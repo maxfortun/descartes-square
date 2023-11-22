@@ -5,6 +5,11 @@ var router = express.Router();
 
 var dsquares = require('../lib/dsquares');
 
+router.get('/session', function(req, res, next) {
+	const { options } = req.app.settings;
+	res.json({ account: req.account });
+});
+
 router.get('/redirect', function(req, res, next) {
 	const { options } = req.app.settings;
 	res.redirect(decodeURIComponent(req.query.url));
