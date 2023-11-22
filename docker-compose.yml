@@ -1,0 +1,18 @@
+services:
+  descartes-squares:
+    container_name: descartes-squares
+    image: node:lts-alpine3.14
+    working_dir: /usr/src/app
+    environment:
+      DEBUG: "*,-morgan,-agentkeepalive,-send,-body-parser:*,-nodemon*,-express:*,-mongooose-jsproxy,-ezsso:express-client:*"
+    restart: always
+    ports:
+      - '50803:3000'
+    volumes:
+      - ${PWD}/:/usr/src/app/
+      - ${PWD}/secrets/.env.local:/usr/src/app/.env.local
+    command: [ "npm", "start" ]
+networks:
+  default:
+    name: dpsrv
+    external: true
