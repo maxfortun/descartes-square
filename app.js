@@ -8,6 +8,7 @@ const debug = require('debug')('dsquares');
 const options = require('./options');
 const oidc = require('@ezsso/express-client').oidc(options);
 
+const dsquares = require('./lib/dsquares');
 const apiRouter = require('./routes/api');
 
 const app = express();
@@ -28,7 +29,7 @@ app.use(cookieParser());
 
 app.use('/oidc/idpresponse', oidc.idpresponse);
 const staticFiles = express.static(path.join(__dirname, 'public'));
-app.use('/api', oidc.authorize, apiRouter);
+app.use('/api', oidc.authorize, dsquares.account, apiRouter);
 app.use(staticFiles);
 
 // catch 404 and forward to error handler

@@ -1,9 +1,9 @@
 const debug = require('debug')('dsquares:routes:api');
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var dsquares = require('../lib/dsquares');
+const dsquares = require('../lib/dsquares');
 
 router.get('/session', function(req, res, next) {
 	const { options } = req.app.settings;
