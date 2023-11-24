@@ -32,23 +32,23 @@ router.post('/squares', async function(req, res, next) {
 });
 
 router.get('/squares/:square', async function(req, res, next) {
-	res.json(await dsquare.findSquare(req));
+	res.json(await dsquares.findSquare(req));
 });
 
 router.delete('/squares/:square', async function(req, res, next) {
-	res.json(await dsquare.deleteSquare(req));
+	res.json(await dsquares.deleteSquare(req));
 });
 
 router.post('/squares/:square', async function(req, res, next) {
-	res.json(await dsquare.createConsideration(req));
+	res.json(await dsquares.createConsideration(req));
 });
 
 router.post('/squares/:square/:consideration', async function(req, res, next) {
-	res.json(await dsquare.updateConsideration(req));
+	res.json(await dsquares.updateConsideration(req));
 });
 
 router.delete('/squares/:square/:consideration', async function(req, res, next) {
-	res.json(await dsquare.deleteConsideration(req));
+	res.json(await dsquares.deleteConsideration(req));
 });
 
 module.exports = router;

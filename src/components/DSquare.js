@@ -13,7 +13,7 @@ export default function (props) {
 	const [ id, setId ] = useState(props.dSquareId);
 	const [ considerations, setConsiderations ] = useState();
 
-	const debug = Debug('descartes-dSquares:DSquare:'+session.email);
+	const debug = Debug('descartes-dSquares:DSquare:'+session.account.email);
 
 	debug("DSquare");
 

@@ -13,7 +13,7 @@ export default function () {
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
 
-	const debug = Debug('descartes-dSquares:DSquares:'+session.email);
+	const debug = Debug('descartes-dSquares:DSquares:'+session.account.email);
 
 	debug("DSquares");
 
@@ -44,13 +44,13 @@ export default function () {
 		return <Loader />;
 	}
 
-	const dSquareElements = dSquares.map((dSquare, i) => <DSquare key={i} dSquareId={dSquare.id} />);
+	const dSquareElements = dSquares.map((dSquareId, i) => <DSquare key={i} dSquareId={dSquareId} />);
 	if(dSquareElements.length == 0) {
 		dSquareElements.push(<DSquare key='0' />);
 	}
 
 	return	<Box>
-				<Box>{dSquareElements}</Box>
+				{dSquareElements}
 			</Box>;
 
 }
