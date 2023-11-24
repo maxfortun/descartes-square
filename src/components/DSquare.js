@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
-import { Box, Button, Grid, FormControl, FormControlLabel, FormLabel, Icon, Paper, Radio, RadioGroup, Switch, Table } from '@mui/material';
+import { Box, Button, Grid, FormControl, FormControlLabel, FormLabel, Icon, Paper, Radio, RadioGroup, Switch, Table, TableContainer, TableCell, TableRow, TableHead, TableBody, TextField } from '@mui/material';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
 
@@ -11,7 +11,13 @@ import Loader from './Loader';
 export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ id, setId ] = useState(props.dSquareId);
-	const [ considerations, setConsiderations ] = useState();
+
+	const [ decision, setDecision ] = useState('');
+	const [ decisionChanged, setDecisionChanged ] = useState(false);
+
+	const [ considerations, setConsiderations ] = useState([]);
+
+	const [ shouldStore, setShouldStore ] = useState(false);
 
 	const debug = Debug('descartes-dSquares:DSquare:'+session.account.email);
 
@@ -61,7 +67,45 @@ export default function (props) {
 		return <Loader />;
 	}
 
-	return  <Box>
+	const handleDecisionChange = async (event) => {
+		setDecisionChanged(true);
+	};
+
+	const handleDecisionBlur = async (event) => {
+		if(!decisionChanged) {
+			return;
+		}
+		setDecisionChanged(false);
+		setShouldStore(true);
+	};
+
+	return	<Box>
+				<TextField
+					id='decision'
+					label='Decision'
+					size='small'
+					sx={{ mt: '16px', mb: '4px' }}
+					inputProps={{ style: { textAlign: 'center' } }}
+					fullWidth={true}
+					defaultValue={decision || ''}
+					onChange={handleDecisionChange}
+					onBlur={handleDecisionBlur}
+				/>
+
+				<TableContainer component={Paper}>
+					<Table>
+						<TableBody>
+							<TableRow>
+								<TableCell>Will happen if done</TableCell>
+								<TableCell>Won't happen if done</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell>Will happen if not done</TableCell>
+								<TableCell>Won't happen if not done</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
+				</TableContainer>
 			</Box>;
 
 }
