@@ -1,9 +1,25 @@
 import Debug from 'debug';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
-import { Box, Button, Grid, FormControl, FormControlLabel, FormLabel, Icon, Paper, Radio, RadioGroup, Switch, Table, TableContainer, TableCell, TableRow, TableHead, TableBody, TextField } from '@mui/material';
+import {
+	Box,
+	Button,
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Icon,
+	IconButton,
+	Paper,
+	Radio,
+	RadioGroup,
+	Switch,
+	Table,
+	TableContainer, TableCell, TableRow, TableHead, TableBody, TextField
+} from '@mui/material';
+
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
+import { Add as AddIcon } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
@@ -80,28 +96,37 @@ export default function (props) {
 	};
 
 	return	<Box>
-				<TextField
-					id='decision'
-					label='Decision'
-					size='small'
-					sx={{ mt: '16px', mb: '4px' }}
-					inputProps={{ style: { textAlign: 'center' } }}
-					fullWidth={true}
-					defaultValue={decision || ''}
-					onChange={handleDecisionChange}
-					onBlur={handleDecisionBlur}
-				/>
-
-				<TableContainer component={Paper}>
-					<Table>
+				<Box fullWidth={true}>
+					<TextField
+						id='decision'
+						label='Decision'
+						size='small'
+						fullWidth={true}
+						sx={{ mt: '16px', mb: '4px' }}
+						inputProps={{ style: { textAlign: 'center' } }}
+						defaultValue={decision || ''}
+						onChange={handleDecisionChange}
+						onBlur={handleDecisionBlur}
+					/>
+					<IconButton
+						size="large"
+						edge="end"
+						color="inherit"
+						aria-label="Add"
+					>
+						<AddIcon />
+					</IconButton>
+				</Box>
+				<TableContainer component={Paper} >
+					<Table sx={{ height: '80vh' }}>
 						<TableBody>
 							<TableRow>
-								<TableCell>Will happen if done</TableCell>
-								<TableCell>Won't happen if done</TableCell>
+								<TableCell align='center'>Will happen if done</TableCell>
+								<TableCell align='center'>Won't happen if done</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell>Will happen if not done</TableCell>
-								<TableCell>Won't happen if not done</TableCell>
+								<TableCell align='center'>Will happen if not done</TableCell>
+								<TableCell align='center'>Won't happen if not done</TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
