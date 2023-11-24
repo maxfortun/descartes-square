@@ -31,20 +31,24 @@ router.post('/squares', async function(req, res, next) {
 	res.json(await dsquares.createSquare(req));
 });
 
+router.get('/squares/:square', async function(req, res, next) {
+	res.json(await dsquare.findSquare(req));
+});
+
 router.delete('/squares/:square', async function(req, res, next) {
 	res.json(await dsquare.deleteSquare(req));
 });
 
 router.post('/squares/:square', async function(req, res, next) {
-	res.json(await dsquare.createConcern(req));
+	res.json(await dsquare.createConsideration(req));
 });
 
-router.post('/squares/:square/:concern', async function(req, res, next) {
-	res.json(await dsquare.updateConcern(req));
+router.post('/squares/:square/:consideration', async function(req, res, next) {
+	res.json(await dsquare.updateConsideration(req));
 });
 
-router.delete('/squares/:square/:concern', async function(req, res, next) {
-	res.json(await dsquare.deleteConcern(req));
+router.delete('/squares/:square/:consideration', async function(req, res, next) {
+	res.json(await dsquare.deleteConsideration(req));
 });
 
 module.exports = router;

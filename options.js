@@ -17,13 +17,13 @@ const options = {
 	}
 };
 
+const connectPromises = {};
 function mongoose(dbId) {
 	const dbOptions = options[dbId];
 	return async function() {
-		this.connectPromises = {};
-		if(this.connectPromises[dbId]) {
+		if(connectPromises[dbId]) {
 			// debug('Reusing connection', dbId);
-			return this.connectPromises[dbId];
+			return connectPromises[dbId];
 		}
 		debug('Creating connection', dbId);
 
@@ -32,7 +32,7 @@ function mongoose(dbId) {
 			this._mongoose.set('debug', dbOptions.debug);
 		}
 
-		return this.connectPromises[dbId] = this._mongoose.connect(dbOptions.uri, dbOptions.options);
+		return connectPromises[dbId] = this._mongoose.connect(dbOptions.uri, dbOptions.options);
 	}
 }
 
