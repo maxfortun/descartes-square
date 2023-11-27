@@ -13,8 +13,9 @@ import {
 	Radio,
 	RadioGroup,
 	Switch,
-	Table,
-	TableContainer, TableCell, TableRow, TableHead, TableBody, TextField
+	Table, TableContainer, TableCell, TableRow, TableHead, TableBody,
+	TextField,
+	Typography
 } from '@mui/material';
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -34,6 +35,8 @@ export default function (props) {
 	const [ considerations, setConsiderations ] = useState([]);
 
 	const [ shouldStore, setShouldStore ] = useState(false);
+
+	const border = '1px solid rgba(224, 224, 224, 1)';
 
 	const debug = Debug('descartes-dSquares:DSquare:'+session.account.email);
 
@@ -95,33 +98,52 @@ export default function (props) {
 		setShouldStore(true);
 	};
 
-	return	<Box>
-				<Box fullWidth={true}>
-					<TextField
-						id='decision'
-						label='Decision'
-						size='small'
-						fullWidth={true}
-						sx={{ mt: '16px', mb: '4px' }}
-						inputProps={{ style: { textAlign: 'center' } }}
-						defaultValue={decision || ''}
-						onChange={handleDecisionChange}
-						onBlur={handleDecisionBlur}
-					/>
-					<IconButton
-						size="large"
-						edge="end"
-						color="inherit"
-						aria-label="Add"
-					>
-						<AddIcon />
-					</IconButton>
+	const handleAdd = async (event, cause, effect) => {
+		debug(event, cause, effect);
+	};
+
+	return	<Box sx={{ mt: '16px', mb: '4px' }} >
+				<Box style={{ display: 'flex' }}>
+					<Box sx={{ margin: 'auto', flexGrow: 1 }} >
+						<TextField
+							id='decision'
+							label='Decision'
+							size='small'
+							fullWidth={true}
+							inputProps={{ style: { textAlign: 'center' } }}
+							defaultValue={decision || ''}
+							onChange={handleDecisionChange}
+							onBlur={handleDecisionBlur}
+						/>
+					</Box>
 				</Box>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '80vh' }}>
 						<TableBody>
 							<TableRow>
-								<TableCell align='center'>Will happen if done</TableCell>
+								<TableCell style={{ borderRight: border }}>
+									<Box style={{ height: '100%', width: '100%' }}>
+										<Box style={{ display: 'flex' }}>
+											<Box sx={{ mt: 'auto', mb: 'auto' }}>
+												<Typography>Will happen if done:</Typography>
+											</Box>
+											<Box>
+												<IconButton
+													size="large"
+													edge="end"
+													color="inherit"
+													aria-label="Add"
+													onClick={(event) => handleAdd(event, 'done', 'will')}
+												>
+													<AddIcon />
+												</IconButton>
+											</Box>
+										</Box>
+										<Box>
+											chips
+										</Box>
+									</Box>
+								</TableCell>
 								<TableCell align='center'>Won't happen if done</TableCell>
 							</TableRow>
 							<TableRow>
