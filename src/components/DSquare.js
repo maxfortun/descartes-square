@@ -94,12 +94,45 @@ export default function (props) {
 		if(!decisionChanged) {
 			return;
 		}
+		await updateDecision();
 		setDecisionChanged(false);
-		setShouldStore(true);
 	};
 
-	const handleAdd = async (event, cause, effect) => {
-		debug(event, cause, effect);
+	const createConsideration = async (cause, effect) => {
+		debug('createConsideration');
+
+		return fetch(`/api/squares/${id}`, { method: 'POST', credentials: 'include' })
+		.then(response => response.json())
+		.then(consideration => {
+			debug('createConsideration', consideration);
+			setConsiderations(square.considerations.concat([consideration]));
+			return consideration;
+		});
+
+	};
+
+	const renderConsiderations = (cause, effect) => {
+		return <Box style={{ height: '100%', width: '100%' }}>
+			<Box style={{ display: 'flex' }}>
+				<Box sx={{ mt: 'auto', mb: 'auto' }}>
+					<Typography>{effect} happen if {cause.toLowerCase()}:</Typography>
+				</Box>
+				<Box>
+					<IconButton
+						size="large"
+						edge="end"
+						color="inherit"
+						aria-label="Add"
+						onClick={() => handleAdd(cause, effect)}
+					>
+						<AddIcon />
+					</IconButton>
+				</Box>
+			</Box>
+			<Box>
+				{considerations}
+			</Box>
+		</Box>;
 	};
 
 	return	<Box sx={{ mt: '16px', mb: '4px' }} >
@@ -122,33 +155,19 @@ export default function (props) {
 						<TableBody>
 							<TableRow>
 								<TableCell style={{ borderRight: border }}>
-									<Box style={{ height: '100%', width: '100%' }}>
-										<Box style={{ display: 'flex' }}>
-											<Box sx={{ mt: 'auto', mb: 'auto' }}>
-												<Typography>Will happen if done:</Typography>
-											</Box>
-											<Box>
-												<IconButton
-													size="large"
-													edge="end"
-													color="inherit"
-													aria-label="Add"
-													onClick={(event) => handleAdd(event, 'done', 'will')}
-												>
-													<AddIcon />
-												</IconButton>
-											</Box>
-										</Box>
-										<Box>
-											chips
-										</Box>
-									</Box>
+									{renderConsiderations('Done', 'Will')}
 								</TableCell>
-								<TableCell align='center'>Won't happen if done</TableCell>
+								<TableCell align='center'>
+									{renderConsiderations('Done', "Will not")}
+								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align='center'>Will happen if not done</TableCell>
-								<TableCell align='center'>Won't happen if not done</TableCell>
+								<TableCell align='center'>
+									{renderConsiderations('Not done', 'Will')}
+								</TableCell>
+								<TableCell align='center'>
+									{renderConsiderations('Not done', 'Will not')}
+								</TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
