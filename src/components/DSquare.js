@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import {
 	Box,
+	Chip,
 	Button,
 	FormControl,
 	FormControlLabel,
@@ -98,20 +99,27 @@ export default function (props) {
 		setDecisionChanged(false);
 	};
 
+	const deleteConsideration = async (considerationId) => {
+		debug('deleteConsideration', considerationId);
+	};
+
 	const createConsideration = async (cause, effect) => {
-		debug('createConsideration');
+		debug('createConsideration', cause, effect);
 
 		return fetch(`/api/squares/${id}`, { method: 'POST', credentials: 'include' })
 		.then(response => response.json())
 		.then(consideration => {
 			debug('createConsideration', consideration);
-			setConsiderations(square.considerations.concat([consideration]));
+			setConsiderations(considerations.concat([consideration]));
 			return consideration;
 		});
 
 	};
 
 	const renderConsiderations = (cause, effect) => {
+		const considerationElements = considerations.map((consideration, i) => 
+			 <Chip key={i} label={consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
+		);
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ mt: 'auto', mb: 'auto' }}>
@@ -123,14 +131,14 @@ export default function (props) {
 						edge="end"
 						color="inherit"
 						aria-label="Add"
-						onClick={() => handleAdd(cause, effect)}
+						onClick={() => createConsideration(cause, effect)}
 					>
 						<AddIcon />
 					</IconButton>
 				</Box>
 			</Box>
 			<Box>
-				{considerations}
+				{considerationElements}
 			</Box>
 		</Box>;
 	};
