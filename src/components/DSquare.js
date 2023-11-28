@@ -10,6 +10,7 @@ import {
 	FormLabel,
 	Icon,
 	IconButton,
+	InputAdornment,
 	Paper,
 	Radio,
 	RadioGroup,
@@ -21,7 +22,10 @@ import {
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
-import { Add as AddIcon } from '@mui/icons-material';
+import {
+	Add as AddIcon,
+	KeyboardReturn as KeyboardReturnIcon
+} from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
@@ -32,6 +36,13 @@ export default function (props) {
 
 	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
+
+	const descs = {
+		'Done:Will': useState(''),
+		'Done:Will not': useState(''),
+		'Not done:Will': useState(''),
+		'Not done:Will not': useState('')
+	};
 
 	const [ considerations, setConsiderations ] = useState([]);
 
@@ -129,12 +140,21 @@ export default function (props) {
 
 	};
 
-	const handleAddConsiderationChange = (event, cause, effect) => {
-		debug('handleAddConsiderationChange', event, cause, effect);
+	const descState = (cause, effect) => {
+		const descKey = cause+':'+effect;
+		return descs[descKey];
+		return _descState;
+	}
+
+	const handleConsiderationChange = (cause, effect, event) => {
+		debug('handleConsiderationChange', cause, effect, event);
+		const [ desc, setDesc ] = descState(cause, effect);
+		setDesc(event.target.value);
 	};
 
-	const handleAddConsiderationBlur = (event, cause, effect) => {
-		debug('handleAddConsiderationBlur', event, cause, effect);
+	const storeConsideration = (cause, effect) => {
+		const [ desc, setDesc ] = descState(cause, effect);
+		debug('storeConsideration', cause, effect, desc);
 	};
 
 	const renderConsiderations = (cause, effect) => {
@@ -154,8 +174,14 @@ export default function (props) {
 						fullWidth={true}
 						inputProps={{ style: { textAlign: 'center' } }}
 						defaultValue={decision || ''}
-						onChange={() => handleAddConsiderationChange(event, cause, effect)}
-						onBlur={() => handleAddConsiderationBlur(event, cause, effect)}
+						onChange={() => handleConsiderationChange(cause, effect, event)}
+						InputProps={{
+							endAdornment: ( 
+								<InputAdornment position="end">
+									<KeyboardReturnIcon onClick={() => storeConsideration(cause, effect)} />
+								</InputAdornment>
+							)
+						}}
 					/>
 				</Box>
 			</Box>
