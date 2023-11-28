@@ -253,7 +253,7 @@ export default function (props) {
 					<Table sx={{ height: '80vh' }}>
 						<TableBody>
 							<TableRow>
-								<TableCell style={{ width: '50%', borderRight: border }}>
+								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
 									{renderConsiderations('Done', 'Will')}
 								</TableCell>
 								<TableCell>
@@ -261,7 +261,7 @@ export default function (props) {
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell style={{ width: '50%', borderRight: border }}>
+								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
 									{renderConsiderations('Not done', 'Will')}
 								</TableCell>
 								<TableCell>
