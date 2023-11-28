@@ -105,8 +105,21 @@ export default function (props) {
 
 	const createConsideration = async (cause, effect) => {
 		debug('createConsideration', cause, effect);
+		const body = JSON.stringify({
+			cause,
+			effect
+		});
 
-		return fetch(`/api/squares/${id}`, { method: 'POST', credentials: 'include' })
+		const fetchOptions = {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-type': 'application/json'
+			},
+			body
+		};
+
+		return fetch(`/api/squares/${id}`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('createConsideration', consideration);
@@ -117,9 +130,12 @@ export default function (props) {
 	};
 
 	const renderConsiderations = (cause, effect) => {
-		const considerationElements = considerations.map((consideration, i) => 
-			 <Chip key={i} label={consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
-		);
+		const considerationElements = considerations
+					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
+					.map((consideration, i) => 
+			 			<Chip key={i} label={consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
+					);
+
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ mt: 'auto', mb: 'auto' }}>
@@ -165,15 +181,15 @@ export default function (props) {
 								<TableCell style={{ borderRight: border }}>
 									{renderConsiderations('Done', 'Will')}
 								</TableCell>
-								<TableCell align='center'>
+								<TableCell>
 									{renderConsiderations('Done', "Will not")}
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align='center'>
+								<TableCell style={{ borderRight: border }}>
 									{renderConsiderations('Not done', 'Will')}
 								</TableCell>
-								<TableCell align='center'>
+								<TableCell>
 									{renderConsiderations('Not done', 'Will not')}
 								</TableCell>
 							</TableRow>
