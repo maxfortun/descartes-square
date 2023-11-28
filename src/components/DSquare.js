@@ -129,28 +129,34 @@ export default function (props) {
 
 	};
 
+	const handleAddConsiderationChange = (event, cause, effect) => {
+		debug('handleAddConsiderationChange', event, cause, effect);
+	};
+
+	const handleAddConsiderationBlur = (event, cause, effect) => {
+		debug('handleAddConsiderationBlur', event, cause, effect);
+	};
+
 	const renderConsiderations = (cause, effect) => {
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => 
-			 			<Chip key={i} label={consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
+			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
 					);
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
-				<Box sx={{ mt: 'auto', mb: 'auto' }}>
-					<Typography>{effect} happen if {cause.toLowerCase()}:</Typography>
-				</Box>
-				<Box>
-					<IconButton
-						size="large"
-						edge="end"
-						color="inherit"
-						aria-label="Add"
-						onClick={() => createConsideration(cause, effect)}
-					>
-						<AddIcon />
-					</IconButton>
+				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
+					<TextField
+						id='decision'
+						label={effect + ' happen if ' + cause.toLowerCase()}
+						size='small'
+						fullWidth={true}
+						inputProps={{ style: { textAlign: 'center' } }}
+						defaultValue={decision || ''}
+						onChange={() => handleAddConsiderationChange(event, cause, effect)}
+						onBlur={() => handleAddConsiderationBlur(event, cause, effect)}
+					/>
 				</Box>
 			</Box>
 			<Box>
@@ -178,7 +184,7 @@ export default function (props) {
 					<Table sx={{ height: '80vh' }}>
 						<TableBody>
 							<TableRow>
-								<TableCell style={{ borderRight: border }}>
+								<TableCell style={{ width: '50%', borderRight: border }}>
 									{renderConsiderations('Done', 'Will')}
 								</TableCell>
 								<TableCell>
@@ -186,7 +192,7 @@ export default function (props) {
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell style={{ borderRight: border }}>
+								<TableCell style={{ width: '50%', borderRight: border }}>
 									{renderConsiderations('Not done', 'Will')}
 								</TableCell>
 								<TableCell>
