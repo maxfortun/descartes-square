@@ -178,6 +178,10 @@ export default function (props) {
 		storeConsideration(cause, effect);
 	};
 
+	const handleConsiderationBlur = (cause, effect, event) => {
+		storeConsideration(cause, effect);
+	};
+
 	const storeConsideration = async (cause, effect) => {
 		const inputRef = descsRefs[descKey(cause,effect)];
 
@@ -218,6 +222,7 @@ export default function (props) {
 						defaultValue={decision || ''}
 						onChange={() => handleConsiderationChange(cause, effect, event)}
 						onKeyDown={() => handleConsiderationKeyDown(cause, effect, event)}
+						onBlur={() => handleConsiderationBlur(cause, effect, event)}
 						InputProps={{
 							endAdornment: ( 
 								<InputAdornment position="end">
