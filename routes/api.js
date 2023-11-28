@@ -39,15 +39,15 @@ router.delete('/squares/:square', async function(req, res, next) {
 	res.json(await dsquares.deleteSquare(req));
 });
 
-router.post('/squares/:square', async function(req, res, next) {
+router.post('/squares/:square/considerations', async function(req, res, next) {
 	res.json(await dsquares.createConsideration(req));
 });
 
-router.post('/squares/:square/:consideration', async function(req, res, next) {
+router.post('/squares/:square/considerations/:consideration', async function(req, res, next) {
 	res.json(await dsquares.updateConsideration(req));
 });
 
-router.delete('/squares/:square/:consideration', async function(req, res, next) {
+router.delete('/squares/:square/considerations/:consideration', async function(req, res, next) {
 	res.json(await dsquares.deleteConsideration(req));
 });
 

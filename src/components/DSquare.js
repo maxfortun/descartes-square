@@ -37,12 +37,20 @@ export default function (props) {
 	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 
-	const descs = {
-		'Done:Will': useState(''),
-		'Done:Will not': useState(''),
-		'Not done:Will': useState(''),
-		'Not done:Will not': useState('')
-	};
+	const descKey = (cause, effect) => {
+		return cause+':'+effect;
+	}
+
+	const descs = {};
+	const descsRefs = {};
+
+	for(const cause of [ 'Done', 'Not done' ]) {
+		for(const effect of [ 'Will', 'Will not' ]) {
+			const key = descKey(cause, effect);
+			descs[key] = useState('');
+			descsRefs[key] = useRef(null);
+		}
+	}
 
 	const [ considerations, setConsiderations ] = useState([]);
 
@@ -114,11 +122,12 @@ export default function (props) {
 		debug('deleteConsideration', considerationId);
 	};
 
-	const createConsideration = async (cause, effect) => {
+	const createConsideration = async (cause, effect, desc) => {
 		debug('createConsideration', cause, effect);
 		const body = JSON.stringify({
 			cause,
-			effect
+			effect,
+			desc
 		});
 
 		const fetchOptions = {
@@ -130,7 +139,7 @@ export default function (props) {
 			body
 		};
 
-		return fetch(`/api/squares/${id}`, fetchOptions)
+		return fetch(`/api/squares/${id}/considerations`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('createConsideration', consideration);
@@ -140,24 +149,41 @@ export default function (props) {
 
 	};
 
-	const descState = (cause, effect) => {
-		const descKey = cause+':'+effect;
-		return descs[descKey];
-		return _descState;
-	}
-
 	const handleConsiderationChange = (cause, effect, event) => {
-		debug('handleConsiderationChange', cause, effect, event);
-		const [ desc, setDesc ] = descState(cause, effect);
+		const [ desc, setDesc ] = descs[descKey(cause, effect)];
+
 		setDesc(event.target.value);
 	};
 
-	const storeConsideration = (cause, effect) => {
-		const [ desc, setDesc ] = descState(cause, effect);
+	const handleConsiderationKeyDown = (cause, effect, event) => {
+		if(event.keyCode != 13) {
+			return;
+		}
+
+		storeConsideration(cause, effect);
+	};
+
+	const storeConsideration = async (cause, effect) => {
+		const inputRef = descsRefs[descKey(cause,effect)];
+
+		if( ! inputRef.current ) {
+			return;
+		}
+
+		if( ! inputRef.current.value ) {
+			return;
+		}
+
+		const [ desc, setDesc ] = descs[descKey(cause, effect)];
 		debug('storeConsideration', cause, effect, desc);
+
+		await createConsideration(cause, effect, inputRef.current.value);
+
+		inputRef.current.value = '';
 	};
 
 	const renderConsiderations = (cause, effect) => {
+		const inputRef = descsRefs[descKey(cause,effect)];
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => 
@@ -168,6 +194,7 @@ export default function (props) {
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 					<TextField
+						inputRef={inputRef}
 						id='decision'
 						label={effect + ' happen if ' + cause.toLowerCase()}
 						size='small'
@@ -175,6 +202,7 @@ export default function (props) {
 						inputProps={{ style: { textAlign: 'center' } }}
 						defaultValue={decision || ''}
 						onChange={() => handleConsiderationChange(cause, effect, event)}
+						onKeyDown={() => handleConsiderationKeyDown(cause, effect, event)}
 						InputProps={{
 							endAdornment: ( 
 								<InputAdornment position="end">
