@@ -120,6 +120,21 @@ export default function (props) {
 
 	const deleteConsideration = async (considerationId) => {
 		debug('deleteConsideration', considerationId);
+		const fetchOptions = {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: {
+				'Content-type': 'application/json'
+			}
+		};
+
+		return fetch(`/api/squares/${id}/considerations/${considerationId}`, fetchOptions)
+		.then(response => response.json())
+		.then(consideration => {
+			debug('deleteConsideration', consideration);
+			setConsiderations(considerations.filter(_consideration => _consideration.id != consideration.id));
+			return consideration;
+		});
 	};
 
 	const createConsideration = async (cause, effect, desc) => {
