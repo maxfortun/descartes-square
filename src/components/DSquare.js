@@ -34,8 +34,9 @@ export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ id, setId ] = useState(props.dSquareId);
 
-	const [ decision, setDecision ] = useState('');
+	const [ decision, setDecision ] = useState(null);
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
+	const decisionRef = useRef('');
 
 	const descKey = (cause, effect) => {
 		return cause+':'+effect;
@@ -69,6 +70,10 @@ export default function (props) {
 		.then(square => {
 			debug('fetchDSquare', square);
 			setId(square.id);
+			setDecision(square.decision);
+			if(decisionRef.current) {
+				decisionRef.current.value = square.decision;
+			}
 			setConsiderations(square.considerations);
 			return square;
 		});
@@ -106,7 +111,36 @@ export default function (props) {
 		return <Loader />;
 	}
 
+	const updateDecision = async () => {
+		if(!decisionChanged) {
+			return;
+		}
+		debug('updateDecision', decision);
+		const body = JSON.stringify({
+			decision
+		});
+
+		const fetchOptions = {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-type': 'application/json'
+			},
+			body
+		};
+
+		return fetch(`/api/squares/${id}/decision`, fetchOptions)
+		.then(response => response.json())
+		.then(decision => {
+			debug('updateDecision', decision);
+			setDecisionChanged(false);
+			return decision;
+		});
+
+	};
+
 	const handleDecisionChange = async (event) => {
+		setDecision(event.target.value);
 		setDecisionChanged(true);
 	};
 
@@ -115,7 +149,14 @@ export default function (props) {
 			return;
 		}
 		await updateDecision();
-		setDecisionChanged(false);
+	};
+
+	const handleDecisionKeyDown = async (event) => {
+		if(event.keyCode != 13) {
+			return;
+		}
+
+		await updateDecision();
 	};
 
 	const deleteConsideration = async (considerationId) => {
@@ -214,12 +255,11 @@ export default function (props) {
 				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 					<TextField
 						inputRef={inputRef}
-						id='decision'
 						label={effect + ' happen if ' + cause.toLowerCase()}
 						size='small'
 						fullWidth={true}
 						inputProps={{ style: { textAlign: 'center' } }}
-						defaultValue={decision || ''}
+						defaultValue={''}
 						onChange={() => handleConsiderationChange(cause, effect, event)}
 						onKeyDown={() => handleConsiderationKeyDown(cause, effect, event)}
 						onBlur={() => handleConsiderationBlur(cause, effect, event)}
@@ -243,14 +283,22 @@ export default function (props) {
 				<Box style={{ display: 'flex' }}>
 					<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 						<TextField
-							id='decision'
+							inputRef={decisionRef}
 							label='Decision'
 							size='small'
 							fullWidth={true}
 							inputProps={{ style: { textAlign: 'center' } }}
-							defaultValue={decision || ''}
+							defaultValue={decision}
 							onChange={handleDecisionChange}
+							onKeyDown={handleDecisionKeyDown}
 							onBlur={handleDecisionBlur}
+							InputProps={{
+								endAdornment: ( 
+									<InputAdornment position="end">
+										<KeyboardReturnIcon onClick={updateDecision} />
+									</InputAdornment>
+								)
+							}}
 						/>
 					</Box>
 				</Box>

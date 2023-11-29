@@ -39,6 +39,10 @@ router.delete('/squares/:square', async function(req, res, next) {
 	res.json(await dsquares.deleteSquare(req));
 });
 
+router.post('/squares/:square/decision', async function(req, res, next) {
+	res.json(await dsquares.updateDecision(req));
+});
+
 router.post('/squares/:square/considerations', async function(req, res, next) {
 	res.json(await dsquares.createConsideration(req));
 });
