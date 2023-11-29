@@ -9,6 +9,7 @@ import {
 	FormControlLabel,
 	FormLabel,
 	Icon,
+	IconButton,
 	Paper,
 	Radio,
 	RadioGroup,
@@ -63,6 +64,7 @@ export default function () {
 
 	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
 	buttons.push(<IconButton
+					key={buttons.length}
                     size="large"
                     edge="end"
                     color="inherit"
