@@ -1,7 +1,20 @@
 import Debug from 'debug';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
-import { Box, Button, Grid, FormControl, FormControlLabel, FormLabel, Icon, Paper, Radio, RadioGroup, Switch } from '@mui/material';
+import {
+	Box,
+	Button,
+	Grid,
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Icon,
+	Paper,
+	Radio,
+	RadioGroup,
+	Switch
+} from '@mui/material';
+
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
 
