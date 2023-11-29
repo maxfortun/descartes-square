@@ -24,6 +24,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
 import {
 	Add as AddIcon,
+	InvertColors as InvertColorsIcon,
 	KeyboardReturn as KeyboardReturnIcon
 } from '@mui/icons-material';
 
@@ -45,8 +46,11 @@ export default function (props) {
 	const descs = {};
 	const descsRefs = {};
 
-	for(const cause of [ 'Done', 'Not done' ]) {
-		for(const effect of [ 'Will', 'Will not' ]) {
+	const causes = [ 'do', 'do not' ];
+	const effects = [ 'will', 'will not' ];
+
+	for(const cause of causes) {
+		for(const effect of effects) {
 			const key = descKey(cause, effect);
 			descs[key] = useState('');
 			descsRefs[key] = useRef(null);
@@ -247,15 +251,17 @@ export default function (props) {
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => 
-			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" onDelete={() => deleteConsideration(consideration.id)} />
+			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />
 					);
+
+		const label = ('What '+effect + ' happen if you ' + cause.toLowerCase()+' '+decision).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 					<TextField
 						inputRef={inputRef}
-						label={effect + ' happen if ' + cause.toLowerCase()}
+						label={label}
 						size='small'
 						fullWidth={true}
 						inputProps={{ style: { textAlign: 'center' } }}
@@ -307,18 +313,18 @@ export default function (props) {
 						<TableBody>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
-									{renderConsiderations('Done', 'Will')}
+									{renderConsiderations(causes[0], effects[0])}
 								</TableCell>
 								<TableCell>
-									{renderConsiderations('Done', "Will not")}
+									{renderConsiderations(causes[0], effects[1])}
 								</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
-									{renderConsiderations('Not done', 'Will')}
+									{renderConsiderations(causes[1], effects[0])}
 								</TableCell>
 								<TableCell>
-									{renderConsiderations('Not done', 'Will not')}
+									{renderConsiderations(causes[1], effects[1])}
 								</TableCell>
 							</TableRow>
 						</TableBody>
