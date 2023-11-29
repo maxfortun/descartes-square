@@ -16,7 +16,10 @@ import {
 } from '@mui/material';
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
+import {
+	Add as AddIcon,
+	ArrowForwardOutlined as ArrowForwardOutlinedIcon
+} from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
@@ -25,6 +28,7 @@ import DSquare from './DSquare';
 export default function () {
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
+	const [ dSquareId, setDSquareId ] = useState(null);
 
 	const debug = Debug('descartes-dSquares:DSquares:'+session.account.email);
 
@@ -57,18 +61,23 @@ export default function () {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined'>{dSquare.decision}</Button>);
-	const dSquareElements = dSquares.map((dSquare, i) => <DSquare key={i} dSquareId={dSquare.id} />);
-	if(dSquareElements.length == 0) {
-		dSquareElements.push(<DSquare key='0' />);
-	}
+	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
+	buttons.push(<IconButton
+                    size="large"
+                    edge="end"
+                    color="inherit"
+                    aria-label="Menu"
+                >
+                    <AddIcon />
+                </IconButton>
+	);
 
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
 					{buttons}
 				</Box>
 				<Box>
-					{dSquareElements}
+					{dSquareId && <DSquare dSquareId={dSquareId} />}
 				</Box>
 			</Box>;
 
