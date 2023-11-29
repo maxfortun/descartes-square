@@ -42,6 +42,9 @@ export default function () {
 		.then(dSquares => {
 			debug('fetchDSquares', dSquares);
 			setDSquares(dSquares);
+			if(dSquares.length > 0) {
+				setDSquareId(dSquares[0].id);
+			}
 			return dSquares;
 		});
 	};
@@ -63,15 +66,16 @@ export default function () {
 	}
 
 	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
-	buttons.push(<IconButton
-					key={buttons.length}
-                    size="large"
-                    edge="end"
-                    color="inherit"
-                    aria-label="Menu"
-                >
-                    <AddIcon />
-                </IconButton>
+	buttons.push(
+		<IconButton
+			key={buttons.length}
+			size="large"
+			edge="end"
+			color="inherit"
+			aria-label="Menu"
+		>
+			<AddIcon />
+		</IconButton>
 	);
 
 	return	<Box sx={{ mt: '4px' }}>
