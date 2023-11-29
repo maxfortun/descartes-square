@@ -57,12 +57,14 @@ export default function () {
 		return <Loader />;
 	}
 
+	const buttons = dSquares.map((dSquareId, i) => <Button key={i} variant='contained'>{dSquareId}</Button>);
 	const dSquareElements = dSquares.map((dSquareId, i) => <DSquare key={i} dSquareId={dSquareId} />);
 	if(dSquareElements.length == 0) {
 		dSquareElements.push(<DSquare key='0' />);
 	}
 
 	return	<Box>
+				{buttons}
 				{dSquareElements}
 			</Box>;
 
