@@ -66,6 +66,7 @@ export default function (props) {
 		if(!dSquare.id) {
 			return;
 		}
+
 		debug('useEffect dSquare', dSquare.id);
 		localStorage.dSquareId = dSquare.id;
 	}, [dSquare.id]);
@@ -80,6 +81,8 @@ export default function (props) {
 			setDSquare({ id: localStorage.dSquareId } );
 		} else if(dSquares.length > 0) {
 			setDSquare({ id: dSquares[0].id });
+		} else {
+			setDSquare({ id: '' });
 		}
 	}, [dSquares]);
 
@@ -107,7 +110,7 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{dSquare.id
+					{ null != dSquare.id 
 						? <DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />
 						: <Loader />
 					}

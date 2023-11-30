@@ -93,6 +93,9 @@ export default function (props) {
 		.then(square => {
 			debug('createDSquare <', square);
 			setId(square.id);
+			if(decisionRef.current) {
+				decisionRef.current.value = square.decision;
+			}
 			setConsiderations(square.considerations);
 			props.setDSquares(props.dSquares.concat([square]));
 			return square;
