@@ -342,39 +342,41 @@ export default function (props) {
 							}}
 						/>
 					</Box>
-					<IconButton
-						size="small" 
-						edge="end"
-						color="inherit"
-						aria-label="Menu"
-						onClick={handleShareClick}
-					>
-						<Tooltip placement="top-start" title="Share">
-							<IosShareIcon />
-						</Tooltip>
-					</IconButton>
-					<IconButton
-						size="small" 
-						edge="end"
-						color="inherit"
-						aria-label="Menu"
-						onClick={handleDownloadClick}
-					>
-						<Tooltip placement="top-start" title="Download">
-							<DownloadIcon />
-						</Tooltip>
-					</IconButton>
-					<IconButton
-						size="small" 
-						edge="end"
-						color="inherit"
-						aria-label="Menu"
-						onClick={handleDeleteClick}
-					>
-						<Tooltip placement="top-start" title="Delete">
-							<DeleteForeverIcon />
-						</Tooltip>
-					</IconButton>
+					<Box sx={{ mr: '16px' }}>
+						<IconButton
+							size="small" 
+							edge="end"
+							color="inherit"
+							aria-label="Menu"
+							onClick={handleShareClick}
+						>
+							<Tooltip placement="top-start" title="Share">
+								<IosShareIcon />
+							</Tooltip>
+						</IconButton>
+						<IconButton
+							size="small" 
+							edge="end"
+							color="inherit"
+							aria-label="Menu"
+							onClick={handleDownloadClick}
+						>
+							<Tooltip placement="top-start" title="Download">
+								<DownloadIcon />
+							</Tooltip>
+						</IconButton>
+						<IconButton
+							size="small" 
+							edge="end"
+							color="inherit"
+							aria-label="Menu"
+							onClick={handleDeleteClick}
+						>
+							<Tooltip placement="top-start" title="Delete">
+								<DeleteForeverIcon />
+							</Tooltip>
+						</IconButton>
+					</Box>
 				</Box>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '80vh' }}>
@@ -399,6 +401,5 @@ export default function (props) {
 					</Table>
 				</TableContainer>
 			</Box>;
-
 }
 
