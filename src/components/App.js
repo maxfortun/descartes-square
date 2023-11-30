@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import { Icon } from '@mui/material';
 
@@ -16,9 +16,13 @@ const appContext = {};
 
 export default function () {
 	debug("App");
-	const [ session, setSession ] = useState({});
+	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
 	Object.assign(appContext, { session, setSession });
 
+	useEffect(() => {
+		debug('useEffect session.login', session.login);
+		localStorage.login = session.login;
+	}, [session.login]);
 
 	function getAppComponent() {
 		if(!session.login) {

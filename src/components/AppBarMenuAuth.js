@@ -21,8 +21,7 @@ export default function () {
 	};
 
 	const handleLogoutClick = (event) => {
-		setSession(Object.assign({}, session, {login: false}));
-		window.location.href = '/logout';
+		setSession(Object.assign({}, session, {login: false, account: {}}));
 	};
 
 	debug("AppBarMenuAuth");
