@@ -65,14 +65,14 @@ export default function (props) {
 
 	const debug = Debug('descartes-dSquares:DSquare:'+session.account.email);
 
-	debug("DSquare");
+	debug("DSquare:", props);
 
 	const fetchDSquare = async () => {
-		debug('fetchDSquare');
+		debug('fetchDSquare >', id);
 		return fetch(`/api/squares/${id}`, { credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
-			debug('fetchDSquare', square);
+			debug('fetchDSquare <', square);
 			setId(square.id);
 			setDecision(square.decision);
 			if(decisionRef.current) {
@@ -84,11 +84,11 @@ export default function (props) {
 	};
 
 	const createDSquare = async () => {
-		debug('createDSquare');
+		debug('createDSquare >');
 		return fetch(`/api/squares`, { method: 'POST', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
-			debug('createDSquare', square);
+			debug('createDSquare <', square);
 			setId(square.id);
 			setConsiderations(square.considerations);
 			return square;
@@ -100,16 +100,22 @@ export default function (props) {
 		if(!didMount.current) {
 			didMount.current = true;
 			debug('useEffect', 'mounted');
-			if(!status) {
-				if(id) {
-					fetchDSquare();
-				} else {
-					createDSquare();
-				}
-			}
 			return;
 		}
 	});
+
+	useEffect(() => {
+		setId(props.dSquareId);
+	}, [props.dSquareId]);
+
+	useEffect(() => {
+		if(id) {
+			fetchDSquare();
+		} else {
+			createDSquare();
+		}
+	}, [id]);
+
 
 	if(!id) {
 		return <Loader />;

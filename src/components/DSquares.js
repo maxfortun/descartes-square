@@ -26,14 +26,14 @@ import { AppContext } from './AppContext';
 import Loader from './Loader';
 import DSquare from './DSquare';
 
-export default function () {
+export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
 	const [ dSquareId, setDSquareId ] = useState(null);
 
 	const debug = Debug('descartes-dSquares:DSquares:'+session.account.email);
 
-	debug("DSquares");
+	debug("DSquares", props);
 
 	const fetchDSquares = async () => {
 		debug('fetchDSquares');
@@ -65,7 +65,7 @@ export default function () {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
+	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' sx={{ mr: '4px' }} onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
 	buttons.push(
 		<IconButton
 			key={buttons.length}
@@ -73,6 +73,7 @@ export default function () {
 			edge="end"
 			color="inherit"
 			aria-label="Menu"
+			onClick={() => setDSquareId(null)}
 		>
 			<AddIcon />
 		</IconButton>
@@ -83,7 +84,7 @@ export default function () {
 					{buttons}
 				</Box>
 				<Box>
-					{dSquareId && <DSquare dSquareId={dSquareId} />}
+					{<DSquare dSquareId={dSquareId} />}
 				</Box>
 			</Box>;
 
