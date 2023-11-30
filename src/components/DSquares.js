@@ -99,7 +99,7 @@ export default function (props) {
 			edge="end"
 			color="inherit"
 			aria-label="Menu"
-			onClick={() => setDSquare({})}
+			onClick={() => setDSquare({ id: '' })}
 		>
 			<AddIcon />
 		</IconButton>

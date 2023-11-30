@@ -76,7 +76,6 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('fetchDSquare <', square);
-			setId(square.id);
 			setDecision(square.decision);
 			if(decisionRef.current) {
 				decisionRef.current.value = square.decision;
