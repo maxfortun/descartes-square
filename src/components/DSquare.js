@@ -3,8 +3,9 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import {
 	Box,
-	Chip,
 	Button,
+	Chip,
+	Divider,
 	FormControl,
 	FormControlLabel,
 	FormLabel,
@@ -321,7 +322,7 @@ export default function (props) {
 	};
 
 	return	<Box sx={{ mt: '16px', mb: '4px' }} >
-				<Box style={{ display: 'flex' }}>
+				<Box sx={{ display: 'flex', mr: '16px', ml: '16px' }}>
 					<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 						<TextField
 							inputRef={decisionRef}
@@ -342,7 +343,7 @@ export default function (props) {
 							}}
 						/>
 					</Box>
-					<Box sx={{ mr: '16px' }}>
+					<Box>
 						<IconButton
 							size="small" 
 							edge="end"
@@ -378,8 +379,11 @@ export default function (props) {
 						</IconButton>
 					</Box>
 				</Box>
+				<Box sx={{ mb: '8px' }}>
+					<Divider />
+				</Box>
 				<TableContainer component={Paper} >
-					<Table sx={{ height: '80vh' }}>
+					<Table sx={{ height: '75vh' }}>
 						<TableBody>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
