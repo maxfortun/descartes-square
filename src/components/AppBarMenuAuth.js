@@ -13,11 +13,15 @@ export default function () {
 	const [ anchorEl, setAnchorEl ] = useState(null);
 
 	const handleOpen = (event) => {
-		setAnchorEl(event.currentTarget);
+		setAnchorEl(event.target);
 	};
 
 	const handleClose = (event) => {
 		setAnchorEl(null);
+	};
+
+	const handleLogoutClick = (event) => {
+		window.location.href = '/logout';
 	};
 
 	debug("AppBarMenuAuth");
@@ -45,7 +49,7 @@ export default function () {
 				MenuListProps={{ onMouseLeave: handleClose }}
 				sx={{ mt: '45px' }}
 			>
-				<MenuItem><Typography textAlign='center'>Logout</Typography></MenuItem>
+				<MenuItem onClick={handleLogoutClick}><Typography textAlign='center'>Logout</Typography></MenuItem>
 			</Menu>
 		</Box>
 	);
