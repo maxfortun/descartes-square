@@ -29,7 +29,7 @@ import DSquare from './DSquare';
 export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
-	const [ dSquareId, setDSquareId ] = useState(null);
+	const [ dSquare, setDSquare ] = useState({});
 
 	const debug = Debug('descartes-dSquares:DSquares:'+session.account.email);
 
@@ -43,9 +43,9 @@ export default function (props) {
 			debug('fetchDSquares', dSquares);
 			setDSquares(dSquares);
 			if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
-				setDSquareId(localStorage.dSquareId);
+				setDSquare({ id: localStorage.dSquareId } );
 			} else if(dSquares.length > 0) {
-				setDSquareId(dSquares[0].id);
+				setDSquare({ id: dSquares[0].id });
 			}
 			return dSquares;
 		});
@@ -62,17 +62,17 @@ export default function (props) {
 	});
 
 	useEffect(() => {
-		if(dSquareId) {
-			localStorage.dSquareId = dSquareId;
+		if(dSquare.id) {
+			localStorage.dSquareId = dSquare.id;
 		}
-	}, [dSquareId]);
+	}, [dSquare]);
 
 
 	if(!dSquares) {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((dSquare, i) => <Button key={i} variant='outlined' sx={{ mr: '4px' }} onClick={() => setDSquareId(dSquare.id)}>{dSquare.decision}</Button>);
+	const buttons = dSquares.map((_dSquare, i) => <Button key={i} variant='outlined' sx={{ mr: '4px' }} onClick={() => setDSquare(Object.assign({ button: this }, _dSquare))}>{_dSquare.decision}</Button>);
 	buttons.push(
 		<IconButton
 			key={buttons.length}
@@ -80,7 +80,7 @@ export default function (props) {
 			edge="end"
 			color="inherit"
 			aria-label="Menu"
-			onClick={() => setDSquareId(null)}
+			onClick={() => setDSquare({})}
 		>
 			<AddIcon />
 		</IconButton>
@@ -91,7 +91,7 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquareId={dSquareId} />}
+					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />}
 				</Box>
 			</Box>;
 

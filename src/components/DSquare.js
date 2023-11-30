@@ -37,7 +37,7 @@ import Loader from './Loader';
 
 export default function (props) {
 	const { session, setSession } = useContext(AppContext);
-	const [ id, setId ] = useState(props.dSquareId);
+	const [ id, setId ] = useState(props.dSquare.id);
 
 	const [ decision, setDecision ] = useState(null);
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
@@ -119,8 +119,8 @@ export default function (props) {
 	});
 
 	useEffect(() => {
-		setId(props.dSquareId);
-	}, [props.dSquareId]);
+		setId(props.dSquare.id);
+	}, [props.dSquare.id]);
 
 	useEffect(() => {
 		if(id) {
