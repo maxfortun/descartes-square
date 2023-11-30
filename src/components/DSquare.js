@@ -17,6 +17,7 @@ import {
 	Switch,
 	Table, TableContainer, TableCell, TableRow, TableHead, TableBody,
 	TextField,
+	Tooltip,
 	Typography
 } from '@mui/material';
 
@@ -24,7 +25,10 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { ArrowForwardOutlined as ArrowForwardOutlinedIcon } from '@mui/icons-material';
 import {
 	Add as AddIcon,
+	DeleteForever as DeleteForeverIcon,
+	Download as DownloadIcon,
 	InvertColors as InvertColorsIcon,
+	IosShare as IosShareIcon,
 	KeyboardReturn as KeyboardReturnIcon
 } from '@mui/icons-material';
 
@@ -313,6 +317,36 @@ export default function (props) {
 							}}
 						/>
 					</Box>
+					<IconButton
+						size="small" 
+						edge="end"
+						color="inherit"
+						aria-label="Menu"
+					>
+						<Tooltip placement="top-start" title="Share">
+							<IosShareIcon />
+						</Tooltip>
+					</IconButton>
+					<IconButton
+						size="small" 
+						edge="end"
+						color="inherit"
+						aria-label="Menu"
+					>
+						<Tooltip placement="top-start" title="Download">
+							<DownloadIcon />
+						</Tooltip>
+					</IconButton>
+					<IconButton
+						size="small" 
+						edge="end"
+						color="inherit"
+						aria-label="Menu"
+					>
+						<Tooltip placement="top-start" title="Delete">
+							<DeleteForeverIcon />
+						</Tooltip>
+					</IconButton>
 				</Box>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '80vh' }}>
