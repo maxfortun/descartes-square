@@ -42,7 +42,7 @@ export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ id, setId ] = useState(props.dSquare.id);
 
-	const [ decision, setDecision ] = useState(null);
+	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 	const decisionRef = useRef('');
 
@@ -294,7 +294,7 @@ export default function (props) {
 			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />
 					);
 
-		const label = ('What '+effect + ' happen if you ' + cause.toLowerCase()+' '+decision).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if you ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
@@ -386,7 +386,6 @@ export default function (props) {
 					</Box>
 				</Box>
 				<Box sx={{ mb: '8px' }}>
-					<Divider />
 				</Box>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '75vh' }}>
