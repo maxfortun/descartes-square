@@ -24,6 +24,7 @@ import {
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
+import DSButton from './DSButton';
 import DSquare from './DSquare';
 
 export default function (props) {
@@ -72,7 +73,8 @@ export default function (props) {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((_dSquare, i) => <Button key={i} variant='outlined' sx={{ mr: '4px' }} onClick={() => setDSquare(Object.assign({ button: this }, _dSquare))}>{_dSquare.decision}</Button>);
+	const buttons = dSquares.map((_dSquare, i) => <DSButton key={i} setDSquare={setDSquare} dSquare={_dSquare} />);
+
 	buttons.push(
 		<IconButton
 			key={buttons.length}
@@ -91,7 +93,7 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />}
+					{<DSquare dSquare={dSquare} />}
 				</Box>
 			</Box>;
 

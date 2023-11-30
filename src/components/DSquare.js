@@ -69,8 +69,6 @@ export default function (props) {
 
 	const debug = Debug('descartes-dSquares:DSquare:'+session.account.email);
 
-	debug("DSquare:", props);
-
 	const fetchDSquare = async () => {
 		debug('fetchDSquare >', id);
 		return fetch(`/api/squares/${id}`, { credentials: 'include' })
@@ -113,7 +111,7 @@ export default function (props) {
 	useEffect(() => {
 		if(!didMount.current) {
 			didMount.current = true;
-			debug('useEffect', 'mounted');
+			debug('useEffect', 'mounted', props);
 			return;
 		}
 	});
@@ -165,6 +163,9 @@ export default function (props) {
 
 	const handleDecisionChange = async (event) => {
 		setDecision(event.target.value);
+		if(props.dSquare.setDecision) {
+			props.dSquare.setDecision(event.target.value);
+		}
 		setDecisionChanged(true);
 	};
 
