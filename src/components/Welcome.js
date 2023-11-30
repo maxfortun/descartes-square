@@ -52,6 +52,8 @@ export default function () {
 			</Box>
 			<Box sx={{ mt: '24px', mb: '8px' }}><Divider/></Box>
 			<Box>
+				<Typography>
+				</Typography>
 			</Box>
 		</>
 	);

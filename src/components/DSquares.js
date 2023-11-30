@@ -37,6 +37,7 @@ import DSquare from './DSquare';
 export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
+	const [ dsButtons, setDSButtons ] = useState([]);
 	const [ dSquare, setDSquare ] = useState({});
 
 	const debug = Debug('descartes-dSquares:DSquares:'+session.account.email);
@@ -86,30 +87,40 @@ export default function (props) {
 		} else {
 			setDSquare({ id: '' });
 		}
+
 	}, [dSquares]);
+
+	useEffect(() => {
+		if(!dSquares) {
+			return;
+		}
+
+		const buttons = dSquares.map((_dSquare, i) => <DSButton key={i} selectedDSquare={dSquare} setDSquare={setDSquare} dSquare={_dSquare} />);
+	
+		buttons.push(
+			<IconButton
+				key={buttons.length}
+				size="large"
+				edge="end"
+				color="inherit"
+				aria-label="Menu"
+				onClick={() => setDSquare({ id: '' })}
+			>
+				<AddIcon />
+			</IconButton>
+		);
+
+		setDSButtons(buttons);
+	}, [dSquares, dSquare]);
+
 
 	if(!dSquares) {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((_dSquare, i) => <DSButton key={i} selectedDSquare={dSquare} setDSquare={setDSquare} dSquare={_dSquare} />);
-
-	buttons.push(
-		<IconButton
-			key={buttons.length}
-			size="large"
-			edge="end"
-			color="inherit"
-			aria-label="Menu"
-			onClick={() => setDSquare({ id: '' })}
-		>
-			<AddIcon />
-		</IconButton>
-	);
-
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
-					{buttons}
+					{dsButtons}
 				</Box>
 				<Box>
 					{ null != dSquare.id 
