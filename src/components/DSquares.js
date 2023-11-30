@@ -93,7 +93,7 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{<DSquare dSquare={dSquare} />}
+					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />}
 				</Box>
 			</Box>;
 

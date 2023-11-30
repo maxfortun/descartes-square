@@ -93,6 +93,7 @@ export default function (props) {
 			debug('createDSquare <', square);
 			setId(square.id);
 			setConsiderations(square.considerations);
+			props.setDSquares(props.dSquares.concat([square]));
 			return square;
 		});
 	};
@@ -103,6 +104,7 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
+			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});
 	};
