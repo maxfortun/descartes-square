@@ -356,12 +356,12 @@ export default function (props) {
 									{renderConsiderations(causes[0], effects[0])}
 								</TableCell>
 								<TableCell>
-									{renderConsiderations(causes[0], effects[1])}
+									{renderConsiderations(causes[1], effects[0])}
 								</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border }}>
-									{renderConsiderations(causes[1], effects[0])}
+									{renderConsiderations(causes[0], effects[1])}
 								</TableCell>
 								<TableCell>
 									{renderConsiderations(causes[1], effects[1])}
