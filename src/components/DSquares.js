@@ -42,7 +42,9 @@ export default function (props) {
 		.then(dSquares => {
 			debug('fetchDSquares', dSquares);
 			setDSquares(dSquares);
-			if(dSquares.length > 0) {
+			if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
+				setDSquareId(localStorage.dSquareId);
+			} else if(dSquares.length > 0) {
 				setDSquareId(dSquares[0].id);
 			}
 			return dSquares;
@@ -54,12 +56,17 @@ export default function (props) {
 		if(!didMount.current) { 
 			didMount.current = true;
 			debug('useEffect', 'mounted');
-			if(!status) { 
-				fetchDSquares();
-			}
+			fetchDSquares();
 			return;
 		} 
 	});
+
+	useEffect(() => {
+		if(dSquareId) {
+			localStorage.dSquareId = dSquareId;
+		}
+	}, [dSquareId]);
+
 
 	if(!dSquares) {
 		return <Loader />;
@@ -84,7 +91,7 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{<DSquare dSquareId={dSquareId} />}
+					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquareId={dSquareId} />}
 				</Box>
 			</Box>;
 

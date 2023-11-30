@@ -99,6 +99,16 @@ export default function (props) {
 		});
 	};
 
+	const deleteDSquare = async () => {
+		debug('deleteDSquare >');
+		return fetch(`/api/squares/${id}`, { method: 'DELETE', credentials: 'include' })
+		.then(response => response.json())
+		.then(square => {
+			debug('deleteDSquare <', square);
+			return square;
+		});
+	};
+
 	const didMount = useRef(false);
 	useEffect(() => {
 		if(!didMount.current) {
@@ -171,6 +181,16 @@ export default function (props) {
 		}
 
 		await updateDecision();
+	};
+
+	const handleShareClick = async (event) => {
+	};
+
+	const handleDownloadClick = async (event) => {
+	};
+
+	const handleDeleteClick = async (event) => {
+		await deleteDSquare();
 	};
 
 	const deleteConsideration = async (considerationId) => {
@@ -322,6 +342,7 @@ export default function (props) {
 						edge="end"
 						color="inherit"
 						aria-label="Menu"
+						onClick={handleShareClick}
 					>
 						<Tooltip placement="top-start" title="Share">
 							<IosShareIcon />
@@ -332,6 +353,7 @@ export default function (props) {
 						edge="end"
 						color="inherit"
 						aria-label="Menu"
+						onClick={handleDownloadClick}
 					>
 						<Tooltip placement="top-start" title="Download">
 							<DownloadIcon />
@@ -342,6 +364,7 @@ export default function (props) {
 						edge="end"
 						color="inherit"
 						aria-label="Menu"
+						onClick={handleDeleteClick}
 					>
 						<Tooltip placement="top-start" title="Delete">
 							<DeleteForeverIcon />
