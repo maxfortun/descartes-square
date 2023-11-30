@@ -119,10 +119,12 @@ export default function (props) {
 	});
 
 	useEffect(() => {
+		debug('useEffect props.dSquare.id', props.dSquare.id);
 		setId(props.dSquare.id);
 	}, [props.dSquare.id]);
 
 	useEffect(() => {
+		debug('useEffect id', id);
 		if(id) {
 			fetchDSquare();
 		} else {

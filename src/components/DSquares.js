@@ -1,5 +1,10 @@
 import Debug from 'debug';
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, {
+	useContext,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
 
 import {
 	Box,
@@ -43,11 +48,6 @@ export default function (props) {
 		.then(dSquares => {
 			debug('fetchDSquares', dSquares);
 			setDSquares(dSquares);
-			if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
-				setDSquare({ id: localStorage.dSquareId } );
-			} else if(dSquares.length > 0) {
-				setDSquare({ id: dSquares[0].id });
-			}
 			return dSquares;
 		});
 	};
@@ -63,17 +63,31 @@ export default function (props) {
 	});
 
 	useEffect(() => {
-		if(dSquare.id) {
-			localStorage.dSquareId = dSquare.id;
+		if(!dSquare.id) {
+			return;
 		}
-	}, [dSquare]);
+		debug('useEffect dSquare', dSquare.id);
+		localStorage.dSquareId = dSquare.id;
+	}, [dSquare.id]);
 
+	useEffect(() => {
+		if(!dSquares) {
+			return;
+		}
+
+		debug('useEffect dSquares');
+		if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
+			setDSquare({ id: localStorage.dSquareId } );
+		} else if(dSquares.length > 0) {
+			setDSquare({ id: dSquares[0].id });
+		}
+	}, [dSquares]);
 
 	if(!dSquares) {
 		return <Loader />;
 	}
 
-	const buttons = dSquares.map((_dSquare, i) => <DSButton key={i} setDSquare={setDSquare} dSquare={_dSquare} />);
+	const buttons = dSquares.map((_dSquare, i) => <DSButton key={i} selectedDSquare={dSquare} setDSquare={setDSquare} dSquare={_dSquare} />);
 
 	buttons.push(
 		<IconButton
@@ -93,7 +107,10 @@ export default function (props) {
 					{buttons}
 				</Box>
 				<Box>
-					{<DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />}
+					{dSquare.id
+						? <DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />
+						: <Loader />
+					}
 				</Box>
 			</Box>;
 
