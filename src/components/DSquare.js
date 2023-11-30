@@ -33,6 +33,8 @@ import {
 	KeyboardReturn as KeyboardReturnIcon
 } from '@mui/icons-material';
 
+import { refetch } from './utils';
+
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 
@@ -72,7 +74,7 @@ export default function (props) {
 
 	const fetchDSquare = async () => {
 		debug('fetchDSquare >', id);
-		return fetch(`/api/squares/${id}`, { credentials: 'include' })
+		return refetch(`/api/squares/${id}`, { credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('fetchDSquare <', square);
@@ -87,7 +89,7 @@ export default function (props) {
 
 	const createDSquare = async () => {
 		debug('createDSquare >');
-		return fetch(`/api/squares`, { method: 'POST', credentials: 'include' })
+		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('createDSquare <', square);
@@ -103,7 +105,7 @@ export default function (props) {
 
 	const deleteDSquare = async () => {
 		debug('deleteDSquare >');
-		return fetch(`/api/squares/${id}`, { method: 'DELETE', credentials: 'include' })
+		return refetch(`/api/squares/${id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
@@ -158,7 +160,7 @@ export default function (props) {
 			body
 		};
 
-		return fetch(`/api/squares/${id}/decision`, fetchOptions)
+		return refetch(`/api/squares/${id}/decision`, fetchOptions)
 		.then(response => response.json())
 		.then(decision => {
 			debug('updateDecision', decision);
@@ -211,7 +213,7 @@ export default function (props) {
 			}
 		};
 
-		return fetch(`/api/squares/${id}/considerations/${considerationId}`, fetchOptions)
+		return refetch(`/api/squares/${id}/considerations/${considerationId}`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('deleteConsideration', consideration);
@@ -237,7 +239,7 @@ export default function (props) {
 			body
 		};
 
-		return fetch(`/api/squares/${id}/considerations`, fetchOptions)
+		return refetch(`/api/squares/${id}/considerations`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('createConsideration', consideration);

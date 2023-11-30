@@ -27,6 +27,8 @@ import {
 	ArrowForwardOutlined as ArrowForwardOutlinedIcon
 } from '@mui/icons-material';
 
+import { refetch } from './utils';
+
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 import DSButton from './DSButton';
@@ -43,7 +45,7 @@ export default function (props) {
 
 	const fetchDSquares = async () => {
 		debug('fetchDSquares');
-		return fetch('/api/squares', { credentials: 'include' })
+		return refetch('/api/squares', { credentials: 'include' })
 		.then(response => response.json())
 		.then(dSquares => {
 			debug('fetchDSquares', dSquares);
