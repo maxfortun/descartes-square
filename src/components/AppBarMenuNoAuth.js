@@ -9,15 +9,19 @@ import { AppContext } from './AppContext';
 const debug = Debug('accounts:AppBarMenuAuth');
 
 export default function () {
+	const { session, setSession } = useContext(AppContext);
+
 	const [ anchorEl, setAnchorEl ] = useState(null);
 
 	const handleOpen = (event) => {
-		setAnchorEl(event.currentTarget);
+		setAnchorEl(event.target);
 	};
 
 	const handleClose = (event) => {
 		setAnchorEl(null);
 	};
+
+	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
 
 	debug("AppBarMenuAuth");
 
@@ -43,7 +47,7 @@ export default function () {
 				MenuListProps={{ onMouseLeave: handleClose }}
 				sx={{ mt: '45px' }}
 			>
-				<MenuItem><Typography textAlign='center'>Login</Typography></MenuItem>
+				<MenuItem onClick={handleLoginClick}><Typography textAlign='center'>Login</Typography></MenuItem>
 			</Menu>
 		</Box>
 	);

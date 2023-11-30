@@ -15,7 +15,7 @@ export default function () {
 
 	debug("Welcome");
 
-	const handleClick = () => setSession(Object.assign({}, session, {login: true}));
+	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
 
 	const markdown = `
 Square away your uncertainty with Descartes Squares!  
@@ -34,7 +34,7 @@ You don't have to do it alone - invite others now!
 				flexDirection="column"
 			>
 				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-					<Button className="pulse" color="inherit" variant="contained" onClick={handleClick}>more</Button>
+					<Button className="pulse" color="inherit" variant="contained" onClick={handleLoginClick}>more</Button>
 				</Typography>
 			</Box>
 		</>

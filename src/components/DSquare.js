@@ -353,6 +353,7 @@ export default function (props) {
 							edge="end"
 							color="inherit"
 							aria-label="Menu"
+							sx={{display: 'none'}}
 							onClick={handleShareClick}
 						>
 							<Tooltip placement="top-start" title="Share">
@@ -364,6 +365,7 @@ export default function (props) {
 							edge="end"
 							color="inherit"
 							aria-label="Menu"
+							sx={{display: 'none'}}
 							onClick={handleDownloadClick}
 						>
 							<Tooltip placement="top-start" title="Download">
