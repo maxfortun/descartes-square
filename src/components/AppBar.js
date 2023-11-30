@@ -23,7 +23,7 @@ export default function () {
         .then(response => response.json())
         .then(data => {
             debug('fetchSession<', data);
-            setSession(Object.assign({}, data, {loaded: true}));
+            setSession(Object.assign({}, session, data, {loaded: true}));
         })
 		.catch(e => {
             setSession(Object.assign({}, session, {loaded: true, logged_out: true}));
@@ -32,8 +32,11 @@ export default function () {
     };
 
     useEffect(() => {
+		if(!session.login) {
+			return;
+		}
         fetchSession();
-    }, []);
+    }, [session.login]);
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -42,7 +45,10 @@ export default function () {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						Descartes' Squares - square away the uncertainty.
 					</Typography>
-					{session?.account?.email?<AppBarMenuAuth/>:<AppBarMenuNoAuth/>}
+					{ session?.account?.email
+						? <AppBarMenuAuth/>
+						: <AppBarMenuNoAuth/>
+					}
 				</Toolbar>
 			</AppBar>
 		</Box>

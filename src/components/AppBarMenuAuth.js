@@ -21,6 +21,7 @@ export default function () {
 	};
 
 	const handleLogoutClick = (event) => {
+		setSession(Object.assign({}, session, {login: false}));
 		window.location.href = '/logout';
 	};
 

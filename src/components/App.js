@@ -21,6 +21,10 @@ export default function () {
 
 
 	function getAppComponent() {
+		if(!session.login) {
+			return <Welcome />;
+		}
+
 		if(!session.loaded) {
 			return <Loader />;
 		}
@@ -33,7 +37,7 @@ export default function () {
 			return <DSquares />;
 		}
 
-		return <Welcome />;
+		return <div>Error</div>;
 	}
 
 	return (

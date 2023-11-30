@@ -8,8 +8,15 @@ import { Box, Button, Grid, FormControl, FormControlLabel, FormLabel, Icon, Pape
 
 const debug = Debug('accounts:Welcome');
 
+import { AppContext } from './AppContext';
+
 export default function () {
+	const { session, setSession } = useContext(AppContext);
+
 	debug("Welcome");
+
+	const handleClick = () => setSession(Object.assign({}, session, {login: true}));
+
 	const markdown = `
 Square away your uncertainty with Descartes Squares!  
 Best decisions you'll ever make!  
@@ -27,7 +34,7 @@ You don't have to do it alone - invite others now!
 				flexDirection="column"
 			>
 				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-					<Button className="pulse" color="inherit" variant="contained" href="ui">more</Button>
+					<Button className="pulse" color="inherit" variant="contained" onClick={handleClick}>more</Button>
 				</Typography>
 			</Box>
 		</>
