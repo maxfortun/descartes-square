@@ -6,7 +6,7 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 
-const debug = Debug('accounts:AppBarMenuAuth');
+const debug = Debug('descartes-squares:AppBarMenuAuth');
 
 export default function () {
 	const { session, setSession } = useContext(AppContext);

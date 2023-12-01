@@ -19,7 +19,7 @@ export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ decision, setDecision ] = useState(props.dSquare.decision);
 
-	const debug = Debug('descartes-dSquares:DSButton:'+session.account.email);
+	const debug = Debug('descartes-squares:DSButton:'+session.account.email);
 	const sx={ mr: '4px' };
 
 	const theme = useTheme();

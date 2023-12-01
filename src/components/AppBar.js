@@ -8,7 +8,7 @@ import { AppContext } from './AppContext';
 import AppBarMenuNoAuth from './AppBarMenuNoAuth';
 import AppBarMenuAuth from './AppBarMenuAuth';
 
-const debug = Debug('accounts:AppBar');
+const debug = Debug('descartes-squares:AppBar');
 
 import { refetch } from './utils';
 

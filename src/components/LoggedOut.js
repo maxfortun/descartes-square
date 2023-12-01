@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 
 import { Typography } from '@mui/material';
 
-const debug = Debug('accounts:LoggedOut');
+const debug = Debug('descartes-squares:LoggedOut');
 
 export default function () {
 	const url = encodeURIComponent(window.location.href);
