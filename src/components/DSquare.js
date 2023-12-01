@@ -39,8 +39,10 @@ import { AppContext } from './AppContext';
 import Loader from './Loader';
 
 export default function (props) {
+	const self = Object.assign({}, props);
+
 	const { session, setSession } = useContext(AppContext);
-	const [ id, setId ] = useState(props.dSquare.id);
+	const [ id, setId ] = useState(self.parent.dSquare.id);
 
 	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
@@ -98,7 +100,7 @@ export default function (props) {
 				decisionRef.current.value = square.decision;
 			}
 			setConsiderations(square.considerations);
-			props.setDSquares(props.dSquares.concat([square]));
+			self.parent.setDSquares(self.parent.dSquares.concat([square]));
 			return square;
 		});
 	};
@@ -109,7 +111,7 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
-			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
+			self.parent.setDSquares(self.parent.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});
 	};
@@ -118,15 +120,15 @@ export default function (props) {
 	useEffect(() => {
 		if(!didMount.current) {
 			didMount.current = true;
-			debug('useEffect', 'mounted', props);
+			debug('useEffect', 'mounted', self);
 			return;
 		}
 	});
 
 	useEffect(() => {
-		debug('useEffect props.dSquare.id', props.dSquare.id);
-		setId(props.dSquare.id);
-	}, [props.dSquare.id]);
+		debug('useEffect self.parent.dSquare.id', self.parent.dSquare.id);
+		setId(self.parent.dSquare.id);
+	}, [self.parent.dSquare.id]);
 
 	useEffect(() => {
 		debug('useEffect id', id);
@@ -172,8 +174,8 @@ export default function (props) {
 
 	const handleDecisionChange = async (event) => {
 		setDecision(event.target.value);
-		if(props.dSquare.setDecision) {
-			props.dSquare.setDecision(event.target.value);
+		if(self.parent.dSButtons.setDecision) {
+			self.parent.dSButtons.setDecision(event.target.value);
 		}
 		setDecisionChanged(true);
 	};

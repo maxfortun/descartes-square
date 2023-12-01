@@ -34,14 +34,16 @@ import Loader from './Loader';
 import DSButtons from './DSButtons';
 import DSquare from './DSquare';
 
-export default function (props) {
+export default function DSquares(props) {
+	const self = Object.assign({}, props);
+
 	const { session, setSession } = useContext(AppContext);
 	const [ dSquares, setDSquares ] = useState(null);
 	const [ dSquare, setDSquare ] = useState({});
 
-	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
+	Object.assign(self, { dSquares, setDSquares, dSquare, setDSquare });
 
-	debug("DSquares", props);
+	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
 
 	const fetchDSquares = async () => {
 		debug('fetchDSquares');
@@ -89,17 +91,19 @@ export default function (props) {
 
 	}, [dSquares]);
 
+	debug("DSquares", self);
+
 	if(!dSquares) {
 		return <Loader />;
 	}
 
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
-					<DSButtons dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} setDSquare={setDSquare} />
+					<DSButtons parent={self} />
 				</Box>
 				<Box>
 					{ null != dSquare.id 
-						? <DSquare dSquares={dSquares} setDSquares={setDSquares} dSquare={dSquare} />
+						? <DSquare parent={self} />
 						: <Loader />
 					}
 				</Box>

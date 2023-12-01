@@ -20,11 +20,15 @@ import { AppContext } from './AppContext';
 import DSButton from './DSButton';
 
 export default function (props) {
+	const self = Object.assign({}, props);
+
+	self.parent.dSButtons = self;
+
 	const { session, setSession } = useContext(AppContext);
 
 	const debug = Debug('descartes-squares:DSButtons:'+session.account.email);
 
-	const buttons = props.dSquares.map((_dSquare, i) => <DSButton key={i} dSButtons={this} selectedDSquare={props.dSquare} setDSquare={props.setDSquare} dSquare={_dSquare} />); 
+	const buttons = self.parent.dSquares.map((dSquare, i) => <DSButton key={i} parent={self} dSquare={dSquare} />); 
 	
 	buttons.push(
 		<IconButton
@@ -33,7 +37,7 @@ export default function (props) {
 			edge="end"
 			color="inherit"
 			aria-label="Menu"
-			onClick={() => props.setDSquare({ id: '' })}
+			onClick={() => self.parent.setDSquare({ id: '' })}
 		>	   
 			<AddIcon />
 		</IconButton>
