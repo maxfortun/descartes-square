@@ -26,6 +26,11 @@ export default function (props) {
 		debug('mounted', props);
 	}, []);
 
+    useEffect(() => {
+		debug('updated', props);
+		setDecision(props.dSquare.decision);
+	});
+
 	const sx={ mr: '4px' };
 
 	const theme = useTheme();
