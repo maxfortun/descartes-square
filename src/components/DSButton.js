@@ -27,9 +27,9 @@ export default function (props) {
 	}, []);
 
     useEffect(() => {
-		debug('updated', props);
+		debug('updated props.dSquare.decision', props.dSquare.decision);
 		setDecision(props.dSquare.decision);
-	});
+	}, [props.dSquare.decision]);
 
 	const sx={ mr: '4px' };
 
