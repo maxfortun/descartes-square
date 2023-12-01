@@ -122,10 +122,10 @@ export default function (props) {
 	}, []);
 
 	useEffect(() => {
-		debug('useEffect props.selectedDSquare.id', props.selectedDSquare?.id);
 		if(props.selectedDSquare?.id === undefined) {
 			return;
 		}
+		debug('useEffect props.selectedDSquare.id', props.selectedDSquare?.id);
 		setId(props.selectedDSquare.id);
 	}, [props.selectedDSquare?.id]);
 
@@ -140,7 +140,6 @@ export default function (props) {
 			createDSquare();
 		}
 	}, [id]);
-
 
 	if(!id) {
 		return <Loader />;
