@@ -79,6 +79,7 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('fetchDSquare <', square);
+			localStorage.dSquareId = square.id;
 			setDecision(square.decision);
 			if(decisionRef.current) {
 				decisionRef.current.value = square.decision;
@@ -94,6 +95,7 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('createDSquare <', square);
+			localStorage.dSquareId = square.id;
 			setId(square.id);
 			if(decisionRef.current) {
 				decisionRef.current.value = square.decision;
@@ -174,8 +176,8 @@ export default function (props) {
 
 	const handleDecisionChange = async (event) => {
 		setDecision(event.target.value);
-		if(props.setSelectedDecision) {
-			props.setSelectedDecision(event.target.value);
+		if(props.selectedDSquare?.setDecision) {
+			props.selectedDSquare.setDecision(event.target.value);
 		}
 		setDecisionChanged(true);
 	};

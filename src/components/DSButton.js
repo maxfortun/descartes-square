@@ -34,11 +34,8 @@ export default function (props) {
 		sx.color = theme.palette.secondary.main;
 	}
 
-	return <Button variant='outlined' sx={sx} 
-		onClick={() => {
-			props.setSelectedDSquare(props.dSquare);
-			self.parent.setDecision = setDecision;
-		}}
+	return <Button id={props.id} variant='outlined' sx={sx} 
+		onClick={() => props.setSelectedDSquare(Object.assign({}, props.dSquare, { setDecision }))}
 	>{decision}</Button>;
 }
 

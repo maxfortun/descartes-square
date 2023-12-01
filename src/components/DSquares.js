@@ -40,7 +40,7 @@ export default function (props) {
 	const [ ready, setReady ] = useState(false);
 	const [ dSButtons, setDSButtons ] = useState(null);
 	const [ dSquares, setDSquares ] = useState(null);
-	const [ dSquare, setDSquare ] = useState({});
+	const [ selectedDSquare, setSelectedDSquare ] = useState({});
 
 	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
 
@@ -77,8 +77,8 @@ export default function (props) {
             				setDSButtons,
             				dSquares,
             				setDSquares,
-            				selectedDSquare: dSquare,
-            				setSelectedDSquare: setDSquare
+            				selectedDSquare,
+            				setSelectedDSquare
        					}
 	);
 
@@ -87,7 +87,7 @@ export default function (props) {
 					<DSButtons {...childProps} />
 				</Box>
 				<Box>
-					{ null != dSquare.id 
+					{ null != selectedDSquare.id 
 						? <DSquare {...childProps} />
 						: <Loader />
 					}

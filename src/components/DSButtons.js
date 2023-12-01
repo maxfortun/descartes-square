@@ -35,7 +35,7 @@ export default function (props) {
 		}
 
 		debug("Rendering", props.dSquares);
-		const _buttons = props.dSquares.map((dSquare, i) => <DSButton key={i} {...props} dSquare={dSquare} />); 
+		const _buttons = props.dSquares.map((dSquare, i) => <DSButton key={i} {...props} id={'dsbutton:'+dSquare.id} dSquare={dSquare} />); 
 	
 		_buttons.push(
 			<IconButton
@@ -55,15 +55,6 @@ export default function (props) {
 	}, [ props.dSquares ]);
 
 	useEffect(() => {
-		if(!props.selectedDSquare.id) {
-			return;
-		}
-	
-		debug('useEffect props.selectedDSquare', props.selectedDSquare.id);
-		localStorage.dSquareId = props.selectedDSquare.id;
-	}, [props.selectedDSquare.id]);
-
-	useEffect(() => {
 		if(!buttons.length) {
 			return;
 		}
@@ -71,9 +62,11 @@ export default function (props) {
 		debug('useEffect buttons');
 
 		if(localStorage.dSquareId && props.dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
-			props.setSelectedDSquare({ id: localStorage.dSquareId } );
+			const button = document.getElementById('dsbutton:'+localStorage.dSquareId);
+			button.click();
 		} else if(props.dSquares.length > 0) {
-			props.setSelectedDSquare({ id: props.dSquares[0].id });
+			const button = document.getElementById('dsbutton:'+props.dSquares[0].id);
+			button.click();
 		} else {
 			props.setSelectedDSquare({ id: '' });
 		}
