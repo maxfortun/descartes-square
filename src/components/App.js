@@ -15,9 +15,12 @@ const debug = Debug('descartes-squares:App');
 const appContext = {};
 
 export default function () {
-	debug("App");
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
 	Object.assign(appContext, { session, setSession });
+
+	useEffect(() => {
+		debug('mounted');
+	}, []);
 
 	useEffect(() => {
 		debug('useEffect session.login', session.login);

@@ -34,8 +34,8 @@ import Loader from './Loader';
 import DSButtons from './DSButtons';
 import DSquare from './DSquare';
 
-export default function DSquares(props) {
-	const self = Object.assign({}, props);
+const self = {};
+export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
 	const [ ready, setReady ] = useState(false);
@@ -43,10 +43,7 @@ export default function DSquares(props) {
 	const [ dSquares, setDSquares ] = useState(null);
 	const [ dSquare, setDSquare ] = useState({});
 
-	Object.assign(self, { ready, dSButtons, setDSButtons, dSquares, setDSquares, dSquare, setDSquare });
-
 	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
-	debug(self);
 
 	const fetchDSquares = async () => {
 		debug('fetchDSquares');
@@ -62,34 +59,27 @@ export default function DSquares(props) {
 	useEffect(() => {
 		debug('mounted');
 		setReady(true);
-		fetchDSquares();
 	}, []);
 
 	useEffect(() => {
-		if(!dSquare.id) {
-			return;
-		}
-
-		debug('useEffect dSquare', dSquare.id);
-		localStorage.dSquareId = dSquare.id;
-	}, [dSquare.id]);
+		debug('updated');
+		Object.assign(self, props, {
+			ready, 
+			dSButtons,
+			setDSButtons,
+			dSquares,
+			setDSquares,
+			dSquare,
+			setDSquare
+		});
+	});
 
 	useEffect(() => {
-		if(!dSButtons) {
+		if(!ready) {
 			return;
 		}
-
-		debug('useEffect self.dSButtons');
-		if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
-			setDSquare({ id: localStorage.dSquareId } );
-		} else if(dSquares.length > 0) {
-			setDSquare({ id: dSquares[0].id });
-		} else {
-			setDSquare({ id: '' });
-		}
-
-	}, [dSButtons]);
-
+		fetchDSquares();
+	}, [ready]);
 
 	if(!dSquares) {
 		return <Loader />;

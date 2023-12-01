@@ -38,11 +38,11 @@ import { refetch } from './utils';
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 
+const self = {};
 export default function (props) {
-	const self = Object.assign({}, props);
 
 	const { session, setSession } = useContext(AppContext);
-	const [ id, setId ] = useState(self.parent.dSquare.id);
+	const [ id, setId ] = useState(props.parent?.dSquare?.id);
 
 	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
@@ -73,7 +73,6 @@ export default function (props) {
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
 	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
-	debug(self);
 
 	const fetchDSquare = async () => {
 		debug('fetchDSquare >', id);
@@ -107,26 +106,37 @@ export default function (props) {
 	};
 
 	const deleteDSquare = async () => {
-		debug('deleteDSquare >');
+		debug('deleteDSquare >', id);
 		return refetch(`/api/squares/${id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
-			debug('deleteDSquare <', square);
+			debug('deleteDSquare <', id);
 			self.parent.setDSquares(self.parent.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});
 	};
 
     useEffect(() => {
-		debug('mounted');
+		debug('mounted', props);
 	}, []);
+
+    useEffect(() => {
+		Object.assign(self, props);
+		debug('updated', self);
+	});
 
 	useEffect(() => {
 		debug('useEffect self.parent.dSquare.id', self.parent.dSquare.id);
+		if(!self.parent?.dSquare?.id) {
+			return;
+		}
 		setId(self.parent.dSquare.id);
-	}, [self.parent.dSquare.id]);
+	}, [self.parent?.dSquare?.id]);
 
 	useEffect(() => {
+		if(id === undefined) {
+			return;
+		}
 		debug('useEffect id', id);
 		if(id) {
 			fetchDSquare();

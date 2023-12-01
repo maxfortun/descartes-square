@@ -15,29 +15,34 @@ import { useTheme } from '@mui/material/styles';
 
 import { AppContext } from './AppContext';
 
+const self = {};
 export default function (props) {
-	const self = Object.assign({}, props);
 
 	const { session, setSession } = useContext(AppContext);
-	const [ decision, setDecision ] = useState(self.dSquare.decision);
+	const [ decision, setDecision ] = useState(props.dSquare.decision);
 
 	const debug = Debug('descartes-squares:DSButton:'+session.account.email);
 
     useEffect(() => {
-		debug('mounted');
+		debug('mounted', props);
 	}, []);
+
+    useEffect(() => {
+		debug('updated', props);
+		Object.assign(self, props);
+	});
 
 	const sx={ mr: '4px' };
 
 	const theme = useTheme();
 
-	if(self.dSquare.id == self.parent.parent.dSquare.id) {
+	if(props.dSquare.id == self.parent?.parent?.dSquare?.id) {
 		sx.color = theme.palette.secondary.main;
 	}
 
 	return <Button variant='outlined' sx={sx} 
 		onClick={() => {
-			self.parent.parent.setDSquare(self.dSquare);
+			self.parent.parent.setDSquare(props.dSquare);
 			self.parent.setDecision = setDecision;
 		}}
 	>{decision}</Button>;
