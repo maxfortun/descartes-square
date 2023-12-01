@@ -21,7 +21,6 @@ export default function (props) {
 	const [ decision, setDecision ] = useState(props.dSquare.decision);
 
 	const debug = Debug('descartes-squares:DSButton:'+session.account.email);
-	debug('init', props);
 
     useEffect(() => {
 		debug('mounted', props);
@@ -33,10 +32,11 @@ export default function (props) {
 
 	if(props.dSquare.id == props.selectedDSquare.id) {
 		sx.color = theme.palette.secondary.main;
+		props.selectedDSquare.setDecision = setDecision;
 	}
 
 	return <Button id={props.id} variant='outlined' sx={sx} 
-		onClick={() => props.setSelectedDSquare(Object.assign({}, props.dSquare, { setDecision }))}
+		onClick={() => props.setSelectedDSquare(props.dSquare)}
 	>{decision}</Button>;
 }
 

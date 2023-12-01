@@ -102,6 +102,7 @@ export default function (props) {
 			}
 			setConsiderations(square.considerations);
 			props.setDSquares(props.dSquares.concat([square]));
+			props.setSelectedDSquare(square);
 			return square;
 		});
 	};
@@ -112,6 +113,11 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', id);
+			let nextDSquare = {};
+			if(props.selectedDSquare.position) {
+				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.selectedDSquares[props.dSquare.position - 1];
+			}
+			props.setSelectedDSquare(nextDSquare);
 			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});

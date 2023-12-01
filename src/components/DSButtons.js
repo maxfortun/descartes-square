@@ -25,18 +25,29 @@ export default function (props) {
 	const debug = Debug('descartes-squares:DSButtons:'+session.account.email);
 
 	useEffect(() => {
-		debug('mounted', props);
+		if(props.selectedDSquare.id !== undefined) {
+			return;
+		}
 
 		if(localStorage.dSquareId && props.dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
 			const button = document.getElementById('dsbutton:'+localStorage.dSquareId);
-			button.click();
-		} else if(props.dSquares.length > 0) {
-			const button = document.getElementById('dsbutton:'+props.dSquares[0].id);
-			button.click();
-		} else {
-			props.setSelectedDSquare({ id: '' });
+			if(button) {
+				button.click();
+				return;
+			}
 		}
-	}, []);
+
+		if(props.dSquares.length > 0) {
+			const button = document.getElementById('dsbutton:'+props.dSquares[0].id);
+			if(button) {
+				button.click();
+				return;
+			}
+		}
+
+		props.setSelectedDSquare({ id: '' });
+	}, [props.selectedDSquare.id]);
+
 
 	if(!props.dSquares) {
 		return;

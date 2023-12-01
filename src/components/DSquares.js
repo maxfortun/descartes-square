@@ -66,6 +66,14 @@ export default function (props) {
 		fetchDSquares();
 	}, [ready]);
 
+	useEffect(() => {
+		if(!dSquares) {
+			return;
+		}
+		dSquares.forEach((dSquare, i) => dSquare.position = i);
+	}, [dSquares]);
+
+
 	if(!dSquares) {
 		return <Loader />;
 	}
