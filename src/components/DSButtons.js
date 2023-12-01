@@ -19,7 +19,6 @@ import {
 import { AppContext } from './AppContext';
 import DSButton from './DSButton';
 
-const self = {};
 export default function (props) {
 	const { session, setSession } = useContext(AppContext);
 	const [ buttons, setButtons ] = useState([]);
@@ -31,26 +30,12 @@ export default function (props) {
 	}, []);
 
 	useEffect(() => {
-		debug('updated', props);
-		Object.assign(self, props);
-	});
-
-	useEffect(() => {
-		if(!self.parent.ready) {
+		if(!props.dSquares) {
 			return;
 		}
 
-		debug("Parent ready");
-		self.parent.setDSButtons(self);
-	}, [ self.parent?.ready ]);
-
-	useEffect(() => {
-		if(!self.parent.dSquares) {
-			return;
-		}
-
-		debug("Rendering", self.parent.dSquares);
-		const _buttons = self.parent.dSquares.map((dSquare, i) => <DSButton key={i} parent={self} dSquare={dSquare} />); 
+		debug("Rendering", props.dSquares);
+		const _buttons = props.dSquares.map((dSquare, i) => <DSButton key={i} {...props} dSquare={dSquare} />); 
 	
 		_buttons.push(
 			<IconButton
@@ -59,7 +44,7 @@ export default function (props) {
 				edge="end"
 				color="inherit"
 				aria-label="Menu"
-				onClick={() => self.parent.setDSquare({ id: '' })}
+				onClick={() => props.setSelectedDSquare({ id: '' })}
 			>	   
 				<AddIcon />
 			</IconButton>
@@ -67,16 +52,16 @@ export default function (props) {
 		
 		setButtons(_buttons);
 
-	}, [ self.parent?.dSquares ]);
+	}, [ props.dSquares ]);
 
 	useEffect(() => {
-		if(!self.parent?.dSquare.id) {
+		if(!props.selectedDSquare.id) {
 			return;
 		}
 	
-		debug('useEffect self.parent?.dSquare', self.parent?.dSquare.id);
-		localStorage.dSquareId = self.parent?.dSquare.id;
-	}, [self.parent?.dSquare.id]);
+		debug('useEffect props.selectedDSquare', props.selectedDSquare.id);
+		localStorage.dSquareId = props.selectedDSquare.id;
+	}, [props.selectedDSquare.id]);
 
 	useEffect(() => {
 		if(!buttons.length) {
@@ -85,12 +70,12 @@ export default function (props) {
 
 		debug('useEffect buttons');
 
-		if(localStorage.dSquareId && self.parent.dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
-			self.parent.setDSquare({ id: localStorage.dSquareId } );
-		} else if(dSquares.length > 0) {
-			self.parent.setDSquare({ id: dSquares[0].id });
+		if(localStorage.dSquareId && props.dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
+			props.setSelectedDSquare({ id: localStorage.dSquareId } );
+		} else if(props.dSquares.length > 0) {
+			props.setSelectedDSquare({ id: props.dSquares[0].id });
 		} else {
-			self.parent.setDSquare({ id: '' });
+			props.setSelectedDSquare({ id: '' });
 		}
 
 	}, [ buttons ]);

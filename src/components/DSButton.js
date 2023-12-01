@@ -15,7 +15,6 @@ import { useTheme } from '@mui/material/styles';
 
 import { AppContext } from './AppContext';
 
-const self = {};
 export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
@@ -27,22 +26,17 @@ export default function (props) {
 		debug('mounted', props);
 	}, []);
 
-    useEffect(() => {
-		debug('updated', props);
-		Object.assign(self, props);
-	});
-
 	const sx={ mr: '4px' };
 
 	const theme = useTheme();
 
-	if(props.dSquare.id == self.parent?.parent?.dSquare?.id) {
+	if(props.dSquare.id == props.selectedDSquare?.id) {
 		sx.color = theme.palette.secondary.main;
 	}
 
 	return <Button variant='outlined' sx={sx} 
 		onClick={() => {
-			self.parent.parent.setDSquare(props.dSquare);
+			props.setSelectedDSquare(props.dSquare);
 			self.parent.setDecision = setDecision;
 		}}
 	>{decision}</Button>;

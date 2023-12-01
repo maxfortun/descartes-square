@@ -38,11 +38,10 @@ import { refetch } from './utils';
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 
-const self = {};
 export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
-	const [ id, setId ] = useState(props.parent?.dSquare?.id);
+	const [ id, setId ] = useState(props.selectedDSquare?.id);
 
 	const [ decision, setDecision ] = useState('');
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
@@ -100,7 +99,7 @@ export default function (props) {
 				decisionRef.current.value = square.decision;
 			}
 			setConsiderations(square.considerations);
-			self.parent.setDSquares(self.parent.dSquares.concat([square]));
+			props.setDSquares(props.dSquares.concat([square]));
 			return square;
 		});
 	};
@@ -111,7 +110,7 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', id);
-			self.parent.setDSquares(self.parent.dSquares.filter( _square => _square.id != id ));
+			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});
 	};
@@ -120,18 +119,13 @@ export default function (props) {
 		debug('mounted', props);
 	}, []);
 
-    useEffect(() => {
-		Object.assign(self, props);
-		debug('updated', self);
-	});
-
 	useEffect(() => {
-		debug('useEffect self.parent.dSquare.id', self.parent.dSquare.id);
-		if(!self.parent?.dSquare?.id) {
+		debug('useEffect props.selectedDSquare.id', props.selectedDSquare?.id);
+		if(props.selectedDSquare?.id === undefined) {
 			return;
 		}
-		setId(self.parent.dSquare.id);
-	}, [self.parent?.dSquare?.id]);
+		setId(props.selectedDSquare.id);
+	}, [props.selectedDSquare?.id]);
 
 	useEffect(() => {
 		if(id === undefined) {
@@ -180,8 +174,8 @@ export default function (props) {
 
 	const handleDecisionChange = async (event) => {
 		setDecision(event.target.value);
-		if(self.parent.dSButtons.setDecision) {
-			self.parent.dSButtons.setDecision(event.target.value);
+		if(props.setSelectedDecision) {
+			props.setSelectedDecision(event.target.value);
 		}
 		setDecisionChanged(true);
 	};

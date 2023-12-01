@@ -34,7 +34,6 @@ import Loader from './Loader';
 import DSButtons from './DSButtons';
 import DSquare from './DSquare';
 
-const self = {};
 export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
@@ -62,19 +61,6 @@ export default function (props) {
 	}, []);
 
 	useEffect(() => {
-		debug('updated');
-		Object.assign(self, props, {
-			ready, 
-			dSButtons,
-			setDSButtons,
-			dSquares,
-			setDSquares,
-			dSquare,
-			setDSquare
-		});
-	});
-
-	useEffect(() => {
 		if(!ready) {
 			return;
 		}
@@ -85,13 +71,24 @@ export default function (props) {
 		return <Loader />;
 	}
 
+	const childProps = Object.assign({}, props, 
+            			{
+            				dSButtons,
+            				setDSButtons,
+            				dSquares,
+            				setDSquares,
+            				selectedDSquare: dSquare,
+            				setSelectedDSquare: setDSquare
+       					}
+	);
+
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
-					<DSButtons parent={self} />
+					<DSButtons {...childProps} />
 				</Box>
 				<Box>
 					{ null != dSquare.id 
-						? <DSquare parent={self} />
+						? <DSquare {...childProps} />
 						: <Loader />
 					}
 				</Box>
