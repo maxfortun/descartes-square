@@ -31,16 +31,9 @@ export default function (props) {
 
 	const theme = useTheme();
 
-	useEffect(() => {
-		debug('updated props.selectedDSquare', props.selectedDSquare.id);
-		if(props.selectedDSquare?.id === undefined) {
-			return;
-		}
-		if(props.dSquare.id == props.selectedDSquare.id) {
-			sx.color = theme.palette.secondary.main;
-		}
-	}, [ props.selectedDSquare?.id ]);
-
+	if(props.dSquare.id == props.selectedDSquare.id) {
+		sx.color = theme.palette.secondary.main;
+	}
 
 	return <Button id={props.id} variant='outlined' sx={sx} 
 		onClick={() => props.setSelectedDSquare(Object.assign({}, props.dSquare, { setDecision }))}
