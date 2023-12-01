@@ -73,6 +73,7 @@ export default function (props) {
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
 	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
+	debug(self);
 
 	const fetchDSquare = async () => {
 		debug('fetchDSquare >', id);
@@ -116,14 +117,9 @@ export default function (props) {
 		});
 	};
 
-	const didMount = useRef(false);
-	useEffect(() => {
-		if(!didMount.current) {
-			didMount.current = true;
-			debug('useEffect', 'mounted', self);
-			return;
-		}
-	});
+    useEffect(() => {
+		debug('mounted');
+	}, []);
 
 	useEffect(() => {
 		debug('useEffect self.parent.dSquare.id', self.parent.dSquare.id);

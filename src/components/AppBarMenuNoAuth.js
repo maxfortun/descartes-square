@@ -23,7 +23,9 @@ export default function () {
 
 	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
 
-	debug("AppBarMenuAuth");
+    useEffect(() => {
+		debug('mounted');
+	}, []);
 
 	return (
 		<Box onMouseEnter={handleOpen} onMouseLeave={handleClose}>

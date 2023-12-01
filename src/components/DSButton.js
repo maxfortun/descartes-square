@@ -22,6 +22,11 @@ export default function (props) {
 	const [ decision, setDecision ] = useState(self.dSquare.decision);
 
 	const debug = Debug('descartes-squares:DSButton:'+session.account.email);
+
+    useEffect(() => {
+		debug('mounted');
+	}, []);
+
 	const sx={ mr: '4px' };
 
 	const theme = useTheme();

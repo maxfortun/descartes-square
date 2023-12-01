@@ -15,8 +15,6 @@ import { refetch } from './utils';
 export default function () {
 	const { session, setSession } = useContext(AppContext);
 
-	debug("AppBar");
-
 	const fetchSession = async () => {
         debug('fetchSession>');
         refetch('/api/session', { credentials: 'include' })
@@ -30,6 +28,10 @@ export default function () {
 			debug('fetchSession!', e);
 		});
     };
+
+    useEffect(() => {
+		debug('mounted');
+	}, []);
 
     useEffect(() => {
 		if(!session.login) {

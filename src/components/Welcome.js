@@ -27,7 +27,9 @@ import { AppContext } from './AppContext';
 export default function () {
 	const { session, setSession } = useContext(AppContext);
 
-	debug("Welcome");
+	useEffect(() => {
+		debug('mounted');
+	}, []);
 
 	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
 

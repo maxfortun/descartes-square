@@ -38,12 +38,15 @@ export default function DSquares(props) {
 	const self = Object.assign({}, props);
 
 	const { session, setSession } = useContext(AppContext);
+	const [ ready, setReady ] = useState(false);
+	const [ dSButtons, setDSButtons ] = useState(null);
 	const [ dSquares, setDSquares ] = useState(null);
 	const [ dSquare, setDSquare ] = useState({});
 
-	Object.assign(self, { dSquares, setDSquares, dSquare, setDSquare });
+	Object.assign(self, { ready, dSButtons, setDSButtons, dSquares, setDSquares, dSquare, setDSquare });
 
 	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
+	debug(self);
 
 	const fetchDSquares = async () => {
 		debug('fetchDSquares');
@@ -56,15 +59,11 @@ export default function DSquares(props) {
 		});
 	};
 
-	const didMount = useRef(false); 
 	useEffect(() => {
-		if(!didMount.current) { 
-			didMount.current = true;
-			debug('useEffect', 'mounted');
-			fetchDSquares();
-			return;
-		} 
-	});
+		debug('mounted');
+		setReady(true);
+		fetchDSquares();
+	}, []);
 
 	useEffect(() => {
 		if(!dSquare.id) {
@@ -76,11 +75,11 @@ export default function DSquares(props) {
 	}, [dSquare.id]);
 
 	useEffect(() => {
-		if(!dSquares) {
+		if(!dSButtons) {
 			return;
 		}
 
-		debug('useEffect dSquares');
+		debug('useEffect self.dSButtons');
 		if(localStorage.dSquareId && dSquares.filter(square => square.id == localStorage.dSquareId).length > 0) {
 			setDSquare({ id: localStorage.dSquareId } );
 		} else if(dSquares.length > 0) {
@@ -89,9 +88,8 @@ export default function DSquares(props) {
 			setDSquare({ id: '' });
 		}
 
-	}, [dSquares]);
+	}, [dSButtons]);
 
-	debug("DSquares", self);
 
 	if(!dSquares) {
 		return <Loader />;

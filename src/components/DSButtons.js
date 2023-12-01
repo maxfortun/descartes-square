@@ -22,11 +22,18 @@ import DSButton from './DSButton';
 export default function (props) {
 	const self = Object.assign({}, props);
 
-	self.parent.dSButtons = self;
-
 	const { session, setSession } = useContext(AppContext);
 
 	const debug = Debug('descartes-squares:DSButtons:'+session.account.email);
+
+    useEffect(() => {
+		debug('mounted');
+	}, []);
+
+	useEffect(() => {
+		debug("Parent ready");
+		self.parent.setDSButtons(self);
+	}, [ self.parent.ready ]);
 
 	const buttons = self.parent.dSquares.map((dSquare, i) => <DSButton key={i} parent={self} dSquare={dSquare} />); 
 	
