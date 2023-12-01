@@ -73,7 +73,6 @@ export default function (props) {
 		dSquares.forEach((dSquare, i) => dSquare.position = i);
 	}, [dSquares]);
 
-
 	if(!dSquares) {
 		return <Loader />;
 	}
