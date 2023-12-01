@@ -38,7 +38,6 @@ export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
 	const [ ready, setReady ] = useState(false);
-	const [ dSButtons, setDSButtons ] = useState(null);
 	const [ dSquares, setDSquares ] = useState(null);
 	const [ selectedDSquare, setSelectedDSquare ] = useState({});
 
@@ -73,8 +72,6 @@ export default function (props) {
 
 	const childProps = Object.assign({}, props, 
             			{
-            				dSButtons,
-            				setDSButtons,
             				dSquares,
             				setDSquares,
             				selectedDSquare,
