@@ -6,21 +6,15 @@ const router = express.Router();
 const dsquares = require('../lib/dsquares');
 
 router.get('/session', function(req, res, next) {
-	const { options } = req.app.settings;
 	res.json({ account: req.account });
 });
 
 router.get('/redirect', function(req, res, next) {
-	const { options } = req.app.settings;
 	res.redirect(decodeURIComponent(req.query.url));
 });
 
 router.get('/appinfo', async (req, res) => {
-	const app_info = {
-	};
-
-	// debug(req.id, 'appinfo',app_info);
-	res.json(app_info);
+	res.json(await dsquares.appInfo(req));
 });
 
 router.get('/squares', async (req, res) => {

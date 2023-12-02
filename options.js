@@ -38,10 +38,12 @@ function mongoose(dbId) {
 
 const dsquaresMongoose = mongoose('dsquares');
 const dsquares	= new MongooseJSProxy({ mongoose: dsquaresMongoose, idField: 'id', options: { collection: 'dsquares' }});
+const accounts	= new MongooseJSProxy({ mongoose: dsquaresMongoose, idField: 'id', options: { collection: 'accounts' }});
 
 module.exports = {
 	dsquaresMongoose,
 	dsquares,
+	accounts,
 	ezsso_oidc_auth_id: process.env.EZSSO_OIDC_AUTH_ID,
     ezsso_oidc_idp_id: process.env.EZSSO_OIDC_IDP_ID,
     ezsso_oidc_authorize_uri: process.env.EZSSO_OIDC_AUTHORIZE_URI,
