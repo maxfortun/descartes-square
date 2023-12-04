@@ -41,6 +41,8 @@ import Loader from './Loader';
 export default function (props) {
 
 	const { session, setSession } = useContext(AppContext);
+	const [ error, setError ] = useState(null);
+
 	const [ id, setId ] = useState(props.selectedDSquare?.id);
 
 	const [ decision, setDecision ] = useState('');
@@ -92,7 +94,12 @@ export default function (props) {
 	const createDSquare = async () => {
 		debug('createDSquare >');
 		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
-		.then(response => response.json())
+		.then(async response => {
+			if(response.status < 400) {
+				return response.json();
+			}
+			throw await response.json();
+		})
 		.then(square => {
 			debug('createDSquare <', square);
 			localStorage.dSquareId = square.id;
@@ -104,7 +111,12 @@ export default function (props) {
 			props.setDSquares(props.dSquares.concat([square]));
 			props.setSelectedDSquare(square);
 			return square;
+		})
+		.catch(e => {
+			debug('createDSquare !', e);
+			setError(e.error+'. '+(e.detail?.description || ''));
 		});
+		
 	};
 
 	const deleteDSquare = async () => {
@@ -148,6 +160,9 @@ export default function (props) {
 	}, [id]);
 
 	if(!id) {
+		if(error) {
+			return <Typography color='red'>{error}</Typography>;
+		}
 		return <Loader />;
 	}
 
