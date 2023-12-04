@@ -127,7 +127,7 @@ export default function (props) {
 			debug('deleteDSquare <', id);
 			let nextDSquare = {};
 			if(props.selectedDSquare.position) {
-				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.selectedDSquares[props.dSquare.position - 1];
+				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.dSquares[props.selectedDSquare.position - 1];
 			}
 			props.setSelectedDSquare(nextDSquare);
 			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
