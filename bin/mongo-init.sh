@@ -1,5 +1,4 @@
 #!/opt/local/bin/bash -e
-
 app=$1
 
 if [ -z "$app" ]; then
@@ -8,11 +7,24 @@ if [ -z "$app" ]; then
 	exit 1
 fi
 
-WD=$( cd $(dirname $0)/..; pwd )
-. $WD/secrets/.env.local
+SWD=$( cd $(dirname $0) ; pwd )
+MONGO_INITDB_ROOT_USERNAME_FILE=$DPSRV_HOME/rc/secrets/mongo/conf/admin-username
+MONGO_INITDB_ROOT_PASSWORD_FILE=$DPSRV_HOME/rc/secrets/mongo/conf/admin-password
 
+if [ -z "$MONGO_INITDB_ROOT_USERNAME" ] && [ -f "$MONGO_INITDB_ROOT_USERNAME_FILE" ]; then
+	MONGO_INITDB_ROOT_USERNAME=$(cat $MONGO_INITDB_ROOT_USERNAME_FILE)
+fi
+
+if [ -z "$MONGO_INITDB_ROOT_PASSWORD" ] && [ -f "$MONGO_INITDB_ROOT_PASSWORD_FILE" ]; then
+	MONGO_INITDB_ROOT_PASSWORD=$(cat $MONGO_INITDB_ROOT_PASSWORD_FILE)
+fi
+
+admin_uri="mongodb://$MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_PASSWORD@localhost:27017/admin?tls=true&tlsInsecure=true&tlsCertificateKeyFile=/etc/mongo/cert.pem"
+
+. $SWD/../secrets/.env.local
 app_var=${app^^}_MONGODB
 app_uri=${!app_var}
+app_uri=${app_uri%%\?*}
 app_db=${app_uri##*/}
 app_uri=${app_uri##*//}
 app_uri=${app_uri%%@*}
@@ -39,7 +51,8 @@ db.createUser(
 
 _EOT_
 
-docker exec -i mongo mongosh "$ADMIN_MONGODB" --quiet < "$script"
+cat $script
+docker exec -i dpsrv-mongo mongosh "$admin_uri" --quiet < "$script"
 
 rm "$script"
 
