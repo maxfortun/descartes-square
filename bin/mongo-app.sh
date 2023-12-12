@@ -22,6 +22,6 @@ else
         params+=( -it )
 fi
 
-docker exec ${params[@]} mongo mongosh "$app_uri" "$@"
+docker exec ${params[@]} dpsrv-mongo mongosh "$app_uri" "$@"
 
 

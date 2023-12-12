@@ -318,7 +318,7 @@ export default function (props) {
 			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />
 					);
 
-		const label = ('What '+effect + ' happen if you ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
