@@ -13,6 +13,7 @@ import {
 	FormControlLabel,
 	FormLabel,
 	Icon,
+	Link,
 	Paper,
 	Radio,
 	RadioGroup,
@@ -55,6 +56,7 @@ export default function () {
 			<Box sx={{ mt: '24px', mb: '8px' }}><Divider/></Box>
 			<Box>
 				<Typography>
+A Descartes' Square is a decision making technique, invention of which is attributed to <Link href="https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes">René Descartes</Link>, a French philosopher, scientist, and mathematician, widely considered a seminal figure in the emergence of modern philosophy and science. It is an enhanced approach to its more familiar relative <Link href="https://en.wikipedia.org/wiki/Decisional_balance_sheet">Pros/Cons lists</Link>. Instead of creating two lists of advantages and disadvantages of a decision, a two by two grid is created and each resulting quadrant is populated accordingly:
 				</Typography>
 			</Box>
 		</>
