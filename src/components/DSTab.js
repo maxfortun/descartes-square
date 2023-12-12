@@ -24,7 +24,11 @@ export default function (props) {
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
-	const label = <Box display='flex'>
+	const label = <Box
+		display='flex'
+		justifyContent='center'
+		alignItems='center'
+	>
 		{props.dSquare.decision}
 		{ props.dSquare.id && props.dSquare.id == props.selectedDSquare.id &&
 			<Box>

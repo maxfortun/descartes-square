@@ -70,7 +70,11 @@ export default function (props) {
 	debug("props.selectedDSquare", props.selectedDSquare);
 	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id) || 0;
 
-	return <Box display='flex'>
+	return <Box
+		display='flex'
+		justifyContent='center'
+		alignItems='center'
+	>
 		<Tabs
 				value={value}
 				onChange={handleChange}
