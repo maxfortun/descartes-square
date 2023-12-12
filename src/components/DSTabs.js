@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import {
+	Box,
 	Tabs,
 	Tab,
 	Tooltip
@@ -66,20 +67,19 @@ export default function (props) {
 	debug("Rendering", props.dSquares);
 	const tabs = props.dSquares.map((dSquare, i) => <DSTab key={i} {...props} id={'dstab:'+dSquare.id} dSquare={dSquare} />); 
 	
-	tabs.push(
-		<Tab key={tabs.length} icon={<AddIcon />} />
-	);
-
 	debug("props.selectedDSquare", props.selectedDSquare);
 	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id) || 0;
 
-	return <Tabs
+	return <Box display='flex'>
+		<Tabs
 				value={value}
 				onChange={handleChange}
 				variant="scrollable"
   				scrollButtons={false}
-	>
-		{tabs}
-	</Tabs>;
+		>
+			{tabs}
+		</Tabs>
+		<AddIcon />
+	</Box>;
 }
 

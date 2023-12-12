@@ -5,8 +5,17 @@ import React, {
 } from 'react';
 
 import {
-	Tab
+	Box,
+	Tab,
+	Tooltip
 } from '@mui/material';
+
+import {
+	DeleteForever as DeleteForeverIcon,
+	Download as DownloadIcon,
+	Edit as EditIcon,
+	IosShare as IosShareIcon
+} from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 
@@ -15,6 +24,16 @@ export default function (props) {
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
-	return <Tab id={props.id} label={props.dSquare.decision} />;
+	const label = <Box display='flex'>
+		{props.dSquare.decision}
+		{ props.dSquare.id && props.dSquare.id == props.selectedDSquare.id &&
+			<Box>
+				<EditIcon />
+				<IosShareIcon />
+				<DeleteForeverIcon />
+			</Box>
+		}
+	</Box>;
+	return <Tab id={props.id} label={label} />;
 }
 
