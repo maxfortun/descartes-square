@@ -42,29 +42,7 @@ export default function () {
 				display='flex'
 				justifyContent='center'
 				alignItems='center'
-				sx={{ mt: '24px' }}
-			>
-				<Box>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						Best decision you'll ever make.
-					</Typography>
-				</Box>
-				<Box sx={{ ml: '24px' }}>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						<Button className="pulse" color="inherit" variant="contained" onClick={handleLoginClick}>more</Button>
-					</Typography>
-				</Box>
-			</Box>
-			<Box sx={{ mt: '24px', mb: '8px' }}><Divider/></Box>
-			<Box>
-				<Typography>
-A Descartes' Square is a decision making technique, invention of which is attributed to <Link href="https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes">René Descartes</Link>, a French philosopher, scientist, and mathematician, widely considered a seminal figure in the emergence of modern philosophy and science. It is an enhanced approach to its more familiar relative <Link href="https://en.wikipedia.org/wiki/Decisional_balance_sheet">Pros/Cons list</Link>. Instead of creating two lists of advantages and disadvantages of a decision, a two by two grid is created and each resulting quadrant is populated accordingly. A completed Descartes` Square provides a deeper insight into the consequences of a decision. This tools aims to take the Descartes` Square technique further, by allowing sharing and collaborating on a decision across multiple individuals. Try it. May be the best decision you'll ever make.
-				</Typography>
-			</Box>
-			<Box
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
+				sx={{ mt: '24px', mb: '8px' }}
 			>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '100px' }}>
@@ -88,7 +66,18 @@ A Descartes' Square is a decision making technique, invention of which is attrib
 						</TableBody>
 					</Table>
 				</TableContainer>
-
+			</Box>
+			<Box>
+				<Typography>
+A Descartes' Square is a decision making technique, invention of which is attributed to <Link href="https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes">René Descartes</Link>, a French philosopher, scientist, and mathematician, widely considered a seminal figure in the emergence of modern philosophy and science. It is an enhanced approach to its more familiar relative <Link href="https://en.wikipedia.org/wiki/Decisional_balance_sheet">Pros/Cons list</Link>. Instead of creating two lists of advantages and disadvantages of a decision, a two by two grid is created and each resulting quadrant is populated accordingly. A completed Descartes` Square provides a deeper insight into the consequences of a decision. This tools aims to take the Descartes` Square technique further, by allowing sharing and collaborating on a decision across multiple contributors. It just may be the best decision you'll ever make.
+				</Typography>
+			</Box>
+			<Box
+				display='flex'
+				justifyContent='center'
+				alignItems='center'
+			>
+				<Button variant="outlined" onClick={handleLoginClick}>Try it.</Button>
 			</Box>
 		</>
 	);
