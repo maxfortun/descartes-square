@@ -314,9 +314,12 @@ export default function (props) {
 		const inputRef = descsRefs[descKey(cause,effect)];
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
-					.map((consideration, i) => 
-			 			<Chip key={i} label={consideration.desc || consideration.id} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />
-					);
+					.map((consideration, i) => {
+						const label = <Box>
+							{consideration.desc || consideration.id}
+						</Box>;
+			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />;
+					});
 
 		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
