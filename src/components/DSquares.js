@@ -31,7 +31,7 @@ import { refetch } from './utils';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
-import DSButtons from './DSButtons';
+import DSTabs from './DSTabs';
 import DSquare from './DSquare';
 
 export default function (props) {
@@ -88,7 +88,7 @@ export default function (props) {
 
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
-					<DSButtons {...childProps} />
+					<DSTabs {...childProps} />
 				</Box>
 				<Box>
 					{ null != selectedDSquare.id 
