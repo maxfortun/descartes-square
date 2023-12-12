@@ -49,18 +49,18 @@ export default function () {
 						<TableBody>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border, textAlign: 'center' }}>
-									What will happen if I do this?
+									What <Typography display='inline' sx={{ color: 'green' }}>will</Typography> happen if I <Typography display='inline' sx={{ color: 'green' }}>do</Typography> this?
 								</TableCell>
 								<TableCell style={{ textAlign: 'center' }}>
-									What will happen if I do not do this?
+									What <Typography display='inline' sx={{ color: 'green' }}>will</Typography> happen if I <Typography display='inline' sx={{ color: 'red' }}>do not</Typography> do this?
 								</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ width: '50%', height: '50%', borderRight: border, textAlign: 'center' }}>
-									What will not happen if I do this?
+									What <Typography display='inline' sx={{ color: 'red' }}>will not</Typography> happen if I <Typography display='inline' sx={{ color: 'green' }}>do</Typography> this?
 								</TableCell>
 								<TableCell style={{ textAlign: 'center' }}>
-									What will not happen if I do not do this?
+									What <Typography display='inline' sx={{ color: 'red' }}>will not</Typography> happen if I <Typography display='inline' sx={{ color: 'red' }}>do not</Typography> do this?
 								</TableCell>
 							</TableRow>
 						</TableBody>
