@@ -353,67 +353,6 @@ export default function (props) {
 	};
 
 	return	<Box sx={{ mt: '16px', mb: '4px' }} >
-				<Box sx={{ display: 'flex', mr: '16px', ml: '16px' }}>
-					<Box sx={{ margin: 'auto', flexGrow: 1 }} >
-						<TextField
-							inputRef={decisionRef}
-							label='Decision'
-							size='small'
-							fullWidth={true}
-							inputProps={{ style: { textAlign: 'center' } }}
-							defaultValue={decision}
-							onChange={handleDecisionChange}
-							onKeyDown={handleDecisionKeyDown}
-							onBlur={handleDecisionBlur}
-							InputProps={{
-								endAdornment: ( 
-									<InputAdornment position="end">
-										<KeyboardReturnIcon onClick={updateDecision} />
-									</InputAdornment>
-								)
-							}}
-						/>
-					</Box>
-					<Box>
-						<IconButton
-							size="small" 
-							edge="end"
-							color="inherit"
-							aria-label="Menu"
-							sx={{display: 'none'}}
-							onClick={handleShareClick}
-						>
-							<Tooltip placement="top-start" title="Share">
-								<IosShareIcon />
-							</Tooltip>
-						</IconButton>
-						<IconButton
-							size="small" 
-							edge="end"
-							color="inherit"
-							aria-label="Menu"
-							sx={{display: 'none'}}
-							onClick={handleDownloadClick}
-						>
-							<Tooltip placement="top-start" title="Download">
-								<DownloadIcon />
-							</Tooltip>
-						</IconButton>
-						<IconButton
-							size="small" 
-							edge="end"
-							color="inherit"
-							aria-label="Menu"
-							onClick={handleDeleteClick}
-						>
-							<Tooltip placement="top-start" title="Delete">
-								<DeleteForeverIcon />
-							</Tooltip>
-						</IconButton>
-					</Box>
-				</Box>
-				<Box sx={{ mb: '8px' }}>
-				</Box>
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '75vh' }}>
 						<TableBody>
