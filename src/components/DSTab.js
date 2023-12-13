@@ -6,6 +6,7 @@ import React, {
 
 import {
 	Box,
+	IconButton,
 	Tab,
 	Tooltip
 } from '@mui/material';
@@ -24,20 +25,37 @@ export default function (props) {
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
-	const label = <Box
+	return <Box
 		display='flex'
 		justifyContent='center'
 		alignItems='center'
 	>
 		{props.dSquare.decision}
-		{ props.dSquare.id && props.dSquare.id == props.selectedDSquare.id &&
-			<Box>
-				<EditIcon />
-				<IosShareIcon />
-				<DeleteForeverIcon />
-			</Box>
-		}
+		<Box>
+			<IconButton
+				size="small"
+			>
+				<Tooltip placement="top-start" title="Edit">
+					<EditIcon />
+				</Tooltip>
+			</IconButton>
+
+			<IconButton
+				size="small"
+			>
+				<Tooltip placement="top-start" title="Share">
+					<IosShareIcon />
+				</Tooltip>
+			</IconButton>
+
+			<IconButton
+				size="small"
+			>
+				<Tooltip placement="top-start" title="Share">
+					<DeleteForeverIcon />
+				</Tooltip>
+			</IconButton>
+		</Box>
 	</Box>;
-	return <Tab id={props.id} label={label} />;
 }
 

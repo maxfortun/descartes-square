@@ -65,7 +65,12 @@ export default function (props) {
 	};
 
 	debug("Rendering", props.dSquares);
-	const tabs = props.dSquares.map((dSquare, i) => <DSTab key={i} {...props} id={'dstab:'+dSquare.id} dSquare={dSquare} />); 
+	const tabs = props.dSquares.map((dSquare, i) => {
+		if(dSquare.id && dSquare.id == props.selectedDSquare.id) {
+			return <DSTab key={i} {...props} dSquare={dSquare} />
+		}
+		return <Tab key={i} label={dSquare.decision} />
+	}); 
 	
 	debug("props.selectedDSquare", props.selectedDSquare);
 	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id) || 0;
