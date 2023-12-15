@@ -96,6 +96,16 @@ export default function (props) {
 		fetchDSquare();
 	}, [props.selectedDSquare.id]);
 
+	useEffect(() => {
+		if(considerations.length) {
+			return;
+		}
+		refetch(`/api/ai/vertex/${props.selectedDSquare.id}`, { credentials: 'include' })
+		.then(response => response.json())
+		.then(answers => {
+			debug('useEffect decision <', answers);
+		});
+	}, [decision]);
 
 	const deleteConsideration = async (considerationId) => {
 		debug('deleteConsideration', considerationId);
