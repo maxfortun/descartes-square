@@ -2,6 +2,7 @@ import Debug from 'debug';
 
 import React, {
 	useContext,
+	useEffect,
 	useState
 } from 'react';
 
@@ -24,10 +25,20 @@ import { AppContext } from './AppContext';
 import { refetch } from './utils';
 
 export default function (props) {
-	const { decison, setDecision, session, setSession } = useContext(AppContext);
+	const {
+		decision,
+		setDecision,
+		session,
+		setSession
+	} = useContext(AppContext);
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
+
+	useEffect(() => {
+		setDecision(props.selectedDSquare.decision);
+	}, [props.selectedDSquare.decision]);
+
 
 	const handleDecisionChange = (event) => {
 		debug('handleDecisionChange', event.target.value);

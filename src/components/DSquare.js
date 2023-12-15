@@ -40,6 +40,10 @@ import Loader from './Loader';
 
 export default function (props) {
 
+	if(!props.selectedDSquare?.id) {
+		return <Loader />;
+	}
+
 	const {
 		decision,
 		setDecision,
@@ -49,7 +53,6 @@ export default function (props) {
 		setSession
 	} = useContext(AppContext);
 
-	const [ id, setId ] = useState(props.selectedDSquare?.id);
 
 	const descKey = (cause, effect) => {
 		return cause+':'+effect;
@@ -78,8 +81,8 @@ export default function (props) {
 	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
 
 	const fetchDSquare = async () => {
-		debug('fetchDSquare >', id);
-		return refetch(`/api/squares/${id}`, { credentials: 'include' })
+		debug('fetchDSquare >', props.selectedDSquare.id);
+		return refetch(`/api/squares/${props.selectedDSquare.id}`, { credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('fetchDSquare <', square);
@@ -94,29 +97,9 @@ export default function (props) {
 	}, []);
 
 	useEffect(() => {
-		if(props.selectedDSquare?.id === undefined) {
-			return;
-		}
-		debug('useEffect props.selectedDSquare.id', props.selectedDSquare?.id);
-		setId(props.selectedDSquare.id);
-	}, [props.selectedDSquare?.id]);
+		fetchDSquare();
+	}, []);
 
-	useEffect(() => {
-		if(id === undefined) {
-			return;
-		}
-		debug('useEffect id', id);
-		if(id) {
-			fetchDSquare();
-		}
-	}, [id]);
-
-	if(!id) {
-		if(error) {
-			return <Typography color='red'>{error}</Typography>;
-		}
-		return <Loader />;
-	}
 
 	const deleteConsideration = async (considerationId) => {
 		debug('deleteConsideration', considerationId);
@@ -128,7 +111,7 @@ export default function (props) {
 			}
 		};
 
-		return refetch(`/api/squares/${id}/considerations/${considerationId}`, fetchOptions)
+		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('deleteConsideration', consideration);
@@ -154,7 +137,7 @@ export default function (props) {
 			body
 		};
 
-		return refetch(`/api/squares/${id}/considerations`, fetchOptions)
+		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations`, fetchOptions)
 		.then(response => response.json())
 		.then(consideration => {
 			debug('createConsideration', consideration);
@@ -212,7 +195,7 @@ export default function (props) {
 			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />;
 					});
 
-		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
