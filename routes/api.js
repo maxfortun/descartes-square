@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const dsquares = require('../lib/dsquares');
+const ai = require('../lib/ai');
 
 router.get('/session', function(req, res, next) {
 	res.json({ account: req.account });
@@ -49,8 +50,12 @@ router.delete('/squares/:square/considerations/:consideration', async function(r
 	res.json(await dsquares.deleteConsideration(req));
 });
 
-router.get('/openai/:square', async function(req, res, next) {
-	res.json(await dsquares.openaiCompletion(req));
+router.get('/ai/openai/:square', async function(req, res, next) {
+	res.json(await ai.openai(req));
+});
+
+router.get('/ai/vertex/:square', async function(req, res, next) {
+	res.json(await ai.vertex(req));
 });
 
 module.exports = router;

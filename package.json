@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.10.5",
     "@ezsso/express-client": "git+https://github.com/ezsso/express-client.git",
     "@ezsso/mongoose-jsproxy": "git+https://github.com/ezsso/mongoose-jsproxy.git",
+    "@google-cloud/vertexai": "^0.1.3",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "cookie-parser": "~1.4.4",
