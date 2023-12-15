@@ -31,7 +31,7 @@ request=$( cat <<_EOT_
 _EOT_)
 
 curl -v \
-    -H "Authorization: Bearer $GCLOUD_ACCESS_TOKEN" \
+    -H "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
     -H "Content-Type: application/json; charset=utf-8" \
     -d "$request" \
-    "https://us-central1-aiplatform.googleapis.com/v1/projects/$GCLOUD_PROJECT_ID/locations/us-central1/publishers/google/models/gemini-pro:streamGenerateContent"
+    "https://us-central1-aiplatform.googleapis.com/v1/projects/$GOOGLE_PROJECT_ID/locations/us-central1/publishers/google/models/gemini-pro:streamGenerateContent"
