@@ -50,7 +50,7 @@ router.delete('/squares/:square/considerations/:consideration', async function(r
 });
 
 router.get('/openai/:square', async function(req, res, next) {
-	res.json(await dsquares.openai(req));
+	res.json(await dsquares.openaiCompletion(req));
 });
 
 module.exports = router;
