@@ -3,7 +3,8 @@
 question="get a cat"
 
 questions=$( cat <<_EOT_
-	Respond to each question individually, in JSON format, include the question being asked in the JSON structure, itemize by categories, list each category separately with a label, a description, and a sentiment.
+	Respond in JSON.
+	Each question with its answer in its own array element.
 	What will happen if I do $question?
 	What will happen if I do not $question?
 	What will not happen if I do $question?
