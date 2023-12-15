@@ -8,6 +8,7 @@ import React, {
 
 import {
 	Box,
+	IconButton,
 	Tabs,
 	Tab,
 	Tooltip
@@ -19,11 +20,16 @@ import {
 } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
-
+import { refetch } from './utils';
 import DSTab from './DSTab';
 
 export default function (props) {
-	const { session, setSession } = useContext(AppContext);
+	const {
+		error,
+		setError,
+		session,
+		setSession
+	} = useContext(AppContext);
 
 	const debug = Debug('descartes-squares:DSTabs:'+session.account.email);
 
@@ -59,6 +65,27 @@ export default function (props) {
 		return;
 	}
 
+	const handleAdd = async (event) => {
+		debug('createDSquare >');
+		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
+		.then(async response => {
+			if(response.status < 400) {
+				return response.json();
+			}
+			throw await response.json();
+		})
+		.then(square => {
+			debug('createDSquare <', square);
+			localStorage.dSquareId = square.id;
+			props.setDSquares(props.dSquares.concat([square]));
+			props.setSelectedDSquare(square);
+		})
+		.catch(e => { 
+			debug('createDSquare !', e);
+			setError(e.error+'. '+(e.detail?.description || ''));
+		}); 
+	};
+
 	const handleChange = (event, newValue) => {
 		debug("Tab change:", newValue);
 		// setValue(newValue);
@@ -88,7 +115,14 @@ export default function (props) {
 		>
 			{tabs}
 		</Tabs>
-		<AddIcon />
+		<IconButton
+			size="small"
+			onClick={handleAdd}
+		>
+			<Tooltip placement="top-start" title="Add a square">
+				<AddIcon />
+			</Tooltip>
+		</IconButton>
 	</Box>;
 }
 

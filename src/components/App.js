@@ -16,7 +16,13 @@ const appContext = {};
 
 export default function () {
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
-	Object.assign(appContext, { session, setSession });
+	const [ error, setError ] = useState(null);
+	Object.assign(appContext, {
+		error,
+		setError,
+		session,
+		setSession
+	});
 
 	useEffect(() => {
 		debug('mounted');
