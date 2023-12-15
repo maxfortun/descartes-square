@@ -92,13 +92,9 @@ export default function (props) {
 		});
 	};
 
-    useEffect(() => {
-		debug('mounted', props);
-	}, []);
-
 	useEffect(() => {
 		fetchDSquare();
-	}, []);
+	}, [props.selectedDSquare.id]);
 
 
 	const deleteConsideration = async (considerationId) => {

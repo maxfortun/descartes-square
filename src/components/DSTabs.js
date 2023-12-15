@@ -107,6 +107,7 @@ export default function (props) {
 		display='flex'
 		justifyContent='center'
 		alignItems='center'
+		sx={{ mt: '24px' }}
 	>
 		<Tabs
 				value={value}
