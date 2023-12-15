@@ -45,10 +45,6 @@ export default function (props) {
 
 	const [ id, setId ] = useState(props.selectedDSquare?.id);
 
-	const [ decision, setDecision ] = useState('');
-	const [ decisionChanged, setDecisionChanged ] = useState(false);
-	const decisionRef = useRef('');
-
 	const descKey = (cause, effect) => {
 		return cause+':'+effect;
 	}
@@ -82,55 +78,7 @@ export default function (props) {
 		.then(square => {
 			debug('fetchDSquare <', square);
 			localStorage.dSquareId = square.id;
-			setDecision(square.decision);
-			if(decisionRef.current) {
-				decisionRef.current.value = square.decision;
-			}
 			setConsiderations(square.considerations);
-			return square;
-		});
-	};
-
-	const createDSquare = async () => {
-		debug('createDSquare >');
-		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
-		.then(async response => {
-			if(response.status < 400) {
-				return response.json();
-			}
-			throw await response.json();
-		})
-		.then(square => {
-			debug('createDSquare <', square);
-			localStorage.dSquareId = square.id;
-			setId(square.id);
-			if(decisionRef.current) {
-				decisionRef.current.value = square.decision;
-			}
-			setConsiderations(square.considerations);
-			props.setDSquares(props.dSquares.concat([square]));
-			props.setSelectedDSquare(square);
-			return square;
-		})
-		.catch(e => {
-			debug('createDSquare !', e);
-			setError(e.error+'. '+(e.detail?.description || ''));
-		});
-		
-	};
-
-	const deleteDSquare = async () => {
-		debug('deleteDSquare >', id);
-		return refetch(`/api/squares/${id}`, { method: 'DELETE', credentials: 'include' })
-		.then(response => response.json())
-		.then(square => {
-			debug('deleteDSquare <', id);
-			let nextDSquare = {};
-			if(props.selectedDSquare.position) {
-				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.dSquares[props.selectedDSquare.position - 1];
-			}
-			props.setSelectedDSquare(nextDSquare);
-			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
 			return square;
 		});
 	};
@@ -154,8 +102,6 @@ export default function (props) {
 		debug('useEffect id', id);
 		if(id) {
 			fetchDSquare();
-		} else {
-			createDSquare();
 		}
 	}, [id]);
 
@@ -165,67 +111,6 @@ export default function (props) {
 		}
 		return <Loader />;
 	}
-
-	const updateDecision = async () => {
-		if(!decisionChanged) {
-			return;
-		}
-		debug('updateDecision', decision);
-		const body = JSON.stringify({
-			decision
-		});
-
-		const fetchOptions = {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-type': 'application/json'
-			},
-			body
-		};
-
-		return refetch(`/api/squares/${id}/decision`, fetchOptions)
-		.then(response => response.json())
-		.then(decision => {
-			debug('updateDecision', decision);
-			setDecisionChanged(false);
-			return decision;
-		});
-
-	};
-
-	const handleDecisionChange = async (event) => {
-		setDecision(event.target.value);
-		if(props.selectedDSquare?.setDecision) {
-			props.selectedDSquare.setDecision(event.target.value);
-		}
-		setDecisionChanged(true);
-	};
-
-	const handleDecisionBlur = async (event) => {
-		if(!decisionChanged) {
-			return;
-		}
-		await updateDecision();
-	};
-
-	const handleDecisionKeyDown = async (event) => {
-		if(event.keyCode != 13) {
-			return;
-		}
-
-		await updateDecision();
-	};
-
-	const handleShareClick = async (event) => {
-	};
-
-	const handleDownloadClick = async (event) => {
-	};
-
-	const handleDeleteClick = async (event) => {
-		await deleteDSquare();
-	};
 
 	const deleteConsideration = async (considerationId) => {
 		debug('deleteConsideration', considerationId);
@@ -321,7 +206,7 @@ export default function (props) {
 			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />;
 					});
 
-		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+props.selectedDSquare?.decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
