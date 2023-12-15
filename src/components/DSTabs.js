@@ -86,9 +86,10 @@ export default function (props) {
 		}); 
 	};
 
-	const handleChange = (event, newValue) => {
-		debug("Tab change:", newValue);
-		// setValue(newValue);
+	const handleChange = (event, i) => {
+		const selectedSquare = props.dSquares[i];
+		debug('handleChange', i, selectedSquare);
+		props.setSelectedDSquare(selectedSquare);
 	};
 
 	debug("Rendering", props.dSquares);
