@@ -9,8 +9,8 @@ import React, {
 import {
 	Box,
 	IconButton,
-	Tabs,
 	Tab,
+	Tabs,
 	Tooltip
 } from '@mui/material';
 
