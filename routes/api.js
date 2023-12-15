@@ -49,5 +49,9 @@ router.delete('/squares/:square/considerations/:consideration', async function(r
 	res.json(await dsquares.deleteConsideration(req));
 });
 
+router.get('/openai/:square', async function(req, res, next) {
+	res.json(await dsquares.openai(req));
+});
+
 module.exports = router;
 
