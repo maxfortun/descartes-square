@@ -12,7 +12,7 @@ services:
       - ${PWD}/:/usr/src/app/
       - ${PWD}/secrets/.env.local:/usr/src/app/.env.local
       - ${DPSRV_HOME}/rc/secrets/mongo/conf/:/etc/mongo/:ro
-      - ${DPSRV_HOME}/secrets/gcloud/:/usr/src/app/.config/gcloud/:ro
+      - ${DPSRV_HOME}/cloud-gcp/secrets/gcloud/:/usr/src/app/.config/gcloud/:ro
     command: [ "npm", "start" ]
 networks:
   default:
