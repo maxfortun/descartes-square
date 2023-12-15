@@ -24,8 +24,7 @@ import { AppContext } from './AppContext';
 import { refetch } from './utils';
 
 export default function (props) {
-	const { session, setSession } = useContext(AppContext);
-	const [ decision, setDecision ] = useState(props.selectedDSquare.decision);
+	const { decison, setDecision, session, setSession } = useContext(AppContext);
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);

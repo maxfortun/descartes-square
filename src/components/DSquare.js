@@ -40,8 +40,14 @@ import Loader from './Loader';
 
 export default function (props) {
 
-	const { session, setSession } = useContext(AppContext);
-	const [ error, setError ] = useState(null);
+	const {
+		decision,
+		setDecision,
+		error,
+		setError,
+		session,
+		setSession
+	} = useContext(AppContext);
 
 	const [ id, setId ] = useState(props.selectedDSquare?.id);
 
@@ -206,7 +212,7 @@ export default function (props) {
 			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />;
 					});
 
-		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+props.selectedDSquare?.decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
