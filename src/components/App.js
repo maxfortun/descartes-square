@@ -15,10 +15,13 @@ const debug = Debug('descartes-squares:App');
 const appContext = {};
 
 export default function () {
+	const [ considerations, setConsiderations ] = useState(null);
 	const [ decision, setDecision ] = useState('');
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
 	Object.assign(appContext, {
+		considerations,
+		setConsiderations,
 		decision,
 		setDecision,
 		error,

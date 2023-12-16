@@ -41,6 +41,8 @@ import Loader from './Loader';
 export default function (props) {
 
 	const {
+		considerations,
+		setConsiderations,
 		decision,
 		setDecision,
 		error,
@@ -48,8 +50,6 @@ export default function (props) {
 		session,
 		setSession
 	} = useContext(AppContext);
-
-	const [ considerations, setConsiderations ] = useState(null);
 
 	const [ shouldStore, setShouldStore ] = useState(false);
 
@@ -122,46 +122,6 @@ export default function (props) {
 		});
 
 	};
-
-	useEffect(() => {
-		if(!decision) {
-			return;
-		}
-
-		if(!considerations) {
-			return;
-		}
-
-		if(considerations.length) {
-			return;
-		}
-
-		debug('useEffect decision >', decision);
-
-		refetch(`/api/ai/vertex/${props.selectedDSquare.id}`, { credentials: 'include' })
-		.then(response => response.json())
-		.then(async questions => {
-			debug('useEffect decision <', questions);
-			return await Promise.all(questions.questions.map(async question => {
-				let cause = null;
-				let effect = null;
-				if(question.question.match(/^What will not happen /i)) {
-					effect = 'will not';
-				} else {
-					effect = 'will';
-				}
-				if(question.question.match(/ happen if I do not /i)) {
-					cause = 'do not';
-				} else {
-					cause = 'do';
-				}
-
-				return await Promise.all(question.answers.map(async answer => {
-					await createConsideration(cause, effect, answer.answer)
-				}));
-			}));
-		});
-	}, [decision]);
 
 	if(!considerations) {
 		return <Loader />;

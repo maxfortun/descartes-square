@@ -18,14 +18,24 @@ import {
 	DeleteForever as DeleteForeverIcon,
 	Download as DownloadIcon,
 	Edit as EditIcon,
+	HelpOutline as HelpOutlineIcon,
 	IosShare as IosShareIcon
 } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 import { refetch } from './utils';
+import {
+	addAIConsiderations
+} from './api';
 
 export default function (props) {
 	const {
+		selectedDSquare
+	} = props;
+
+	const {
+		considerations,
+		setConsiderations,
 		decision,
 		setDecision,
 		session,
@@ -36,14 +46,14 @@ export default function (props) {
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
 	useEffect(() => {
-		setDecision(props.selectedDSquare.decision);
-	}, [props.selectedDSquare.decision]);
+		setDecision(selectedDSquare.decision);
+	}, [selectedDSquare.decision]);
 
 
 	const handleDecisionChange = (event) => {
 		debug('handleDecisionChange', event.target.value);
 		setDecision(event.target.value);
-		props.selectedDSquare.decision = event.target.value;
+		selectedDSquare.decision = event.target.value;
 		setDecisionChanged(true);
 	};
 
@@ -66,45 +76,57 @@ export default function (props) {
 			body
 		};
 		
-		return refetch(`/api/squares/${props.selectedDSquare.id}/decision`, fetchOptions)
+		return refetch(`/api/squares/${selectedDSquare.id}/decision`, fetchOptions)
 		.then(response => response.json())
 		.then(decision => {
 			debug('updateDecision', decision);
 			setDecisionChanged(false);
 		}); 
 				
-	};	  
+	};
 
 	const handleDecisionBlur = (event) => {
 		debug('handleDecisionBlur');
 		updateDecision();
 	};
 
+	const handleAIAssist = (event) => {
+		debug('handleAIAssist');
+		addAIConsiderations({
+			selectedDSquare,
+        	considerations,
+        	setConsiderations,
+		});
+	};
 
 	const handleShareSquare = (event) => {
 		debug('handleShareSquare');
 	};
 
 	const handleDeleteSquare = async (event) => {
-		debug('deleteDSquare >', props.selectedDSquare.id);
-		return refetch(`/api/squares/${props.selectedDSquare.id}`, { method: 'DELETE', credentials: 'include' })
+		debug('deleteDSquare >', selectedDSquare.id);
+		return refetch(`/api/squares/${selectedDSquare.id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
 			let nextDSquare = {};
 			const positions = {};
 			props.dSquares.forEach((dSquare, i) => positions[dSquare.id] = i);
-			const position = positions[props.selectedDSquare.id];
+			const position = positions[selectedDSquare.id];
 			if(null != position) {
 				nextDSquare = props.dSquares[position + 1] || props.dSquares[position - 1];
 			}
 			if(nextDSquare) {
 				props.setSelectedDSquare(nextDSquare);
 			}
-			props.setDSquares(props.dSquares.filter( _square => _square.id != props.selectedDSquare.id ));
+			props.setDSquares(props.dSquares.filter( _square => _square.id != selectedDSquare.id ));
 			return square;
 		});
 	};
+
+	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
+						<HelpOutlineIcon onClick={handleAIAssist} />
+					</Tooltip>;
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<TextField
@@ -118,6 +140,7 @@ export default function (props) {
 				InputProps={{
 					endAdornment: (
 						<InputAdornment position="end">
+							{aiAssist}
 							<Tooltip placement="top-start" title="Share this sqaure">
 								<IosShareIcon onClick={handleShareSquare} />
 							</Tooltip>
