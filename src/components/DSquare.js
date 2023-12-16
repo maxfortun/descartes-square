@@ -40,10 +40,6 @@ import Loader from './Loader';
 
 export default function (props) {
 
-	if(!props.selectedDSquare?.id) {
-		return <Loader />;
-	}
-
 	const {
 		decision,
 		setDecision,
@@ -53,6 +49,9 @@ export default function (props) {
 		setSession
 	} = useContext(AppContext);
 
+	const [ considerations, setConsiderations ] = useState([]);
+
+	const [ shouldStore, setShouldStore ] = useState(false);
 
 	const descKey = (cause, effect) => {
 		return cause+':'+effect;
@@ -72,9 +71,10 @@ export default function (props) {
 		}
 	}
 
-	const [ considerations, setConsiderations ] = useState([]);
+	if(!props.selectedDSquare?.id) {
+		return <Loader />;
+	}
 
-	const [ shouldStore, setShouldStore ] = useState(false);
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
@@ -97,13 +97,36 @@ export default function (props) {
 	}, [props.selectedDSquare.id]);
 
 	useEffect(() => {
+		if(!decision) {
+			return;
+		}
+
 		if(considerations.length) {
 			return;
 		}
+		debug('useEffect decision >', decision);
 		refetch(`/api/ai/vertex/${props.selectedDSquare.id}`, { credentials: 'include' })
 		.then(response => response.json())
-		.then(answers => {
-			debug('useEffect decision <', answers);
+		.then(questions => {
+			debug('useEffect decision <', questions);
+			questions.questions.forEach(question => {
+				let cause = null;
+				let effect = null;
+				if(question.question.match(/^What will not happen /i)) {
+					effect = 'will not';
+				} else {
+					effect = 'will';
+				}
+				if(question.question.match(/ happen if I do not /i)) {
+					cause = 'do not';
+				} else {
+					cause = 'do';
+				}
+				question.answers.forEach(answer => {
+					debug('createConsideration', cause, effect, answer.answer);
+					// createConsideration(cause, effect, inputRef.current.value)
+				});
+			});
 		});
 	}, [decision]);
 
@@ -207,22 +230,15 @@ export default function (props) {
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
 					<TextField
-						inputRef={inputRef}
+						fullWidth
+						multiline
+						variant='standard'
 						label={label}
 						size='small'
-						fullWidth={true}
-						inputProps={{ style: { textAlign: 'center' } }}
 						defaultValue={''}
 						onChange={() => handleConsiderationChange(cause, effect, event)}
 						onKeyDown={() => handleConsiderationKeyDown(cause, effect, event)}
 						onBlur={() => handleConsiderationBlur(cause, effect, event)}
-						InputProps={{
-							endAdornment: ( 
-								<InputAdornment position="end">
-									<KeyboardReturnIcon onClick={() => storeConsideration(cause, effect)} />
-								</InputAdornment>
-							)
-						}}
 					/>
 				</Box>
 			</Box>
