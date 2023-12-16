@@ -25,6 +25,12 @@ import DSTab from './DSTab';
 
 export default function (props) {
 	const {
+		selectedDSquare,
+		setSelectedDSquare
+	} = props;
+
+	const {
+		setConsiderations,
 		error,
 		setError,
 		session,
@@ -50,7 +56,8 @@ export default function (props) {
 			debug('createDSquare <', square);
 			localStorage.dSquareId = square.id;
 			props.setDSquares(props.dSquares.concat([square]));
-			props.setSelectedDSquare(square);
+			setConsiderations(null);
+			setSelectedDSquare(square);
 		})
 		.catch(e => { 
 			debug('createDSquare !', e);
@@ -66,30 +73,30 @@ export default function (props) {
 	}, [props.dSquares]);
 
 	useEffect(() => {
-		if(props.selectedDSquare.id !== undefined) {
+		if(selectedDSquare.id !== undefined) {
 			return;
 		}
 
 		if(localStorage.dSquareId) {
 			const selectedSquare = props.dSquares.some(square => square.id == localStorage.dSquareId)[0];
-			debug('useEffect', 'props.selectedDSquare.id localStorage.dSquareId', 'selectedSquare', props.dSquares, localStorage.dSquareId, selectedSquare);
+			debug('useEffect', 'selectedDSquare.id localStorage.dSquareId', 'selectedSquare', props.dSquares, localStorage.dSquareId, selectedSquare);
 			if(selectedSquare) {
-				props.setSelectedDSquare(selectedSquare);
+				setSelectedDSquare(selectedSquare);
 				return;
 			}
 		}
 
 		if(props.dSquares.length > 0) {
 			const selectedSquare = props.dSquares[0];
-			debug('useEffect', 'props.selectedDSquare.id 0', 'selectedSquare', props.dSquares, selectedSquare);
-			props.setSelectedDSquare(selectedSquare);
+			debug('useEffect', 'selectedDSquare.id 0', 'selectedSquare', props.dSquares, selectedSquare);
+			setSelectedDSquare(selectedSquare);
 			return;
 		}
 
-	}, [props.selectedDSquare.id]);
+	}, [selectedDSquare.id]);
 
 
-	if(!props.selectedDSquare.id) {
+	if(!selectedDSquare.id) {
 		return;
 	}
 
@@ -100,19 +107,19 @@ export default function (props) {
 	const handleChange = (event, i) => {
 		const selectedSquare = props.dSquares[i];
 		debug('handleChange', i, selectedSquare);
-		props.setSelectedDSquare(selectedSquare);
+		setSelectedDSquare(selectedSquare);
 	};
 
 	debug("Rendering", props.dSquares);
 	const tabs = props.dSquares.map((dSquare, i) => {
-		if(dSquare.id && dSquare.id == props.selectedDSquare.id) {
+		if(dSquare.id && dSquare.id == selectedDSquare.id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
 		return <Tab key={i} label={dSquare.decision} />
 	}); 
 	
-	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id);
-	debug("props.selectedDSquare", value, props.selectedDSquare);
+	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(selectedDSquare.id);
+	debug("selectedDSquare", value, selectedDSquare);
 
 	return <Box
 		display='flex'

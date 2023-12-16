@@ -19,6 +19,7 @@ export default function () {
 	const [ decision, setDecision ] = useState('');
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
+
 	Object.assign(appContext, {
 		considerations,
 		setConsiderations,
