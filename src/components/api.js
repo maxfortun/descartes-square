@@ -46,7 +46,7 @@ const createConsideration = async (props) => {
 	.then(response => response.json())
 	.then(consideration => {
 		debug('createConsideration', consideration);
-		setConsiderations(considerations.concat([consideration]));
+		setConsiderations(prev => prev.concat([consideration]));
 		return consideration;
 	});
 };
@@ -60,11 +60,11 @@ const addAIConsiderations = async (props) => {
 
 	debug('addAIConsiderations >');
 
-	refetch(`/api/ai/vertex/${selectedDSquare.id}`, { credentials: 'include' })
+	await refetch(`/api/ai/vertex/${selectedDSquare.id}`, { credentials: 'include' })
 	.then(response => response.json())
 	.then(async questions => {
 		debug('addAIConsiderations <', questions);
-		return await Promise.all(questions.questions.map(async question => {
+		return Promise.all(questions.questions.map(async question => {
 			let cause = null;
 			let effect = null;
 			if(question.question.match(/^What will not happen /i)) {
@@ -78,8 +78,8 @@ const addAIConsiderations = async (props) => {
 				cause = 'do';
 			}
 
-			return await Promise.all(question.answers.map(async answer => {
-				await createConsideration({
+			return Promise.all(question.answers.map(async answer => {
+				return createConsideration({
 					cause,
 					effect,
 					desc: answer.answer,
@@ -106,7 +106,7 @@ const deleteConsideration = async (considerationId) => {
 	.then(response => response.json())
 	.then(consideration => {
 		debug('deleteConsideration', consideration);
-		setConsiderations(considerations.filter(_consideration => _consideration.id != consideration.id));
+		setConsiderations(prev => prev.filter(_consideration => _consideration.id != consideration.id));
 		return consideration;
 	});
 };
