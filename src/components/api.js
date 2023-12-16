@@ -5,13 +5,18 @@ import { refetch } from './utils';
 const debug = Debug('descartes-squares:api');
 
 const fetchDSquare = async (props) => {
-	debug('fetchDSquare >', props.selectedDSquare.id);
-	return refetch(`/api/squares/${props.selectedDSquare.id}`, { credentials: 'include' })
+	const {
+		selectedDSquare,
+		setConsiderations
+	} = props;
+
+	debug('fetchDSquare >', selectedDSquare.id);
+	return refetch(`/api/squares/${selectedDSquare.id}`, { credentials: 'include' })
 	.then(response => response.json())
 	.then(square => {
 		debug('fetchDSquare <', square);
 		localStorage.dSquareId = square.id;
-		props.setConsiderations(square.considerations);
+		setConsiderations(square.considerations);
 		return square;
 	});
 };
@@ -22,8 +27,7 @@ const createConsideration = async (props) => {
 		effect,
 		desc,
 		selectedDSquare,
-		considerations,
-		setConsiderations,
+		setConsiderations
 	} = props;
 
 	debug('createConsideration', cause, effect, desc);
@@ -54,7 +58,6 @@ const createConsideration = async (props) => {
 const addAIConsiderations = async (props) => {
 	const {
 		selectedDSquare,
-		considerations,
 		setConsiderations,
 	} = props;
 
@@ -84,7 +87,6 @@ const addAIConsiderations = async (props) => {
 					effect,
 					desc: answer.answer,
 					selectedDSquare,
-					considerations,
 					setConsiderations
 				});
 			}));
@@ -92,7 +94,13 @@ const addAIConsiderations = async (props) => {
 	});
 };
 
-const deleteConsideration = async (considerationId) => {
+const deleteConsideration = async () => {
+	const {
+		selectedDSquare,
+		considerationId,
+		setConsiderations
+	} = props;
+
 	debug('deleteConsideration', considerationId);
 	const fetchOptions = {
 		method: 'DELETE',
@@ -102,7 +110,7 @@ const deleteConsideration = async (considerationId) => {
 		}
 	};
 
-	return refetch(`/api/squares/${props.selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
+	return refetch(`/api/squares/${selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
 	.then(response => response.json())
 	.then(consideration => {
 		debug('deleteConsideration', consideration);
@@ -131,6 +139,7 @@ const storeConsideration = async (cause, effect) => {
 };
 
 module.exports = {
+	fetchDSquare,
 	createConsideration,
 	addAIConsiderations
 };

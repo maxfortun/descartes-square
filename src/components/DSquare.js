@@ -33,12 +33,20 @@ import {
 	KeyboardReturn as KeyboardReturnIcon
 } from '@mui/icons-material';
 
-import { refetch } from './utils';
+import { 
+	fetchDSquare,
+	createConsideration,
+	deleteConsideration
+} from './api';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 
 export default function (props) {
+
+	const {
+		selectedDSquare
+	} = props;
 
 	const {
 		considerations,
@@ -71,80 +79,24 @@ export default function (props) {
 		}
 	}
 
-
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
 	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
 
-	const fetchDSquare = async () => {
-		debug('fetchDSquare >', props.selectedDSquare.id);
-		return refetch(`/api/squares/${props.selectedDSquare.id}`, { credentials: 'include' })
-		.then(response => response.json())
-		.then(square => {
-			debug('fetchDSquare <', square);
-			localStorage.dSquareId = square.id;
-			setConsiderations(square.considerations);
-			return square;
-		});
-	};
-
-	if(!props.selectedDSquare?.id) {
+	if(!selectedDSquare?.id) {
 		return <Loader />;
 	}
 
 	useEffect(() => {
-		fetchDSquare();
-	}, [props.selectedDSquare.id]);
-
-	const createConsideration = async (cause, effect, desc) => {
-		debug('createConsideration', cause, effect, desc);
-		const body = JSON.stringify({
-			cause,
-			effect,
-			desc
+		fetchDSquare({
+			selectedDSquare,
+			setConsiderations
 		});
-
-		const fetchOptions = {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-type': 'application/json'
-			},
-			body
-		};
-
-		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations`, fetchOptions)
-		.then(response => response.json())
-		.then(consideration => {
-			debug('createConsideration', consideration);
-			setConsiderations(considerations.concat([consideration]));
-			return consideration;
-		});
-
-	};
+	}, [selectedDSquare.id]);
 
 	if(!considerations) {
 		return <Loader />;
 	}
-
-	const deleteConsideration = async (considerationId) => {
-		debug('deleteConsideration', considerationId);
-		const fetchOptions = {
-			method: 'DELETE',
-			credentials: 'include',
-			headers: {
-				'Content-type': 'application/json'
-			}
-		};
-
-		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
-		.then(response => response.json())
-		.then(consideration => {
-			debug('deleteConsideration', consideration);
-			setConsiderations(considerations.filter(_consideration => _consideration.id != consideration.id));
-			return consideration;
-		});
-	};
 
 	const handleConsiderationChange = (cause, effect, event) => {
 		const [ desc, setDesc ] = descs[descKey(cause, effect)];
@@ -178,7 +130,13 @@ export default function (props) {
 		const [ desc, setDesc ] = descs[descKey(cause, effect)];
 		debug('storeConsideration', cause, effect, desc);
 
-		await createConsideration(cause, effect, inputRef.current.value);
+		await createConsideration({
+			cause,
+			effect,
+			desc: inputRef.current.value,
+			selectedDSquare,
+			setConsiderations
+		});
 
 		inputRef.current.value = '';
 	};
@@ -191,7 +149,14 @@ export default function (props) {
 						const label = <Box>
 							{consideration.desc || consideration.id}
 						</Box>;
-			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => deleteConsideration(consideration.id)} />;
+			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => {
+								deleteConsideration({
+									selectedSquare,
+									considerationId: consideration.id,
+									setConsiderations
+								})
+							}
+						} />;
 					});
 
 		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
