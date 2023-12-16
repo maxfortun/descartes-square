@@ -111,11 +111,8 @@ export default function (props) {
 		return <Tab key={i} label={dSquare.decision} />
 	}); 
 	
-	debug("props.selectedDSquare", props.selectedDSquare);
-	let value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id);
-	if(! value || value < 0 || value >= props.dSquares.length) {
-		value = 0;
-	}
+	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id);
+	debug("props.selectedDSquare", value, props.selectedDSquare);
 
 	return <Box
 		display='flex'

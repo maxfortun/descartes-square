@@ -91,13 +91,16 @@ export default function (props) {
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
-/*
 			let nextDSquare = {};
-			if(props.selectedDSquare.position) {
-				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.dSquares[props.selectedDSquare.position - 1];
+			const positions = {};
+			props.dSquares.forEach((dSquare, i) => positions[dSquare.id] = i);
+			const position = positions[props.selectedDSquare.id];
+			if(null != position) {
+				nextDSquare = props.dSquares[position + 1] || props.dSquares[position - 1];
 			}
-			props.setSelectedDSquare(nextDSquare);
-*/
+			if(nextDSquare) {
+				props.setSelectedDSquare(nextDSquare);
+			}
 			props.setDSquares(props.dSquares.filter( _square => _square.id != props.selectedDSquare.id ));
 			return square;
 		});
