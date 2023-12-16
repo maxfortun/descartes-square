@@ -97,18 +97,13 @@ export default function (props) {
 				nextDSquare = props.dSquares[props.selectedDSquare.position + 1] || props.dSquares[props.selectedDSquare.position - 1];
 			}
 			props.setSelectedDSquare(nextDSquare);
-			props.setDSquares(props.dSquares.filter( _square => _square.id != id ));
 */
+			props.setDSquares(props.dSquares.filter( _square => _square.id != props.selectedDSquare.id ));
 			return square;
 		});
 	};
 
-	return <Box
-		display='flex'
-		justifyContent='center'
-		alignItems='center'
-	>
-		<Box sx={{ margin: 'auto', flexGrow: 1 }} >
+	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<TextField
 				label='Should I ...'
 				size='small'
@@ -130,7 +125,6 @@ export default function (props) {
 					)
 				}}
 			/>
-		</Box>
 	</Box>;
 }
 

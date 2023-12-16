@@ -37,6 +37,34 @@ export default function (props) {
 		return;
 	}
 
+	const createDSquare = async () => {
+		debug('createDSquare >');
+		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
+		.then(async response => {
+			if(response.status < 400) {
+				return response.json();
+			}
+			throw await response.json();
+		})
+		.then(square => {
+			debug('createDSquare <', square);
+			localStorage.dSquareId = square.id;
+			props.setDSquares(props.dSquares.concat([square]));
+			props.setSelectedDSquare(square);
+		})
+		.catch(e => { 
+			debug('createDSquare !', e);
+			setError(e.error+'. '+(e.detail?.description || ''));
+		}); 
+	};
+
+	useEffect(() => {
+		if(props.dSquares.length) {
+			return;
+		}
+		createDSquare();
+	}, [props.dSquares]);
+
 	useEffect(() => {
 		if(props.selectedDSquare.id !== undefined) {
 			return;
@@ -66,24 +94,7 @@ export default function (props) {
 	}
 
 	const handleAdd = async (event) => {
-		debug('createDSquare >');
-		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
-		.then(async response => {
-			if(response.status < 400) {
-				return response.json();
-			}
-			throw await response.json();
-		})
-		.then(square => {
-			debug('createDSquare <', square);
-			localStorage.dSquareId = square.id;
-			props.setDSquares(props.dSquares.concat([square]));
-			props.setSelectedDSquare(square);
-		})
-		.catch(e => { 
-			debug('createDSquare !', e);
-			setError(e.error+'. '+(e.detail?.description || ''));
-		}); 
+		createDSquare();
 	};
 
 	const handleChange = (event, i) => {
@@ -101,13 +112,16 @@ export default function (props) {
 	}); 
 	
 	debug("props.selectedDSquare", props.selectedDSquare);
-	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id) || 0;
+	let value = props.dSquares.map(dSquare => dSquare.id).indexOf(props.selectedDSquare.id);
+	if(! value || value < 0 || value >= props.dSquares.length) {
+		value = 0;
+	}
 
 	return <Box
 		display='flex'
 		justifyContent='center'
 		alignItems='center'
-		sx={{ mt: '24px' }}
+		sx={{ mt: '16px' }}
 	>
 		<Tabs
 				value={value}
