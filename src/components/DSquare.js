@@ -49,7 +49,7 @@ export default function (props) {
 		setSession
 	} = useContext(AppContext);
 
-	const [ considerations, setConsiderations ] = useState([]);
+	const [ considerations, setConsiderations ] = useState(null);
 
 	const [ shouldStore, setShouldStore ] = useState(false);
 
@@ -71,10 +71,6 @@ export default function (props) {
 		}
 	}
 
-	if(!props.selectedDSquare?.id) {
-		return <Loader />;
-	}
-
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
@@ -92,65 +88,16 @@ export default function (props) {
 		});
 	};
 
+	if(!props.selectedDSquare?.id) {
+		return <Loader />;
+	}
+
 	useEffect(() => {
 		fetchDSquare();
 	}, [props.selectedDSquare.id]);
 
-	useEffect(() => {
-		if(!decision) {
-			return;
-		}
-
-		if(considerations.length) {
-			return;
-		}
-		debug('useEffect decision >', decision);
-		refetch(`/api/ai/vertex/${props.selectedDSquare.id}`, { credentials: 'include' })
-		.then(response => response.json())
-		.then(questions => {
-			debug('useEffect decision <', questions);
-			questions.questions.forEach(question => {
-				let cause = null;
-				let effect = null;
-				if(question.question.match(/^What will not happen /i)) {
-					effect = 'will not';
-				} else {
-					effect = 'will';
-				}
-				if(question.question.match(/ happen if I do not /i)) {
-					cause = 'do not';
-				} else {
-					cause = 'do';
-				}
-				question.answers.forEach(answer => {
-					debug('createConsideration', cause, effect, answer.answer);
-					// createConsideration(cause, effect, inputRef.current.value)
-				});
-			});
-		});
-	}, [decision]);
-
-	const deleteConsideration = async (considerationId) => {
-		debug('deleteConsideration', considerationId);
-		const fetchOptions = {
-			method: 'DELETE',
-			credentials: 'include',
-			headers: {
-				'Content-type': 'application/json'
-			}
-		};
-
-		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
-		.then(response => response.json())
-		.then(consideration => {
-			debug('deleteConsideration', consideration);
-			setConsiderations(considerations.filter(_consideration => _consideration.id != consideration.id));
-			return consideration;
-		});
-	};
-
 	const createConsideration = async (cause, effect, desc) => {
-		debug('createConsideration', cause, effect);
+		debug('createConsideration', cause, effect, desc);
 		const body = JSON.stringify({
 			cause,
 			effect,
@@ -174,6 +121,69 @@ export default function (props) {
 			return consideration;
 		});
 
+	};
+
+	useEffect(() => {
+		if(!decision) {
+			return;
+		}
+
+		if(!considerations) {
+			return;
+		}
+
+		if(considerations.length) {
+			return;
+		}
+
+		debug('useEffect decision >', decision);
+
+		refetch(`/api/ai/vertex/${props.selectedDSquare.id}`, { credentials: 'include' })
+		.then(response => response.json())
+		.then(async questions => {
+			debug('useEffect decision <', questions);
+			return await Promise.all(questions.questions.map(async question => {
+				let cause = null;
+				let effect = null;
+				if(question.question.match(/^What will not happen /i)) {
+					effect = 'will not';
+				} else {
+					effect = 'will';
+				}
+				if(question.question.match(/ happen if I do not /i)) {
+					cause = 'do not';
+				} else {
+					cause = 'do';
+				}
+
+				return await Promise.all(question.answers.map(async answer => {
+					await createConsideration(cause, effect, answer.answer)
+				}));
+			}));
+		});
+	}, [decision]);
+
+	if(!considerations) {
+		return <Loader />;
+	}
+
+	const deleteConsideration = async (considerationId) => {
+		debug('deleteConsideration', considerationId);
+		const fetchOptions = {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: {
+				'Content-type': 'application/json'
+			}
+		};
+
+		return refetch(`/api/squares/${props.selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
+		.then(response => response.json())
+		.then(consideration => {
+			debug('deleteConsideration', consideration);
+			setConsiderations(considerations.filter(_consideration => _consideration.id != consideration.id));
+			return consideration;
+		});
 	};
 
 	const handleConsiderationChange = (cause, effect, event) => {
