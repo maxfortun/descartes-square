@@ -103,6 +103,16 @@ export default function (props) {
 		debug('handleShareSquare');
 	};
 
+	const placeholders = [
+		'get a cat?',
+		'buy a car?',
+		'look for a new job?'
+	];
+	const getRandomPlaceHolder = () => {
+		const i = Math.floor(Math.random() * (placeholders.length - 1));
+		return placeholders[i];
+	};
+
 	const handleDeleteSquare = async (event) => {
 		debug('deleteDSquare >', selectedDSquare.id);
 		return refetch(`/api/squares/${selectedDSquare.id}`, { method: 'DELETE', credentials: 'include' })
@@ -135,6 +145,7 @@ export default function (props) {
 				fullWidth={true}
 				inputProps={{ style: { textAlign: 'center' } }}
 				value={decision}
+				placeholder={getRandomPlaceHolder()}
 				onChange={handleDecisionChange}
 				onBlur={handleDecisionBlur}
 				InputProps={{
