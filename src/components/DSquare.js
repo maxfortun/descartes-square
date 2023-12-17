@@ -117,6 +117,24 @@ export default function (props) {
 		storeConsideration(cause, effect);
 	};
 
+	const handleConsiderationsAdd = (cause, effect, value) => {
+		debug('handleConsiderationsAdd', cause, effect, value);
+	};
+
+	const handleConsiderationsDelete = (cause, effect, value) => {
+		debug('handleConsiderationsDelete', cause, effect, value);
+	};
+
+	const handleConsiderationsChange = (cause, effect, event) => {
+		if(event.type == 'keydown') {
+			return handleConsiderationsAdd(cause, effect, event.target.value);
+		}
+
+		if(event.type == 'click') {
+			return handleConsiderationsDelete(cause, effect, event);
+		}
+	};
+
 	const storeConsideration = async (cause, effect) => {
 		const inputRef = descsRefs[descKey(cause,effect)];
 
@@ -147,9 +165,10 @@ export default function (props) {
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => {
-						const label = <Box>
+						const label = <Box key={i}>
 							{consideration.desc || consideration.id}
 						</Box>;
+						return label;
 			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => {
 								deleteConsideration({
 									selectedSquare,
@@ -168,19 +187,13 @@ export default function (props) {
 					<Autocomplete
 						clearIcon={false}
 						options={[]}
-						freeSolo
 						multiple
-						renderTags={(value, props) => {
-								return value.map((option, index) => <Chip label={option} {...props({ index })} />)
-							}
-						}
+						freeSolo
+						value={ considerationElements }
 						renderInput={(params) => <TextField label={label} {...params} />}
-						onChange={ (event) => { debug('onAutocompleteChange', event) } }
+						onChange={ (event) => handleConsiderationsChange(cause, effect, event) }
 					/>
 				</Box>
-			</Box>
-			<Box>
-				{considerationElements}
 			</Box>
 		</Box>;
 	};
