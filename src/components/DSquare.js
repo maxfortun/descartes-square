@@ -117,21 +117,22 @@ export default function (props) {
 		storeConsideration(cause, effect);
 	};
 
-	const handleConsiderationsAdd = (cause, effect, value) => {
-		debug('handleConsiderationsAdd', cause, effect, value);
+	const handleConsiderationsAdd = (cause, effect, event, options, reason, detail) => {
+		debug('handleConsiderationsAdd', cause, effect, event, options, reason);
 	};
 
-	const handleConsiderationsDelete = (cause, effect, value) => {
-		debug('handleConsiderationsDelete', cause, effect, value);
-	};
-
-	const handleConsiderationsChange = (cause, effect, event) => {
-		if(event.type == 'keydown') {
-			return handleConsiderationsAdd(cause, effect, event.target.value);
+	const handleConsiderationsChange = (cause, effect, event, options, reason, detail) => {
+		if(reason == 'createOption') {
+			return handleConsiderationsAdd(cause, effect, event, options, reason, detail);
 		}
 
-		if(event.type == 'click') {
-			return handleConsiderationsDelete(cause, effect, event);
+		if(reason == 'removeOption') {
+			debug('handleConsiderationsChange', cause, effect, event, options, reason, detail, detail.option, detail.option?.props);
+			return deleteConsideration({
+				selectedDSquare,
+				considerationId: detail.option.props.consideration_id,
+				setConsiderations
+			});
 		}
 	};
 
@@ -165,18 +166,10 @@ export default function (props) {
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => {
-						const label = <Box key={i}>
+						const label = <Box key={i} consideration_id={consideration.id}>
 							{consideration.desc || consideration.id}
 						</Box>;
 						return label;
-			 			return <Chip key={i} label={label} variant="outlined" sx={{ mt: '4px' }} onDelete={() => {
-								deleteConsideration({
-									selectedSquare,
-									considerationId: consideration.id,
-									setConsiderations
-								})
-							}
-						} />;
 					});
 
 		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
@@ -191,7 +184,7 @@ export default function (props) {
 						freeSolo
 						value={ considerationElements }
 						renderInput={(params) => <TextField label={label} {...params} />}
-						onChange={ (event) => handleConsiderationsChange(cause, effect, event) }
+						onChange={ ( event, options, reason, detail ) => handleConsiderationsChange( cause, effect, event, options, reason, detail ) }
 					/>
 				</Box>
 			</Box>

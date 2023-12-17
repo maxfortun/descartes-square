@@ -94,7 +94,7 @@ const addAIConsiderations = async (props) => {
 	});
 };
 
-const deleteConsideration = async () => {
+const deleteConsideration = async (props) => {
 	const {
 		selectedDSquare,
 		considerationId,
@@ -141,5 +141,6 @@ const storeConsideration = async (cause, effect) => {
 module.exports = {
 	fetchDSquare,
 	createConsideration,
+	deleteConsideration,
 	addAIConsiderations
 };
