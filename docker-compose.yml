@@ -1,7 +1,7 @@
 services:
   descartes-squares:
     container_name: descartes-squares
-    image: node:lts-alpine3.14
+    image: node:21-alpine3.18
     working_dir: /usr/src/app
     environment:
       DEBUG: "*,-morgan,-agentkeepalive,-send,-body-parser:*,-nodemon*,-express:*,-mongooose-jsproxy,-ezsso:express-client:*"
