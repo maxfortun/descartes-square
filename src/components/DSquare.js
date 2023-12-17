@@ -60,25 +60,8 @@ export default function (props) {
 		setSession
 	} = useContext(AppContext);
 
-	const [ shouldStore, setShouldStore ] = useState(false);
-
-	const descKey = (cause, effect) => {
-		return cause+':'+effect;
-	}
-
-	const descs = {};
-	const descsRefs = {};
-
 	const causes = [ 'do', 'do not' ];
 	const effects = [ 'will', 'will not' ];
-
-	for(const cause of causes) {
-		for(const effect of effects) {
-			const key = descKey(cause, effect);
-			descs[key] = useState('');
-			descsRefs[key] = useRef(null);
-		}
-	}
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
@@ -99,35 +82,25 @@ export default function (props) {
 		return <Loader />;
 	}
 
-	const handleConsiderationChange = (cause, effect, event) => {
-		const [ desc, setDesc ] = descs[descKey(cause, effect)];
-
-		setDesc(event.target.value);
-	};
-
-	const handleConsiderationKeyDown = (cause, effect, event) => {
-		if(event.keyCode != 13) {
-			return;
-		}
-
-		storeConsideration(cause, effect);
-	};
-
-	const handleConsiderationBlur = (cause, effect, event) => {
-		storeConsideration(cause, effect);
-	};
-
 	const handleConsiderationsAdd = (cause, effect, event, options, reason, detail) => {
 		debug('handleConsiderationsAdd', cause, effect, event, options, reason);
 	};
 
 	const handleConsiderationsChange = (cause, effect, event, options, reason, detail) => {
+		debug('handleConsiderationsChange', cause, effect, options, reason, detail);
+
 		if(reason == 'createOption') {
-			return handleConsiderationsAdd(cause, effect, event, options, reason, detail);
+			return createConsideration({
+				cause,
+				effect,
+				desc: detail.option,
+				selectedDSquare,
+				setConsiderations
+			});
+
 		}
 
 		if(reason == 'removeOption') {
-			debug('handleConsiderationsChange', cause, effect, event, options, reason, detail, detail.option, detail.option?.props);
 			return deleteConsideration({
 				selectedDSquare,
 				considerationId: detail.option.props.consideration_id,
@@ -136,33 +109,7 @@ export default function (props) {
 		}
 	};
 
-	const storeConsideration = async (cause, effect) => {
-		const inputRef = descsRefs[descKey(cause,effect)];
-
-		if( ! inputRef.current ) {
-			return;
-		}
-
-		if( ! inputRef.current.value ) {
-			return;
-		}
-
-		const [ desc, setDesc ] = descs[descKey(cause, effect)];
-		debug('storeConsideration', cause, effect, desc);
-
-		await createConsideration({
-			cause,
-			effect,
-			desc: inputRef.current.value,
-			selectedDSquare,
-			setConsiderations
-		});
-
-		inputRef.current.value = '';
-	};
-
 	const renderConsiderations = (cause, effect) => {
-		const inputRef = descsRefs[descKey(cause,effect)];
 		const considerationElements = considerations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => {
