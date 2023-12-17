@@ -17,6 +17,10 @@ app.settings.options = options;
 
 const requestId = require('express-request-id');
 app.use(requestId());
+app.use(function(req, res, next) {
+	res.set('x-app', 'descartes-squares');
+	next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
