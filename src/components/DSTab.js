@@ -90,6 +90,24 @@ export default function (props) {
 		updateDecision();
 	};
 
+	const handleDecisionKeyDown = (event) => {
+		debug('handleDecisionKeyDown');
+		if (event.key != 'Enter') {
+			return;
+		}
+		if(!considerations) {
+			return;
+		}
+		if(considerations.length) {
+			return;
+		}
+		addAIConsiderations({
+			selectedDSquare,
+        	considerations,
+        	setConsiderations,
+		});
+	};
+
 	const handleAIAssist = (event) => {
 		debug('handleAIAssist');
 		addAIConsiderations({
@@ -148,6 +166,7 @@ export default function (props) {
 				placeholder={getRandomPlaceHolder()}
 				onChange={handleDecisionChange}
 				onBlur={handleDecisionBlur}
+				onKeyDown={handleDecisionKeyDown}
 				InputProps={{
 					endAdornment: (
 						<InputAdornment position="end">

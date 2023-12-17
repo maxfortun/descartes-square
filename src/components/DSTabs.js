@@ -115,7 +115,7 @@ export default function (props) {
 		if(dSquare.id && dSquare.id == selectedDSquare.id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
-		return <Tab key={i} label={dSquare.decision} />
+		return <Tab key={i} label={dSquare.decision || 'Empty' } />
 	}); 
 	
 	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(selectedDSquare.id);
