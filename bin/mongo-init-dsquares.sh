@@ -10,6 +10,8 @@ app_db=${ACCOUNTS_MONGODB##*/}
 script=/tmp/$(basename $0).$$
 cat > $script <<_EOT_
 
+db.authN.deleteMany( { id: '$EZSSO_OIDC_AUTH_ID' } );
+
 db.authN.insertOne({
 	id: '$EZSSO_OIDC_AUTH_ID',
 	password: '$EZSSO_OIDC_AUTH_PASSWORD',
@@ -27,7 +29,7 @@ db.authN.insertOne({
 	]
 });
 
-db.authZ.deleteMany({ id: '$EZSSO_OIDC_AUTH_ID' });
+db.authZ.deleteMany({ authN: '$EZSSO_OIDC_AUTH_ID' });
 
 db.authZ.insertMany([
 	{
@@ -66,10 +68,6 @@ db.authZ.insertMany([
 		rules: [ 
 			{
 				engine: 'jmespathts',
-				expr: 'req.method == \`GET\`'
-			},
-			{
-				engine: 'jmespathts',
 				expr: 'req.url.pathname == \`/api/squares\`'
 			}
 		]
@@ -91,6 +89,8 @@ db.authZ.insertMany([
 	{
 		authN: '$EZSSO_OIDC_AUTH_ID',
 		id: UUID().toString('hex').match(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/).slice(1,6).join('-'),
+		priority: 5,
+		access: 'deny',
 		rules: [ 
 			{
 				engine: 'jmespathts',
