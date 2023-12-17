@@ -50,7 +50,12 @@ const createConsideration = async (props) => {
 	.then(response => response.json())
 	.then(consideration => {
 		debug('createConsideration', consideration);
-		setConsiderations(prev => prev.concat([consideration]));
+		setConsiderations(prev => {
+			if(!prev) {
+				prev = [];
+			}
+			return prev.concat([consideration]);
+		});
 		return consideration;
 	});
 };
@@ -62,7 +67,7 @@ const addAIConsiderations = async (props) => {
 	} = props;
 
 	debug('addAIConsiderations >');
-
+	setConsiderations(null);
 	await refetch(`/api/ai/vertex/${selectedDSquare.id}`, { credentials: 'include' })
 	.then(response => response.json())
 	.then(async questions => {
