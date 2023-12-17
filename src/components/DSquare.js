@@ -2,6 +2,7 @@ import Debug from 'debug';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import {
+	Autocomplete,
 	Box,
 	Button,
 	Chip,
@@ -164,16 +165,17 @@ export default function (props) {
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
 				<Box sx={{ margin: 'auto', flexGrow: 1 }} >
-					<TextField
-						fullWidth
-						multiline
-						variant='standard'
-						label={label}
-						size='small'
-						defaultValue={''}
-						onChange={() => handleConsiderationChange(cause, effect, event)}
-						onKeyDown={() => handleConsiderationKeyDown(cause, effect, event)}
-						onBlur={() => handleConsiderationBlur(cause, effect, event)}
+					<Autocomplete
+						clearIcon={false}
+						options={[]}
+						freeSolo
+						multiple
+						renderTags={(value, props) => {
+								return value.map((option, index) => <Chip label={option} {...props({ index })} />)
+							}
+						}
+						renderInput={(params) => <TextField label={label} {...params} />}
+						onChange={ (event) => { debug('onAutocompleteChange', event) } }
 					/>
 				</Box>
 			</Box>
