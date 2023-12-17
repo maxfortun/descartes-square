@@ -10,6 +10,10 @@ router.get('/session', function(req, res, next) {
 	res.json({ account: req.account });
 });
 
+router.get('/logout', async function(req, res, next) {
+	res.json(await dsquares.logout(req));
+});
+
 router.get('/redirect', function(req, res, next) {
 	res.redirect(decodeURIComponent(req.query.url));
 });

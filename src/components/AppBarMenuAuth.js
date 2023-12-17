@@ -6,6 +6,8 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 
+import { logout } from './api';
+
 const debug = Debug('descartes-squares:AppBarMenuAuth');
 
 export default function () {
@@ -20,7 +22,8 @@ export default function () {
 		setAnchorEl(null);
 	};
 
-	const handleLogoutClick = (event) => {
+	const handleLogoutClick = async (event) => {
+		await logout();
 		setSession(Object.assign({}, session, {login: false, account: {}}));
 	};
 

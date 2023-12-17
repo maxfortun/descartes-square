@@ -119,28 +119,19 @@ const deleteConsideration = async (props) => {
 	});
 };
 
-const storeConsideration = async (cause, effect) => {
-	const inputRef = descsRefs[descKey(cause,effect)];
-
-	if( ! inputRef.current ) {
-		return;
-	}
-
-	if( ! inputRef.current.value ) {
-		return;
-	}
-
-	const [ desc, setDesc ] = descs[descKey(cause, effect)];
-	debug('storeConsideration', cause, effect, desc);
-
-	await createConsideration(cause, effect, inputRef.current.value);
-
-	inputRef.current.value = '';
+const logout = async () => {
+	debug('logout >');
+	return refetch(`/api/logout`, { credentials: 'include' })
+	.then(response => response.json())
+	.then(data => {
+		debug('logout <', data);
+	});
 };
 
 module.exports = {
 	fetchDSquare,
 	createConsideration,
 	deleteConsideration,
-	addAIConsiderations
+	addAIConsiderations,
+	logout
 };
