@@ -51,7 +51,7 @@ export default function (props) {
 
 
 	const handleDecisionChange = (event) => {
-		debug('handleDecisionChange', event.target.value);
+		// debug('handleDecisionChange', event.target.value);
 		setDecision(event.target.value);
 		selectedDSquare.decision = event.target.value;
 		setDecisionChanged(true);
@@ -86,12 +86,12 @@ export default function (props) {
 	};
 
 	const handleDecisionBlur = (event) => {
-		debug('handleDecisionBlur');
+		// debug('handleDecisionBlur');
 		updateDecision();
 	};
 
 	const handleDecisionKeyDown = (event) => {
-		debug('handleDecisionKeyDown');
+		// debug('handleDecisionKeyDown');
 		if (event.key != 'Enter') {
 			return;
 		}
