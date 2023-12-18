@@ -107,6 +107,7 @@ export default function (props) {
 	const handleChange = (event, i) => {
 		const selectedSquare = props.dSquares[i];
 		debug('handleChange', i, selectedSquare);
+		setConsiderations(null);
 		setSelectedDSquare(selectedSquare);
 	};
 
