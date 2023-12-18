@@ -75,18 +75,19 @@ const addAIConsiderations = async (props) => {
 		return Promise.all(questions.questions.map(async question => {
 			let cause = null;
 			let effect = null;
-			if(question.question.match(/^What will not happen /i)) {
+			if(question.question.match(/will not happen/i)) {
 				effect = 'will not';
 			} else {
 				effect = 'will';
 			}
-			if(question.question.match(/ happen if I do not /i)) {
+			if(question.question.match(/if I do not/i)) {
 				cause = 'do not';
 			} else {
 				cause = 'do';
 			}
 
 			return Promise.all(question.answers.map(async answer => {
+				debug('addAIConsiderations <<', question.question, cause, effect, answer.answer );
 				return createConsideration({
 					cause,
 					effect,

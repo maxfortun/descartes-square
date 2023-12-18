@@ -90,7 +90,7 @@ export default function (props) {
 		updateDecision();
 	};
 
-	const handleDecisionKeyDown = (event) => {
+	const handleDecisionKeyDown = async (event) => {
 		// debug('handleDecisionKeyDown');
 		if (event.key != 'Enter') {
 			return;
@@ -101,6 +101,7 @@ export default function (props) {
 		if(considerations.length) {
 			return;
 		}
+		await updateDecision();
 		addAIConsiderations({
 			selectedDSquare,
         	considerations,
@@ -158,6 +159,7 @@ export default function (props) {
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<TextField
+				disabled={ considerations==null || considerations.length > 0 }
 				label='Should I ...'
 				size='small'
 				fullWidth={true}
