@@ -1,4 +1,4 @@
-#!/opt/local/bin/bash -e
+#!/opt/local/bin/bash -ex
 
 app=$1
 

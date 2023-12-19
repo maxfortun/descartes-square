@@ -33,8 +33,9 @@ app.use(cookieParser());
 
 app.use('/oidc/idpresponse', oidc.idpresponse);
 const staticFiles = express.static(path.join(__dirname, 'public'));
+debug('oidc.logout', oidc.logout);
+app.use('/api/logout', oidc.authorize, oidc.logout);
 app.use('/api', oidc.authorize, dsquares.account, apiRouter);
-app.use('/logout', oidc.logout);
 app.use(staticFiles);
 
 // catch 404 and forward to error handler
