@@ -131,6 +131,9 @@ const logout = async () => {
 	.then(response => response.json())
 	.then(data => {
 		debug('logout <', data);
+	})
+	.catch(e => {
+		debug('logout !', e);
 	});
 };
 

@@ -4,7 +4,8 @@ services:
     image: node:21-alpine3.18
     working_dir: /usr/src/app
     environment:
-      DEBUG: "*,-morgan,-agentkeepalive,-send,-body-parser:*,-nodemon*,-express:*,-mongooose-jsproxy,-ezsso:express-client:*"
+      DEBUG1: "*,-morgan,-agentkeepalive,-send,-body-parser:*,-nodemon*,-express:*,-mongooose-jsproxy,-ezsso:express-client:*"
+      DEBUG: "*"
     restart: always
     ports:
       - '50803:3000'
