@@ -170,7 +170,8 @@ export default function (props) {
 		debug('handleAccountsChange', detail.option);
 	};
 
-	const accountsElements = selectedDSquare.accounts?.map((account, i) => {
+	const accountsElements = selectedDSquare.accounts?.filter(account => account != session.account.email)
+						.map((account, i) => {
                         const label = <Box key={i} account={account}>
                             {account}
                         </Box>;
@@ -191,7 +192,7 @@ export default function (props) {
 						multiple
 						freeSolo
 						value={ accountsElements }
-						renderInput={params => <TextField label='Emails' {...params} error={accountsError} helperText='Entries must be in email format: username@hostname.' />}
+						renderInput={params => <TextField sx={{ mt: '16px' }} label='Emails' {...params} error={accountsError} helperText='Entries must be in email format: username@hostname.' />}
 						onChange={ handleAccountsChange }
 					/>
 				</DialogContent>
