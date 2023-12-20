@@ -153,21 +153,26 @@ export default function (props) {
 		return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
 	};
 
-	const handleAccountsTextChange = async (event) => {
+	const handleAccountsTextKeyDown = async (event) => {
 		if(!validEmail(event.target.value)) {
 			setAccountsHelperText('Format: username@hostname.tld');
-		} else {
-			setAccountsError(false);
-			setAccountsHelperText(null);
+			if(event.key === 'Enter') {
+				event.stopPropagation();
+				setAccountsError(true);
+			}
+			return;
 		}
+		setAccountsError(false);
 	};
 
 	const handleAccountsChange = async (event, options, reason, detail) => {
 		debug('handleAccountsChange', detail.option);
-		if(validEmail(detail.option)) {
+		if(!validEmail(detail.option)) {
 			setAccountsError(true);
 			return;
 		}
+		setAccountsError(false);
+		setAccountsHelperText(null);
 		await invite(detail.option);
 	};
 
@@ -197,7 +202,7 @@ export default function (props) {
 													sx={{ mt: '16px' }} 
 													label='Emails' 
 													{...params} 
-													onChange={handleAccountsTextChange}
+													onKeyDown={handleAccountsTextKeyDown}
 													error={accountsError} 
 													helperText={accountsHelperText}
 						/>}
