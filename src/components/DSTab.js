@@ -183,11 +183,8 @@ export default function (props) {
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<Dialog open={openShare} onClose={handleCloseShare}>
-				<DialogTitle>Sharing</DialogTitle>
+				<DialogTitle>Sharing as {session.account.email}</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
-						Participants:
-					</DialogContentText>
 					<Autocomplete
 						clearIcon={false}
 						options={[]}
