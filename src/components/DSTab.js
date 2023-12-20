@@ -7,7 +7,12 @@ import React, {
 } from 'react';
 
 import {
+	Autocomplete,
 	Box,
+	Dialog,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	IconButton,
 	InputAdornment,
 	TextField,
@@ -41,7 +46,10 @@ export default function (props) {
 		session,
 		setSession
 	} = useContext(AppContext);
+
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
+	const [ openShare, setOpenShare ] = useState(false);
+	const [ accountsError, setAccountsError ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
@@ -104,8 +112,8 @@ export default function (props) {
 		await updateDecision();
 		addAIConsiderations({
 			selectedDSquare,
-        	considerations,
-        	setConsiderations,
+			considerations,
+			setConsiderations,
 		});
 	};
 
@@ -113,13 +121,14 @@ export default function (props) {
 		debug('handleAIAssist');
 		addAIConsiderations({
 			selectedDSquare,
-        	considerations,
-        	setConsiderations,
+			considerations,
+			setConsiderations,
 		});
 	};
 
 	const handleShareSquare = (event) => {
 		debug('handleShareSquare');
+		setOpenShare(true);
 	};
 
 	const placeholders = [
@@ -153,11 +162,43 @@ export default function (props) {
 		});
 	};
 
+	const handleCloseShare = async (event) => {
+		setOpenShare(false);
+	};
+
+	const handleAccountsChange = async (event, options, reason, detail) => {
+		debug('handleAccountsChange', detail.option);
+	};
+
+	const accountsElements = selectedDSquare.accounts?.map((account, i) => {
+                        const label = <Box key={i} account={account}>
+                            {account}
+                        </Box>;
+                        return label;
+                    });
+    
 	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
 						<HelpOutlineIcon onClick={handleAIAssist} />
 					</Tooltip>;
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
+			<Dialog open={openShare} onClose={handleCloseShare}>
+				<DialogTitle>Sharing</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Participants:
+					</DialogContentText>
+					<Autocomplete
+						clearIcon={false}
+						options={[]}
+						multiple
+						freeSolo
+						value={ accountsElements }
+						renderInput={params => <TextField label='Emails' {...params} error={accountsError} helperText='Entries must be in email format: username@hostname.' />}
+						onChange={ handleAccountsChange }
+					/>
+				</DialogContent>
+			</Dialog>
 			<TextField
 				disabled={ considerations==null || considerations.length > 0 }
 				label='Should I ...'
