@@ -31,6 +31,7 @@ import { AppContext } from './AppContext';
 import { refetch } from './utils';
 import {
 	addAIConsiderations,
+	updateDecision,
 	invite
 } from './api';
 
@@ -67,37 +68,13 @@ export default function (props) {
 		setDecisionChanged(true);
 	};
 
-	const updateDecision = async () => {
-		if(!decisionChanged) {
-			return;
-		}
-
-		debug('updateDecision', decision);
-		const body = JSON.stringify({
-			decision
-		});
-	
-		const fetchOptions = {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-type': 'application/json'
-			},
-			body
-		};
-		
-		return refetch(`/api/squares/${selectedDSquare.id}/decision`, fetchOptions)
-		.then(response => response.json())
-		.then(decision => {
-			debug('updateDecision', decision);
-			setDecisionChanged(false);
-		}); 
-				
-	};
-
 	const handleDecisionBlur = (event) => {
 		// debug('handleDecisionBlur');
-		updateDecision();
+		updateDecision({
+			selectedDSquare,
+			decisionChanged,
+			setDecisionChanged
+		});
 	};
 
 	const handleDecisionKeyDown = async (event) => {
@@ -111,7 +88,11 @@ export default function (props) {
 		if(considerations.length) {
 			return;
 		}
-		await updateDecision();
+		await updateDecision({
+			selectedDSquare,
+			decisionChanged,
+			setDecisionChanged
+		});
 		addAIConsiderations({
 			selectedDSquare,
 			considerations,

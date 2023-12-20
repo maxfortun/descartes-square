@@ -140,8 +140,13 @@ const logout = async () => {
 const updateDecision = async (props) => {
 	const {
 		selectedDSquare,
+		decisionChanged,
 		setDecisionChanged
 	} = props;
+
+	if(!decisionChanged) {
+		return;
+	}
 
 	const { decision } = selectedDSquare;
 
