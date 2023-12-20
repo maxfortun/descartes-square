@@ -137,10 +137,41 @@ const logout = async () => {
 	});
 };
 
+const updateDecision = async (props) => {
+	const {
+		selectedDSquare,
+		setDecisionChanged
+	} = props;
+
+	const { decision } = selectedDSquare;
+
+	debug('updateDecision', decision);
+	const body = JSON.stringify({
+		decision
+	});
+	
+	const fetchOptions = {
+		method: 'POST',
+		credentials: 'include',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body 
+	};
+		
+	return refetch(`/api/squares/${selectedDSquare.id}/decision`, fetchOptions)
+	.then(response => response.json())
+	.then(decision => {
+		debug('updateDecision', decision);
+		setDecisionChanged(false);
+	}); 
+};				  
+
 module.exports = {
 	fetchDSquare,
 	createConsideration,
 	deleteConsideration,
 	addAIConsiderations,
-	logout
+	logout,
+	updateDecision
 };

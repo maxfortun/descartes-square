@@ -30,7 +30,8 @@ import {
 import { AppContext } from './AppContext';
 import { refetch } from './utils';
 import {
-	addAIConsiderations
+	addAIConsiderations,
+	invite
 } from './api';
 
 export default function (props) {
@@ -50,6 +51,7 @@ export default function (props) {
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 	const [ openShare, setOpenShare ] = useState(false);
 	const [ accountsError, setAccountsError ] = useState(false);
+	const [ accountsHelperText, setAccountsHelperText ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
@@ -166,8 +168,26 @@ export default function (props) {
 		setOpenShare(false);
 	};
 
+	const validEmail = (email) => {
+		return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+	};
+
+	const handleAccountsTextChange = async (event) => {
+		if(!validEmail(event.target.value)) {
+			setAccountsHelperText('Format: username@hostname.tld');
+		} else {
+			setAccountsError(false);
+			setAccountsHelperText(null);
+		}
+	};
+
 	const handleAccountsChange = async (event, options, reason, detail) => {
 		debug('handleAccountsChange', detail.option);
+		if(validEmail(detail.option)) {
+			setAccountsError(true);
+			return;
+		}
+		await invite(detail.option);
 	};
 
 	const accountsElements = selectedDSquare.accounts?.filter(account => account != session.account.email)
@@ -192,7 +212,14 @@ export default function (props) {
 						multiple
 						freeSolo
 						value={ accountsElements }
-						renderInput={params => <TextField sx={{ mt: '16px' }} label='Emails' {...params} error={accountsError} helperText='Entries must be in email format: username@hostname.' />}
+						renderInput={params => <TextField 
+													sx={{ mt: '16px' }} 
+													label='Emails' 
+													{...params} 
+													onChange={handleAccountsTextChange}
+													error={accountsError} 
+													helperText={accountsHelperText}
+						/>}
 						onChange={ handleAccountsChange }
 					/>
 				</DialogContent>
