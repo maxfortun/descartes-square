@@ -170,8 +170,8 @@ export default function (props) {
 			return;
 		}
 		
-		if(members?.map(account => account.id).includes(event.target.value)) {
-			setMembersHelperText('Account already has access');
+		if(members?.map(member => member.id).includes(event.target.value)) {
+			setMembersHelperText('Member already has access');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
 				setMembersError(true);
@@ -202,13 +202,26 @@ export default function (props) {
 		}
 	};
 
-	const membersElements = members?.filter(account => account.email != session.account.email)
-						.map((account, i) => {
-                        const label = <Box key={i} account={account}>
-                            {account}
-                        </Box>;
-                        return label;
-                    });
+	const membersElements = [];
+
+	members?.filter(member => member.email != session.account.email)
+	.forEach(member => {
+		const element = <Box key={membersElements.length} account={member.email} bgcolor='PaleGreen'>
+			<Tooltip placement="top-start" title={member.email || ''}>
+				{member.name || member.email}
+			</Tooltip>
+		</Box>;
+		membersElements.push(element);
+	});
+
+	invites?.forEach(invited => {
+		const element = <Box key={membersElements.length} account={invited.email} bgcolor='Cornsilk'>
+			<Tooltip placement="top-start" title={invited.email || ''}>
+				{invited.name || invited.email || ''}
+			</Tooltip>
+		</Box>;
+		membersElements.push(element);
+	});
     
 	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
 						<HelpOutlineIcon onClick={handleAIAssist} />
