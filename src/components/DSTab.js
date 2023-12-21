@@ -213,7 +213,7 @@ export default function (props) {
 					</Tooltip>;
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
-			<Dialog open={openShare} onClose={handleCloseShare}>
+			<Dialog fullWidth open={openShare} onClose={handleCloseShare}>
 				<DialogTitle>Sharing as {session.account.email}</DialogTitle>
 				<DialogContent>
 					<Autocomplete
@@ -229,6 +229,7 @@ export default function (props) {
 													onKeyDown={handleAccountsTextKeyDown}
 													error={accountsError} 
 													helperText={accountsHelperText}
+													placeholder='Enter an email address and press enter.'
 						/>}
 						onChange={ handleAccountsChange }
 					/>
