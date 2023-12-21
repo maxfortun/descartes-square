@@ -206,7 +206,7 @@ export default function (props) {
 
 	members?.filter(member => member.email != session.account.email)
 	.forEach(member => {
-		const element = <Box key={membersElements.length} account={member.email} bgcolor='PaleGreen'>
+		const element = <Box key={membersElements.length} account={member.email} bgcolor='LightGreen'>
 			<Tooltip placement="top-start" title={member.email || ''}>
 				{member.name || member.email}
 			</Tooltip>
@@ -214,10 +214,10 @@ export default function (props) {
 		membersElements.push(element);
 	});
 
-	invites?.forEach(invited => {
-		const element = <Box key={membersElements.length} account={invited.email} bgcolor='Cornsilk'>
-			<Tooltip placement="top-start" title={invited.email || ''}>
-				{invited.name || invited.email || ''}
+	invites?.forEach(invite => {
+		const element = <Box key={membersElements.length} account={invite.invited} bgcolor='LightYellow'>
+			<Tooltip placement="top-start" title={invite.invited || ''}>
+				{invite.invited}
 			</Tooltip>
 		</Box>;
 		membersElements.push(element);
