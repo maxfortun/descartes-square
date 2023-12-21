@@ -8,7 +8,8 @@ const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
 		setConsiderations,
-		setAccounts
+		setAccounts,
+		setInvites,
 	} = props;
 
 	debug('fetchDSquare >', selectedDSquare.id);
@@ -19,6 +20,7 @@ const fetchDSquare = async (props) => {
 		localStorage.dSquareId = square.id;
 		setConsiderations(square.considerations);
 		setAccounts(square.accounts);
+		setInvites(square.accounts);
 		return square;
 	});
 };
@@ -178,7 +180,7 @@ const invite = async (props) => {
 	const {
 		selectedDSquare,
 		email,
-		setAccounts
+		setInvites,
 	} = props;
 	debug('invite', selectedDSquare, email);
 
@@ -200,7 +202,7 @@ const invite = async (props) => {
 	.then(account => {
 		debug('invite', account);
 		if(account.email) {
-			setAccounts(prev => prev.concat([account.email]));
+			setInvites(prev => prev.concat([account.email]));
 		}
 	}); 
 }

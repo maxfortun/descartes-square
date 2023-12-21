@@ -224,7 +224,7 @@ export default function (props) {
 						value={ accountsElements }
 						renderInput={params => <TextField 
 													sx={{ mt: '16px' }} 
-													label='With' 
+													label='With ...' 
 													{...params} 
 													onKeyDown={handleAccountsTextKeyDown}
 													error={accountsError} 
