@@ -222,44 +222,48 @@ export default function (props) {
 						multiple
 						freeSolo
 						value={ accountsElements }
-						renderInput={params => <TextField 
-													sx={{ mt: '16px' }} 
-													label='With ...' 
-													{...params} 
-													onKeyDown={handleAccountsTextKeyDown}
-													error={accountsError} 
-													helperText={accountsHelperText}
-													placeholder='Enter an email address and press enter.'
-						/>}
+						renderInput={params =>
+							<TextField 
+								sx={{ mt: '16px' }} 
+								label='With ...' 
+								{...params} 
+								onKeyDown={handleAccountsTextKeyDown}
+								error={accountsError} 
+								helperText={accountsHelperText}
+								placeholder='Enter an email address and press enter.'
+							/>
+						}
 						onChange={ handleAccountsChange }
 					/>
 				</DialogContent>
 			</Dialog>
-			<TextField
-				disabled={ considerations==null || considerations.length > 0 }
-				label='Should I ...'
-				size='small'
-				fullWidth={true}
-				inputProps={{ style: { textAlign: 'center' } }}
-				value={decision}
-				placeholder={getRandomPlaceHolder()}
-				onChange={handleDecisionChange}
-				onBlur={handleDecisionBlur}
-				onKeyDown={handleDecisionKeyDown}
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position="end">
-							{aiAssist}
-							<Tooltip placement="top-start" title="Share this sqaure">
-								<IosShareIcon onClick={handleShareSquare} />
-							</Tooltip>
-							<Tooltip placement="top-start" title="Delete this square">
-								<DeleteForeverIcon onClick={handleDeleteSquare} />
-							</Tooltip>
-						</InputAdornment>
-					)
-				}}
-			/>
+			<Tooltip placement="top-start" title={decision}>
+				<TextField
+					disabled={ considerations==null || considerations.length > 0 }
+					label='Should I ...'
+					size='small'
+					fullWidth={true}
+					inputProps={{ style: { textAlign: 'center' } }}
+					value={decision}
+					placeholder={getRandomPlaceHolder()}
+					onChange={handleDecisionChange}
+					onBlur={handleDecisionBlur}
+					onKeyDown={handleDecisionKeyDown}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								{aiAssist}
+								<Tooltip placement="top-start" title="Share this sqaure">
+									<IosShareIcon onClick={handleShareSquare} />
+								</Tooltip>
+								<Tooltip placement="top-start" title="Delete this square">
+									<DeleteForeverIcon onClick={handleDeleteSquare} />
+								</Tooltip>
+							</InputAdornment>
+						)
+					}}
+				/>
+			</Tooltip>
 	</Box>;
 }
 
