@@ -200,7 +200,7 @@ const invite = async (props) => {
 	.then(account => {
 		debug('invite', account);
 		if(account.email) {
-			setAccounts(prev => prev.push(account.email));
+			setAccounts(prev => prev.concat([account.email]));
 		}
 	}); 
 }
