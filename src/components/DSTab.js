@@ -41,6 +41,8 @@ export default function (props) {
 	} = props;
 
 	const {
+		accounts,
+		setAccounts,
 		considerations,
 		setConsiderations,
 		decision,
@@ -173,10 +175,14 @@ export default function (props) {
 		}
 		setAccountsError(false);
 		setAccountsHelperText(null);
-		await invite(detail.option);
+		await invite({
+			selectedDSquare,
+			email: detail.option,
+			setAccounts
+		});
 	};
 
-	const accountsElements = selectedDSquare.accounts?.filter(account => account != session.account.email)
+	const accountsElements = accounts?.filter(account => account.email != session.account.email)
 						.map((account, i) => {
                         const label = <Box key={i} account={account}>
                             {account}

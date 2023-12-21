@@ -50,6 +50,8 @@ export default function (props) {
 	} = props;
 
 	const {
+		accounts,
+		setAccounts,
 		considerations,
 		setConsiderations,
 		decision,
@@ -74,7 +76,8 @@ export default function (props) {
 	useEffect(() => {
 		fetchDSquare({
 			selectedDSquare,
-			setConsiderations
+			setConsiderations,
+			setAccounts
 		});
 	}, [selectedDSquare.id]);
 

@@ -7,7 +7,8 @@ const debug = Debug('descartes-squares:api');
 const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
-		setConsiderations
+		setConsiderations,
+		setAccounts
 	} = props;
 
 	debug('fetchDSquare >', selectedDSquare.id);
@@ -17,6 +18,7 @@ const fetchDSquare = async (props) => {
 		debug('fetchDSquare <', square);
 		localStorage.dSquareId = square.id;
 		setConsiderations(square.considerations);
+		setAccounts(square.accounts);
 		return square;
 	});
 };
@@ -172,11 +174,43 @@ const updateDecision = async (props) => {
 	}); 
 };				  
 
+const invite = async (props) => {
+	const {
+		selectedDSquare,
+		email,
+		setAccounts
+	} = props;
+	debug('invite', selectedDSquare, email);
+
+	const body = JSON.stringify({
+		email
+	});
+	
+	const fetchOptions = {
+		method: 'POST',
+		credentials: 'include',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body 
+	};
+		
+	return refetch(`/api/squares/${selectedDSquare.id}/invite`, fetchOptions)
+	.then(response => response.json())
+	.then(account => {
+		debug('invite', account);
+		if(account.email) {
+			setAccounts(prev => prev.push(account.email));
+		}
+	}); 
+}
+
 module.exports = {
 	fetchDSquare,
 	createConsideration,
 	deleteConsideration,
 	addAIConsiderations,
 	logout,
-	updateDecision
+	updateDecision,
+	invite
 };
