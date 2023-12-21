@@ -10,6 +10,8 @@ app_db=${ACCOUNTS_MONGODB##*/}
 script=/tmp/$(basename $0).$$
 cat > $script <<_EOT_
 
+db.invites.createIndex( { square_id: 1, invited: 1 }, { unique: true } );
+
 db.authN.deleteMany( { id: '$EZSSO_OIDC_AUTH_ID' } );
 
 db.authN.insertOne({
