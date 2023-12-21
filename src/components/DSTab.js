@@ -152,6 +152,9 @@ export default function (props) {
 	};
 
 	const validEmail = (email) => {
+		if(!email) {
+			return true;
+		}
 		return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
 	};
 
@@ -165,7 +168,7 @@ export default function (props) {
 			return;
 		}
 		
-		if(accounts?.includes(event.target.value)) {
+		if(accounts?.map(account => account.id).includes(event.target.value)) {
 			setAccountsHelperText('Account already has access');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
@@ -178,18 +181,23 @@ export default function (props) {
 	};
 
 	const handleAccountsChange = async (event, options, reason, detail) => {
-		debug('handleAccountsChange', detail.option);
-		if(!validEmail(detail.option)) {
-			setAccountsError(true);
+		debug('handleAccountsChange', reason, detail.option);
+
+		if(reason == 'createOption') {
+			if(!validEmail(detail.option)) {
+				setAccountsError(true);
+				return;
+			}
+
+			setAccountsError(false);
+			setAccountsHelperText(null);
+			await invite({
+				selectedDSquare,
+				email: detail.option,
+				setAccounts
+			});
 			return;
 		}
-		setAccountsError(false);
-		setAccountsHelperText(null);
-		await invite({
-			selectedDSquare,
-			email: detail.option,
-			setAccounts
-		});
 	};
 
 	const accountsElements = accounts?.filter(account => account.email != session.account.email)
