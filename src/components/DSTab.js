@@ -41,8 +41,10 @@ export default function (props) {
 	} = props;
 
 	const {
-		accounts,
-		setAccounts,
+		members,
+		setMembers,
+		invites,
+		setInvites,
 		considerations,
 		setConsiderations,
 		decision,
@@ -53,8 +55,8 @@ export default function (props) {
 
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 	const [ openShare, setOpenShare ] = useState(false);
-	const [ accountsError, setAccountsError ] = useState(false);
-	const [ accountsHelperText, setAccountsHelperText ] = useState(false);
+	const [ membersError, setMembersError ] = useState(false);
+	const [ membersHelperText, setMembersHelperText ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
@@ -158,49 +160,49 @@ export default function (props) {
 		return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
 	};
 
-	const handleAccountsTextKeyDown = async (event) => {
+	const handleMembersTextKeyDown = async (event) => {
 		if(!validEmail(event.target.value)) {
-			setAccountsHelperText('Format: username@hostname.tld');
+			setMembersHelperText('Format: username@hostname.tld');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
-				setAccountsError(true);
+				setMembersError(true);
 			}
 			return;
 		}
 		
-		if(accounts?.map(account => account.id).includes(event.target.value)) {
-			setAccountsHelperText('Account already has access');
+		if(members?.map(account => account.id).includes(event.target.value)) {
+			setMembersHelperText('Account already has access');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
-				setAccountsError(true);
+				setMembersError(true);
 			}
 			return;
 		}
 
-		setAccountsError(false);
+		setMembersError(false);
 	};
 
-	const handleAccountsChange = async (event, options, reason, detail) => {
-		debug('handleAccountsChange', reason, detail.option);
+	const handleMembersChange = async (event, options, reason, detail) => {
+		debug('handleMembersChange', reason, detail.option);
 
 		if(reason == 'createOption') {
 			if(!validEmail(detail.option)) {
-				setAccountsError(true);
+				setMembersError(true);
 				return;
 			}
 
-			setAccountsError(false);
-			setAccountsHelperText(null);
+			setMembersError(false);
+			setMembersHelperText(null);
 			await invite({
 				selectedDSquare,
 				email: detail.option,
-				setAccounts
+				setInvites
 			});
 			return;
 		}
 	};
 
-	const accountsElements = accounts?.filter(account => account.email != session.account.email)
+	const membersElements = members?.filter(account => account.email != session.account.email)
 						.map((account, i) => {
                         const label = <Box key={i} account={account}>
                             {account}
@@ -221,19 +223,19 @@ export default function (props) {
 						options={[]}
 						multiple
 						freeSolo
-						value={ accountsElements }
+						value={ membersElements }
 						renderInput={params =>
 							<TextField 
 								sx={{ mt: '16px' }} 
 								label='With ...' 
 								{...params} 
-								onKeyDown={handleAccountsTextKeyDown}
-								error={accountsError} 
-								helperText={accountsHelperText}
+								onKeyDown={handleMembersTextKeyDown}
+								error={membersError} 
+								helperText={membersHelperText}
 								placeholder='Enter an email address and press enter.'
 							/>
 						}
-						onChange={ handleAccountsChange }
+						onChange={ handleMembersChange }
 					/>
 				</DialogContent>
 			</Dialog>

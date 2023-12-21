@@ -50,8 +50,10 @@ export default function (props) {
 	} = props;
 
 	const {
-		accounts,
-		setAccounts,
+		members,
+		setMembers,
+		invites,
+		setInvites,
 		considerations,
 		setConsiderations,
 		decision,
@@ -77,7 +79,8 @@ export default function (props) {
 		fetchDSquare({
 			selectedDSquare,
 			setConsiderations,
-			setAccounts
+			setMembers,
+			setInvites
 		});
 	}, [selectedDSquare.id]);
 

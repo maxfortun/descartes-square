@@ -19,11 +19,14 @@ export default function () {
 	const [ decision, setDecision ] = useState('');
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
-	const [ accounts, setAccounts ] = useState(null);
+	const [ members, setMembers ] = useState(null);
+	const [ invites, setInvites ] = useState(null);
 
 	Object.assign(appContext, {
-		accounts,
-		setAccounts,
+		members,
+		setMembers,
+		invites,
+		setInvites,
 		considerations,
 		setConsiderations,
 		decision,

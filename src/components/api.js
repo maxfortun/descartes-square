@@ -8,7 +8,7 @@ const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
 		setConsiderations,
-		setAccounts,
+		setMembers,
 		setInvites,
 	} = props;
 
@@ -19,8 +19,8 @@ const fetchDSquare = async (props) => {
 		debug('fetchDSquare <', square);
 		localStorage.dSquareId = square.id;
 		setConsiderations(square.considerations);
-		setAccounts(square.accounts);
-		setInvites(square.accounts);
+		setMembers(square.members);
+		setInvites(square.invites);
 		return square;
 	});
 };
@@ -199,10 +199,10 @@ const invite = async (props) => {
 		
 	return refetch(`/api/squares/${selectedDSquare.id}/invite`, fetchOptions)
 	.then(response => response.json())
-	.then(account => {
-		debug('invite', account);
-		if(account.email) {
-			setInvites(prev => prev.concat([account.email]));
+	.then(invited => {
+		debug('invite', invited);
+		if(invited.email) {
+			setInvites(prev => prev.concat([invited.email]));
 		}
 	}); 
 }
