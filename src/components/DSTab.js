@@ -164,6 +164,16 @@ export default function (props) {
 			}
 			return;
 		}
+		
+		if(accounts?.includes(event.target.value)) {
+			setAccountsHelperText('Account already has access');
+			if(event.key === 'Enter') {
+				event.stopPropagation();
+				setAccountsError(true);
+			}
+			return;
+		}
+
 		setAccountsError(false);
 	};
 
