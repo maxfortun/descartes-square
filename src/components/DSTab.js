@@ -9,6 +9,7 @@ import React, {
 import {
 	Autocomplete,
 	Box,
+	Chip,
 	Dialog,
 	DialogContent,
 	DialogContentText,
@@ -202,30 +203,48 @@ export default function (props) {
 		}
 	};
 
-	const membersElements = [];
+	const sharedWith = [];
 
+/*
 	members?.filter(member => member.email != session.account.email)
 	.forEach(member => {
-		const element = <Box key={membersElements.length} account={member.email} bgcolor='LightGreen'>
-			<Tooltip placement="top-start" title={member.email || ''}>
-				{member.name || member.email}
-			</Tooltip>
-		</Box>;
-		membersElements.push(element);
+		sharedWith.push(Object.assign({membership: 'member'}, member));
 	});
+*/
 
-	invites?.forEach(invite => {
-		const element = <Box key={membersElements.length} account={invite.invited} bgcolor='LightYellow'>
-			<Tooltip placement="top-start" title={invite.invited || ''}>
-				{invite.invited}
-			</Tooltip>
-		</Box>;
-		membersElements.push(element);
+	invites?.forEach(member => {
+		sharedWith.push(
+			<Box {...member} membership='invited' />
+		);
 	});
     
 	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
-						<HelpOutlineIcon onClick={handleAIAssist} />
-					</Tooltip>;
+		<HelpOutlineIcon onClick={handleAIAssist} />
+	</Tooltip>;
+
+	const renderTagMember = (option, getTagProps, i) => {
+		debug('renderTagMember', option, i);
+		return <Box bgcolor='green'>
+			{option.email}
+		</Box>;
+	};
+
+	const renderTagInvited = (option, getTagProps, i) => {
+		debug('renderTagInvited', option, i);
+		return <Chip {...getTagProps({ index: i })} label={option.invited} />;
+	};
+
+	const renderTag = (option, getTagProps, i) => {
+		debug('renderTag', option, getTagProps, i);
+		const chip = <Chip {...getTagProps({ index: i })} label={'index:'+i} />;
+		debug('renderTag chip', option, getTagProps, i, chip);
+		return chip;
+	/*
+	  option.membership == 'invited'
+	? renderTagInvited(option, getTagProps, i)
+	: renderTagMember(option, getTagProps, i)
+	*/
+	};
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<Dialog fullWidth open={openShare} onClose={handleCloseShare}>
@@ -236,7 +255,7 @@ export default function (props) {
 						options={[]}
 						multiple
 						freeSolo
-						value={ membersElements }
+						value={ sharedWith }
 						renderInput={params =>
 							<TextField 
 								sx={{ mt: '16px' }} 
@@ -248,6 +267,9 @@ export default function (props) {
 								placeholder='Enter an email address and press enter.'
 							/>
 						}
+						renderTags={(values, getTagProps, ownerState) => {
+							return values.map((option, i) => renderTag(option, getTagProps, i));
+						}}
 						onChange={ handleMembersChange }
 					/>
 				</DialogContent>
