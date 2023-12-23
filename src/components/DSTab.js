@@ -205,17 +205,13 @@ export default function (props) {
 
 	const sharedWith = [];
 
-/*
-	members?.filter(member => member.email != session.account.email)
-	.forEach(member => {
+	// members?.filter(member => member.email != session.account.email)
+	members?.forEach(member => {
 		sharedWith.push(Object.assign({membership: 'member'}, member));
 	});
-*/
 
 	invites?.forEach(member => {
-		sharedWith.push(
-			<Box {...member} membership='invited' />
-		);
+		sharedWith.push(Object.assign({membership: 'invited'}, member));
 	});
     
 	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
@@ -223,27 +219,19 @@ export default function (props) {
 	</Tooltip>;
 
 	const renderTagMember = (option, getTagProps, i) => {
-		debug('renderTagMember', option, i);
-		return <Box bgcolor='green'>
-			{option.email}
-		</Box>;
+		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightgreen' }} label={option.email} />;
 	};
 
 	const renderTagInvited = (option, getTagProps, i) => {
-		debug('renderTagInvited', option, i);
-		return <Chip {...getTagProps({ index: i })} label={option.invited} />;
+		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightyellow' }} label={option.invited} />;
 	};
 
 	const renderTag = (option, getTagProps, i) => {
-		debug('renderTag', option, getTagProps, i);
-		const chip = <Chip {...getTagProps({ index: i })} label={'index:'+i} />;
-		debug('renderTag chip', option, getTagProps, i, chip);
-		return chip;
-	/*
-	  option.membership == 'invited'
-	? renderTagInvited(option, getTagProps, i)
-	: renderTagMember(option, getTagProps, i)
-	*/
+		if( option.membership == 'invited' ) {
+			return renderTagInvited(option, getTagProps, i);
+		}
+
+		return renderTagMember(option, getTagProps, i)
 	};
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
