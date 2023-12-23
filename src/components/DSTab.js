@@ -205,8 +205,8 @@ export default function (props) {
 
 	const sharedWith = [];
 
-	// members?.filter(member => member.email != session.account.email)
-	members?.forEach(member => {
+	members?.filter(member => member.email != session.account.email)
+	.forEach(member => {
 		sharedWith.push(Object.assign({membership: 'member'}, member));
 	});
 
@@ -219,11 +219,11 @@ export default function (props) {
 	</Tooltip>;
 
 	const renderTagMember = (option, getTagProps, i) => {
-		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightgreen' }} label={option.email} />;
+		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightgreen' }} title={option.email} label={option.name || option.email} />;
 	};
 
 	const renderTagInvited = (option, getTagProps, i) => {
-		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightyellow' }} label={option.invited} />;
+		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightyellow' }} title={option.invited} label={option.invited} />;
 	};
 
 	const renderTag = (option, getTagProps, i) => {
@@ -236,7 +236,7 @@ export default function (props) {
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<Dialog fullWidth open={openShare} onClose={handleCloseShare}>
-				<DialogTitle>Sharing as {session.account.email}</DialogTitle>
+				<DialogTitle>Sharing as {session.account.name || session.account.email}</DialogTitle>
 				<DialogContent>
 					<Autocomplete
 						clearIcon={false}
