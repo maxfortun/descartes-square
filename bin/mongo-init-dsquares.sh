@@ -80,6 +80,16 @@ db.authZ.insertMany([
 		rules: [ 
 			{
 				engine: 'jmespathts',
+				expr: 'req.url.pathname == \`/api/invites\`'
+			}
+		]
+	},
+	{
+		authN: '$EZSSO_OIDC_AUTH_ID',
+		id: UUID().toString('hex').match(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/).slice(1,6).join('-'),
+		rules: [ 
+			{
+				engine: 'jmespathts',
 				expr: 'req.url.pathname == \`/api/squares\`'
 			}
 		]
