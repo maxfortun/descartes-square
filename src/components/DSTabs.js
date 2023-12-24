@@ -16,7 +16,9 @@ import {
 
 import {
 	Add as AddIcon,
-	ArrowForwardOutlined as ArrowForwardOutlinedIcon
+	ArrowForwardOutlined as ArrowForwardOutlinedIcon,
+	PlaylistAddCheckOutlined as PlaylistAddCheckOutlinedIcon,
+	PlaylistAddOutlined as PlaylistAddOutlinedIcon
 } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
@@ -111,6 +113,12 @@ export default function (props) {
 		setSelectedDSquare(selectedSquare);
 	};
 
+	const handleShowInvites = (event) => {
+	};
+
+	const handleShowOwn = (event) => {
+	};
+
 	debug("Rendering", props.dSquares);
 	const tabs = props.dSquares.map((dSquare, i) => {
 		if(dSquare.id && dSquare.id == selectedDSquare.id) {
@@ -122,21 +130,10 @@ export default function (props) {
 	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(selectedDSquare.id);
 	debug("selectedDSquare", value, selectedDSquare);
 
-	return <Box
-		display='flex'
-		justifyContent='center'
-		alignItems='center'
-		sx={{ mt: '16px' }}
-	>
-		<Tabs
-				value={value}
-				onChange={handleChange}
-				variant="scrollable"
-  				scrollButtons={false}
-		>
-			{tabs}
-		</Tabs>
+	const buttons = [];
+	buttons.push(
 		<IconButton
+			key={buttons.length}
 			size="small"
 			onClick={handleAdd}
 		>
@@ -144,6 +141,45 @@ export default function (props) {
 				<AddIcon />
 			</Tooltip>
 		</IconButton>
+	);
+
+	buttons.push(
+		<IconButton
+			key={buttons.length}
+			size="small"
+			onClick={handleShowInvites}
+		>
+			<Tooltip placement="top-start" title="Show invites">
+				<PlaylistAddOutlinedIcon />
+			</Tooltip>
+		</IconButton>
+	);
+	
+	return <Box
+		display='flex'
+		justifyContent='center'
+		sx={{ mt: '16px' }}
+	>
+		<Box
+			justifyContent='center'
+			sx={{ width:'100%' }}
+		>
+			<Tabs
+				value={value}
+				onChange={handleChange}
+				variant="scrollable"
+  				scrollButtons={false}
+			>
+				{tabs}
+			</Tabs>
+		</Box>
+		<Box 
+			display='flex'
+			justifyContent='center'
+			sx={{ ml: '4px', mr: '4px' }}
+		>
+			{buttons}
+		</Box>
 	</Box>;
 }
 
