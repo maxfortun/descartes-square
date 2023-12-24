@@ -35,7 +35,8 @@ import { refetch } from './utils';
 import {
 	addAIConsiderations,
 	updateDecision,
-	invite
+	inviteMember,
+	removeMember
 } from './api';
 
 export default function (props) {
@@ -196,10 +197,20 @@ export default function (props) {
 
 			setMembersError(false);
 			setMembersHelperText(null);
-			await invite({
+			await inviteMember({
 				selectedDSquare,
 				email: detail.option,
 				setInvites
+			});
+			return;
+		}
+
+		if(reason == 'removeOption') {
+			await removeMember({
+				selectedDSquare,
+				email: detail.option,
+				setInvites,
+				setMembers
 			});
 			return;
 		}

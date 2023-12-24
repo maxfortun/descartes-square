@@ -176,13 +176,13 @@ const updateDecision = async (props) => {
 	}); 
 };				  
 
-const invite = async (props) => {
+const inviteMember = async (props) => {
 	const {
 		selectedDSquare,
 		email,
 		setInvites,
 	} = props;
-	debug('invite', selectedDSquare, email);
+	debug('inviteMember', selectedDSquare, email);
 
 	const body = JSON.stringify({
 		email
@@ -197,10 +197,42 @@ const invite = async (props) => {
 		body 
 	};
 		
-	return refetch(`/api/squares/${selectedDSquare.id}/invite`, fetchOptions)
+	return refetch(`/api/squares/${selectedDSquare.id}/members/invite`, fetchOptions)
 	.then(response => response.json())
 	.then(invited => {
-		debug('invite', invited);
+		debug('inviteMember', invited);
+		if(invited.email) {
+			setInvites(prev => prev.concat([{ invited: invited.email }]));
+		}
+	}); 
+}
+
+const removeMember = async (props) => {
+	const {
+		selectedDSquare,
+		email,
+		setInvites,
+		setMembers
+	} = props;
+	debug('removeMember', selectedDSquare, email);
+
+	const body = JSON.stringify({
+		email
+	});
+	
+	const fetchOptions = {
+		method: 'POST',
+		credentials: 'include',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body 
+	};
+		
+	return refetch(`/api/squares/${selectedDSquare.id}/members/remove`, fetchOptions)
+	.then(response => response.json())
+	.then(invited => {
+		debug('removeMember', invited);
 		if(invited.email) {
 			setInvites(prev => prev.concat([invited.email]));
 		}
@@ -214,5 +246,6 @@ module.exports = {
 	addAIConsiderations,
 	logout,
 	updateDecision,
-	invite
+	inviteMember,
+	removeMember
 };
