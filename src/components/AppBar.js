@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import React, { useContext, useState, useEffect } from 'react';
 
-import { AppBar, Avatar, Box, Button, Icon, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, Button, Icon, Toolbar, Tooltip, Typography } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';

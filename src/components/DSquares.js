@@ -14,7 +14,6 @@ import {
 	FormControlLabel,
 	FormLabel,
 	Icon,
-	IconButton,
 	Paper,
 	Radio,
 	RadioGroup,

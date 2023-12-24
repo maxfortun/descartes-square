@@ -17,10 +17,12 @@ import {
 	IconButton,
 	InputAdornment,
 	TextField,
-	Tooltip
+	Tooltip,
+	Typography
 } from '@mui/material';
 
 import {
+	Close as CloseIcon,
 	DeleteForever as DeleteForeverIcon,
 	Download as DownloadIcon,
 	Edit as EditIcon,
@@ -236,7 +238,21 @@ export default function (props) {
 
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<Dialog fullWidth open={openShare} onClose={handleCloseShare}>
-				<DialogTitle>Sharing as {session.account.name || session.account.email}</DialogTitle>
+				<DialogTitle sx={{ m: 0, p: 2 }}>
+						Sharing as {session.account.name || session.account.email}
+				</DialogTitle>
+				<IconButton
+					aria-label="close"
+					onClick={handleCloseShare}
+					sx={{
+						position: 'absolute',
+						right: 8,
+						top: 8,
+						color: (theme) => theme.palette.grey[500],
+					}}
+				>
+					<CloseIcon />
+				</IconButton>
 				<DialogContent>
 					<Autocomplete
 						clearIcon={false}
