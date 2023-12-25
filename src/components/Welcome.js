@@ -27,7 +27,9 @@ const debug = Debug('descartes-squares:Welcome');
 import { AppContext } from './AppContext';
 
 export default function () {
-	const { session, setSession } = useContext(AppContext);
+	const {
+		session, setSession
+	} = useContext(AppContext);
 
 	useEffect(() => {
 		debug('mounted');
