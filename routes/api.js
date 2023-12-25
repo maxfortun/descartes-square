@@ -42,6 +42,10 @@ router.post('/squares/:square/considerations', async function(req, res, next) {
 	res.json(await dsquares.createConsideration(req));
 });
 
+router.get('/invites', async function(req, res, next) {
+	res.json(await dsquares.listInvites(req));
+});
+
 router.post('/squares/:square/members/invite', async function(req, res, next) {
 	res.json(await dsquares.inviteMember(req));
 });
