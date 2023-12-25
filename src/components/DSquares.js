@@ -28,7 +28,8 @@ import {
 
 import { refetch } from './utils';
 import { 
-	fetchDSquares
+	fetchDSquares,
+	fetchInvites
 } from './api';
 
 import { AppContext } from './AppContext';
@@ -41,6 +42,8 @@ export default function (props) {
 	const {
 		dSquares,
 		setDSquares,
+		invites,
+		setInvites,
 		session,
 		setSession
 	} = useContext(AppContext);
@@ -52,7 +55,12 @@ export default function (props) {
 
 	useEffect(() => {
 		debug('mounted');
-		setReady(true);
+		fetchInvites({
+			setInvites
+		})
+		.then(() => {
+			setReady(true);
+		});
 	}, []);
 
 	useEffect(() => {

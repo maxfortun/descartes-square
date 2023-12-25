@@ -19,6 +19,21 @@ const fetchDSquares = async (props) => {
 		});
 };
 
+const fetchInvites = async (props) => {
+	const {
+		setInvites
+	} = props;
+
+	debug('fetchInvites');
+	return refetch('/api/invites', { credentials: 'include' })
+		.then(response => response.json())
+		.then(invites => {
+			debug('fetchInvites', invites);
+			setInvites(invites);
+			return invites;
+		});
+};
+
 const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
@@ -293,5 +308,6 @@ module.exports = {
 	logout,
 	updateDecision,
 	inviteMember,
-	removeMember
+	removeMember,
+	fetchInvites
 };
