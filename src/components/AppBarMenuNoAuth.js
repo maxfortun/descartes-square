@@ -9,7 +9,9 @@ import { AppContext } from './AppContext';
 const debug = Debug('descartes-squares:AppBarMenuAuth');
 
 export default function () {
-	const { session, setSession } = useContext(AppContext);
+	const {
+		session, setSession
+	} = useContext(AppContext);
 
 	const [ anchorEl, setAnchorEl ] = useState(null);
 

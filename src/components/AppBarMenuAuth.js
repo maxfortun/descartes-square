@@ -11,7 +11,10 @@ import { logout } from './api';
 const debug = Debug('descartes-squares:AppBarMenuAuth');
 
 export default function () {
-	const { session, setSession } = useContext(AppContext);
+	const {
+		session, setSession
+	} = useContext(AppContext);
+
 	const [ anchorEl, setAnchorEl ] = useState(null);
 
 	const handleOpen = (event) => {
