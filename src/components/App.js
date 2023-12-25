@@ -15,34 +15,27 @@ const debug = Debug('descartes-squares:App');
 const appContext = {};
 
 export default function () {
-	const [ considerations, setConsiderations ] = useState(null);
-	const [ decision, setDecision ] = useState('');
-	const [ dSquares, setDSquares ] = useState(null);
+	const [ selectedSquare, setSelectedSquare ] = useState(null);
+	const [ selectedDecision, setSelectedDecision ] = useState('');
+	const [ selectedConsiderations, setSelectedConsiderations ] = useState(null);
+	const [ selectedMembers, setSelectedMembers ] = useState(null);
+	const [ selectedInvites, setSelectedInvites ] = useState(null);
+	const [ squares, setSquares ] = useState(null);
+	const [ invites, setInvites ] = useState(null);
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
-	const [ members, setMembers ] = useState(null);
-	const [ invites, setInvites ] = useState(null);
 
 	Object.assign(appContext, {
-		dSquares,
-		setDSquares,
-		members,
-		setMembers,
-		invites,
-		setInvites,
-		considerations,
-		setConsiderations,
-		decision,
-		setDecision,
-		error,
-		setError,
-		session,
-		setSession
+		selectedSquare, setSelectedSquare,
+		selectedDecision, setSelectedDecision,
+		selectedConsiderations, setSelectedConsiderations,
+		selectedMembers, setSelectedMembers,
+		selectedInvites, setSelectedInvites,
+		squares, setSquares,
+		invites, setInvites,
+		error, setError,
+		session, setSession
 	});
-
-	useEffect(() => {
-		debug('mounted');
-	}, []);
 
 	useEffect(() => {
 		debug('useEffect session.login', session.login);

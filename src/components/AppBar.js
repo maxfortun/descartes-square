@@ -13,7 +13,9 @@ const debug = Debug('descartes-squares:AppBar');
 import { refetch } from './utils';
 
 export default function () {
-	const { session, setSession } = useContext(AppContext);
+	const { 
+        session, setSession
+	} = useContext(AppContext);
 
 	const fetchSession = async () => {
         debug('fetchSession>');
