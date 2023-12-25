@@ -27,6 +27,9 @@ import {
 } from '@mui/icons-material';
 
 import { refetch } from './utils';
+import { 
+	fetchDSquares
+} from './api';
 
 import { AppContext } from './AppContext';
 import Loader from './Loader';
@@ -35,23 +38,17 @@ import DSquare from './DSquare';
 
 export default function (props) {
 
-	const { session, setSession } = useContext(AppContext);
+	const {
+		dSquares,
+		setDSquares,
+		session,
+		setSession
+	} = useContext(AppContext);
+
 	const [ ready, setReady ] = useState(false);
-	const [ dSquares, setDSquares ] = useState(null);
 	const [ selectedDSquare, setSelectedDSquare ] = useState({});
 
 	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
-
-	const fetchDSquares = async () => {
-		debug('fetchDSquares');
-		return refetch('/api/squares', { credentials: 'include' })
-		.then(response => response.json())
-		.then(dSquares => {
-			debug('fetchDSquares', dSquares);
-			setDSquares(dSquares);
-			return dSquares;
-		});
-	};
 
 	useEffect(() => {
 		debug('mounted');
@@ -62,7 +59,10 @@ export default function (props) {
 		if(!ready) {
 			return;
 		}
-		fetchDSquares();
+
+		fetchDSquares({
+			setDSquares
+		});
 	}, [ready]);
 
 	useEffect(() => {

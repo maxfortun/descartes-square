@@ -21,6 +21,10 @@ import {
 	PlaylistAddOutlined as PlaylistAddOutlinedIcon
 } from '@mui/icons-material';
 
+import {
+	createDSquare
+} from './api';
+
 import { AppContext } from './AppContext';
 import { refetch } from './utils';
 import DSTab from './DSTab';
@@ -33,6 +37,7 @@ export default function (props) {
 
 	const {
 		setConsiderations,
+		setDSquares,
 		error,
 		setError,
 		session,
@@ -45,33 +50,16 @@ export default function (props) {
 		return;
 	}
 
-	const createDSquare = async () => {
-		debug('createDSquare >');
-		return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
-		.then(async response => {
-			if(response.status < 400) {
-				return response.json();
-			}
-			throw await response.json();
-		})
-		.then(square => {
-			debug('createDSquare <', square);
-			localStorage.dSquareId = square.id;
-			props.setDSquares(props.dSquares.concat([square]));
-			setConsiderations(null);
-			setSelectedDSquare(square);
-		})
-		.catch(e => { 
-			debug('createDSquare !', e);
-			setError(e.error+'. '+(e.detail?.description || ''));
-		}); 
-	};
-
 	useEffect(() => {
 		if(props.dSquares.length) {
 			return;
 		}
-		createDSquare();
+		createDSquare({
+			setDSquares,
+			setConsiderations,
+			setSelectedDSquare,
+			setError
+		});
 	}, [props.dSquares]);
 
 	useEffect(() => {
@@ -103,7 +91,12 @@ export default function (props) {
 	}
 
 	const handleAdd = async (event) => {
-		createDSquare();
+		createDSquare({
+			setDSquares,
+			setConsiderations,
+			setSelectedDSquare,
+			setError
+		});
 	};
 
 	const handleChange = (event, i) => {

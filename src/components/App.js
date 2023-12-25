@@ -17,12 +17,15 @@ const appContext = {};
 export default function () {
 	const [ considerations, setConsiderations ] = useState(null);
 	const [ decision, setDecision ] = useState('');
+	const [ dSquares, setDSquares ] = useState(null);
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
 	const [ members, setMembers ] = useState(null);
 	const [ invites, setInvites ] = useState(null);
 
 	Object.assign(appContext, {
+		dSquares,
+		setDSquares,
 		members,
 		setMembers,
 		invites,

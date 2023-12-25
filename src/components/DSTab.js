@@ -51,6 +51,8 @@ export default function (props) {
 		setInvites,
 		considerations,
 		setConsiderations,
+		dSquares,
+		setDSquares,
 		decision,
 		setDecision,
 		session,
@@ -148,7 +150,7 @@ export default function (props) {
 			if(nextDSquare) {
 				props.setSelectedDSquare(nextDSquare);
 			}
-			props.setDSquares(props.dSquares.filter( _square => _square.id != selectedDSquare.id ));
+			setDSquares(prev => prev.filter( _square => _square.id != selectedDSquare.id ));
 			return square;
 		});
 	};

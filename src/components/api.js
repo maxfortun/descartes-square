@@ -4,6 +4,21 @@ import { refetch } from './utils';
 
 const debug = Debug('descartes-squares:api');
 
+const fetchDSquares = async (props) => {
+	const {
+		setDSquares
+	} = props;
+
+	debug('fetchDSquares');
+	return refetch('/api/squares', { credentials: 'include' })
+		.then(response => response.json())
+		.then(dSquares => {
+			debug('fetchDSquares', dSquares);
+			setDSquares(dSquares);
+			return dSquares;
+		});
+};
+
 const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
@@ -22,6 +37,35 @@ const fetchDSquare = async (props) => {
 		setMembers(square.members);
 		setInvites(square.invites);
 		return square;
+	});
+};
+
+const createDSquare = async (props) => {
+	const {
+		setDSquares,
+		setConsiderations,
+		setSelectedDSquare,
+		setError
+	} = props;
+
+	debug('createDSquare >');
+	return refetch(`/api/squares`, { method: 'POST', credentials: 'include' })
+	.then(async response => {
+		if(response.status < 400) {
+			return response.json();
+		}
+		throw await response.json();
+	})
+	.then(square => {
+		debug('createDSquare <', square);
+		localStorage.dSquareId = square.id;
+		setDSquares( prev => prev.concat([square]) );
+		setConsiderations(null);
+		setSelectedDSquare(square);
+	})
+	.catch(e => {
+		debug('createDSquare !', e);
+		setError(e.error+'. '+(e.detail?.description || ''));
 	});
 };
 
@@ -240,6 +284,8 @@ const removeMember = async (props) => {
 }
 
 module.exports = {
+	fetchDSquares,
+	createDSquare,
 	fetchDSquare,
 	createConsideration,
 	deleteConsideration,
