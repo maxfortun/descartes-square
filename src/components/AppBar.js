@@ -14,33 +14,33 @@ import { refetch } from './utils';
 
 export default function () {
 	const { 
-        session, setSession
+		session, setSession
 	} = useContext(AppContext);
 
 	const fetchSession = async () => {
-        debug('fetchSession>');
-        refetch('/api/session', { credentials: 'include' })
-        .then(response => response.json())
-        .then(data => {
-            debug('fetchSession<', data);
-            setSession(Object.assign({}, session, data, {loaded: true}));
-        })
+		debug('fetchSession>');
+		refetch('/api/session', { credentials: 'include' })
+		.then(response => response.json())
+		.then(data => {
+			debug('fetchSession<', data);
+			setSession(Object.assign({}, session, data, {loaded: true}));
+		})
 		.catch(e => {
-            setSession(Object.assign({}, session, {loaded: true, logged_out: true}));
+			setSession(Object.assign({}, session, {loaded: true, logged_out: true}));
 			debug('fetchSession!', e);
 		});
-    };
+	};
 
-    useEffect(() => {
+	useEffect(() => {
 		debug('mounted');
 	}, []);
 
-    useEffect(() => {
+	useEffect(() => {
 		if(!session.login) {
 			return;
 		}
-        fetchSession();
-    }, [session.login]);
+		fetchSession();
+	}, [session.login]);
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
