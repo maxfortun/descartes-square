@@ -30,7 +30,7 @@ export default function () {
 		setSession(Object.assign({}, session, {login: false, account: {}}));
 	};
 
-    useEffect(() => {
+	useEffect(() => {
 		debug('mounted');
 	}, []);
 

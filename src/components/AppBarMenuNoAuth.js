@@ -25,7 +25,7 @@ export default function () {
 
 	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
 
-    useEffect(() => {
+	useEffect(() => {
 		debug('mounted');
 	}, []);
 
