@@ -6,22 +6,22 @@ const debug = Debug('descartes-squares:api');
 
 const fetchDSquares = async (props) => {
 	const {
-		setDSquares
+		setSquares
 	} = props;
 
 	debug('fetchDSquares');
 	return refetch('/api/squares', { credentials: 'include' })
 		.then(response => response.json())
-		.then(dSquares => {
-			debug('fetchDSquares', dSquares);
-			setDSquares(dSquares);
-			return dSquares;
+		.then(squares => {
+			debug('fetchDSquares', squares);
+			setSquares(squares);
+			return squares;
 		});
 };
 
 const fetchInvites = async (props) => {
 	const {
-		setInvites
+		setSelectedInvites
 	} = props;
 
 	debug('fetchInvites');
@@ -29,7 +29,7 @@ const fetchInvites = async (props) => {
 		.then(response => response.json())
 		.then(invites => {
 			debug('fetchInvites', invites);
-			setInvites(invites);
+			setSelectedInvites(invites);
 			return invites;
 		});
 };
@@ -38,8 +38,8 @@ const fetchDSquare = async (props) => {
 	const {
 		selectedDSquare,
 		setConsiderations,
-		setMembers,
-		setInvites,
+		setSelectedMembers,
+		setSelectedInvites,
 	} = props;
 
 	debug('fetchDSquare >', selectedDSquare.id);
@@ -49,15 +49,15 @@ const fetchDSquare = async (props) => {
 		debug('fetchDSquare <', square);
 		localStorage.dSquareId = square.id;
 		setConsiderations(square.considerations);
-		setMembers(square.members);
-		setInvites(square.invites);
+		setSelectedMembers(square.members);
+		setSelectedInvites(square.invites);
 		return square;
 	});
 };
 
 const createDSquare = async (props) => {
 	const {
-		setDSquares,
+		setSquares,
 		setConsiderations,
 		setSelectedDSquare,
 		setError
@@ -74,7 +74,7 @@ const createDSquare = async (props) => {
 	.then(square => {
 		debug('createDSquare <', square);
 		localStorage.dSquareId = square.id;
-		setDSquares( prev => prev.concat([square]) );
+		setSquares( prev => prev.concat([square]) );
 		setConsiderations(null);
 		setSelectedDSquare(square);
 	})
@@ -239,7 +239,7 @@ const inviteMember = async (props) => {
 	const {
 		selectedDSquare,
 		email,
-		setInvites,
+		setSelectedInvites,
 	} = props;
 	debug('inviteMember', selectedDSquare, email);
 
@@ -261,7 +261,7 @@ const inviteMember = async (props) => {
 	.then(invited => {
 		debug('inviteMember', invited);
 		if(invited.email) {
-			setInvites(prev => prev.concat([{ invited: invited.email }]));
+			setSelectedInvites(prev => prev.concat([{ invited: invited.email }]));
 		}
 	}); 
 }
@@ -270,8 +270,8 @@ const removeMember = async (props) => {
 	const {
 		selectedDSquare,
 		email,
-		setInvites,
-		setMembers
+		setSelectedInvites,
+		setSelectedMembers
 	} = props;
 	debug('removeMember', selectedDSquare, email);
 
@@ -293,7 +293,7 @@ const removeMember = async (props) => {
 	.then(invited => {
 		debug('removeMember', invited);
 		if(invited.email) {
-			setInvites(prev => prev.concat([invited.email]));
+			setSelectedInvites(prev => prev.concat([invited.email]));
 		}
 	}); 
 }
