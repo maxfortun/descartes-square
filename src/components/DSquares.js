@@ -58,7 +58,7 @@ export default function (props) {
 	useEffect(() => {
 		debug('mounted');
 		fetchInvites({
-			setSelectedInvites
+			setInvites
 		})
 		.then(() => {
 			setReady(true);

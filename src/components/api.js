@@ -21,7 +21,7 @@ const fetchDSquares = async (props) => {
 
 const fetchInvites = async (props) => {
 	const {
-		setSelectedInvites
+		setInvites
 	} = props;
 
 	debug('fetchInvites');
@@ -29,7 +29,7 @@ const fetchInvites = async (props) => {
 		.then(response => response.json())
 		.then(invites => {
 			debug('fetchInvites', invites);
-			setSelectedInvites(invites);
+			setInvites(invites);
 			return invites;
 		});
 };
