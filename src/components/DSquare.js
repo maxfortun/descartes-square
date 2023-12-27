@@ -45,22 +45,15 @@ import Loader from './Loader';
 export default function (props) {
 
 	const {
-		selectedDSquare
-	} = props;
-
-	const {
-		members,
-		setMembers,
-		invites,
-		setInvites,
-		considerations,
-		setConsiderations,
-		decision,
-		setDecision,
-		error,
-		setError,
-		session,
-		setSession
+		selectedSquare, setSelectedSquare,
+		selectedDecision, setSelectedDecision,
+		selectedConsiderations, setSelectedConsiderations,
+		selectedMembers, setSelectedMembers,
+		selectedInvites, setSelectedInvites,
+		squares, setSquares,
+		invites, setInvites,
+		error, setError,
+		session, setSession
 	} = useContext(AppContext);
 
 	const causes = [ 'do', 'do not' ];
@@ -70,20 +63,20 @@ export default function (props) {
 
 	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
 
-	if(!selectedDSquare?.id) {
+	if(!selectedSquare?.id) {
 		return <Loader />;
 	}
 
 	useEffect(() => {
 		fetchDSquare({
-			selectedDSquare,
-			setConsiderations,
-			setMembers,
-			setInvites
+			selectedSquare,
+			setSelectedConsiderations,
+			setSelectedMembers,
+			setSelectedInvites
 		});
-	}, [selectedDSquare.id]);
+	}, [selectedSquare.id]);
 
-	if(!considerations) {
+	if(!selectedConsiderations) {
 		return <Loader />;
 	}
 
@@ -99,23 +92,23 @@ export default function (props) {
 				cause,
 				effect,
 				desc: detail.option,
-				selectedDSquare,
-				setConsiderations
+				selectedSquare,
+				setSelectedConsiderations
 			});
 
 		}
 
 		if(reason == 'removeOption') {
 			return deleteConsideration({
-				selectedDSquare,
+				selectedSquare,
 				considerationId: detail.option.props.consideration_id,
-				setConsiderations
+				setSelectedConsiderations
 			});
 		}
 	};
 
 	const renderConsiderations = (cause, effect) => {
-		const considerationElements = considerations
+		const considerationElements = selectedConsiderations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => {
 						const label = <Box key={i} consideration_id={consideration.id}>
@@ -124,7 +117,7 @@ export default function (props) {
 						return label;
 					});
 
-		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+decision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+selectedDecision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>

@@ -36,19 +36,19 @@ const fetchInvites = async (props) => {
 
 const fetchDSquare = async (props) => {
 	const {
-		selectedDSquare,
-		setConsiderations,
+		selectedSquare,
+		setSelectedConsiderations,
 		setSelectedMembers,
 		setSelectedInvites,
 	} = props;
 
-	debug('fetchDSquare >', selectedDSquare.id);
-	return refetch(`/api/squares/${selectedDSquare.id}`, { credentials: 'include' })
+	debug('fetchDSquare >', selectedSquare.id);
+	return refetch(`/api/squares/${selectedSquare.id}`, { credentials: 'include' })
 	.then(response => response.json())
 	.then(square => {
 		debug('fetchDSquare <', square);
 		localStorage.dSquareId = square.id;
-		setConsiderations(square.considerations);
+		setSelectedConsiderations(square.considerations);
 		setSelectedMembers(square.members);
 		setSelectedInvites(square.invites);
 		return square;
@@ -58,8 +58,8 @@ const fetchDSquare = async (props) => {
 const createDSquare = async (props) => {
 	const {
 		setSquares,
-		setConsiderations,
-		setSelectedDSquare,
+		setSelectedConsiderations,
+		setSelectedSquare,
 		setError
 	} = props;
 
@@ -75,8 +75,8 @@ const createDSquare = async (props) => {
 		debug('createDSquare <', square);
 		localStorage.dSquareId = square.id;
 		setSquares( prev => prev.concat([square]) );
-		setConsiderations(null);
-		setSelectedDSquare(square);
+		setSelectedConsiderations(null);
+		setSelectedSquare(square);
 	})
 	.catch(e => {
 		debug('createDSquare !', e);
@@ -89,8 +89,8 @@ const createConsideration = async (props) => {
 		cause,
 		effect,
 		desc,
-		selectedDSquare,
-		setConsiderations
+		selectedSquare,
+		setSelectedConsiderations
 	} = props;
 
 	debug('createConsideration', cause, effect, desc);
@@ -109,11 +109,11 @@ const createConsideration = async (props) => {
 		body
 	};
 
-	return refetch(`/api/squares/${selectedDSquare.id}/considerations`, fetchOptions)
+	return refetch(`/api/squares/${selectedSquare.id}/considerations`, fetchOptions)
 	.then(response => response.json())
 	.then(consideration => {
 		debug('createConsideration', consideration);
-		setConsiderations(prev => {
+		setSelectedConsiderations(prev => {
 			if(!prev) {
 				prev = [];
 			}
@@ -125,13 +125,13 @@ const createConsideration = async (props) => {
 
 const addAIConsiderations = async (props) => {
 	const {
-		selectedDSquare,
-		setConsiderations,
+		selectedSquare,
+		setSelectedConsiderations,
 	} = props;
 
 	debug('addAIConsiderations >');
-	setConsiderations(null);
-	await refetch(`/api/ai/vertex/${selectedDSquare.id}`, { credentials: 'include' })
+	setSelectedConsiderations(null);
+	await refetch(`/api/ai/vertex/${selectedSquare.id}`, { credentials: 'include' })
 	.then(response => response.json())
 	.then(async questions => {
 		debug('addAIConsiderations <', questions);
@@ -155,8 +155,8 @@ const addAIConsiderations = async (props) => {
 					cause,
 					effect,
 					desc: answer.answer,
-					selectedDSquare,
-					setConsiderations
+					selectedSquare,
+					setSelectedConsiderations
 				});
 			}));
 		}));
@@ -165,9 +165,9 @@ const addAIConsiderations = async (props) => {
 
 const deleteConsideration = async (props) => {
 	const {
-		selectedDSquare,
+		selectedSquare,
 		considerationId,
-		setConsiderations
+		setSelectedConsiderations
 	} = props;
 
 	debug('deleteConsideration', considerationId);
@@ -179,11 +179,11 @@ const deleteConsideration = async (props) => {
 		}
 	};
 
-	return refetch(`/api/squares/${selectedDSquare.id}/considerations/${considerationId}`, fetchOptions)
+	return refetch(`/api/squares/${selectedSquare.id}/considerations/${considerationId}`, fetchOptions)
 	.then(response => response.json())
 	.then(consideration => {
 		debug('deleteConsideration', consideration);
-		setConsiderations(prev => prev.filter(_consideration => _consideration.id != consideration.id));
+		setSelectedConsiderations(prev => prev.filter(_consideration => _consideration.id != consideration.id));
 		return consideration;
 	});
 };
@@ -202,7 +202,7 @@ const logout = async () => {
 
 const updateDecision = async (props) => {
 	const {
-		selectedDSquare,
+		selectedSquare,
 		decisionChanged,
 		setDecisionChanged
 	} = props;
@@ -211,7 +211,7 @@ const updateDecision = async (props) => {
 		return;
 	}
 
-	const { decision } = selectedDSquare;
+	const { decision } = selectedSquare;
 
 	debug('updateDecision', decision);
 	const body = JSON.stringify({
@@ -227,7 +227,7 @@ const updateDecision = async (props) => {
 		body 
 	};
 		
-	return refetch(`/api/squares/${selectedDSquare.id}/decision`, fetchOptions)
+	return refetch(`/api/squares/${selectedSquare.id}/decision`, fetchOptions)
 	.then(response => response.json())
 	.then(decision => {
 		debug('updateDecision', decision);
@@ -237,11 +237,11 @@ const updateDecision = async (props) => {
 
 const inviteMember = async (props) => {
 	const {
-		selectedDSquare,
+		selectedSquare,
 		email,
 		setSelectedInvites,
 	} = props;
-	debug('inviteMember', selectedDSquare, email);
+	debug('inviteMember', selectedSquare, email);
 
 	const body = JSON.stringify({
 		email
@@ -256,7 +256,7 @@ const inviteMember = async (props) => {
 		body 
 	};
 		
-	return refetch(`/api/squares/${selectedDSquare.id}/members/invite`, fetchOptions)
+	return refetch(`/api/squares/${selectedSquare.id}/members/invite`, fetchOptions)
 	.then(response => response.json())
 	.then(invited => {
 		debug('inviteMember', invited);
@@ -268,12 +268,12 @@ const inviteMember = async (props) => {
 
 const removeMember = async (props) => {
 	const {
-		selectedDSquare,
+		selectedSquare,
 		email,
 		setSelectedInvites,
 		setSelectedMembers
 	} = props;
-	debug('removeMember', selectedDSquare, email);
+	debug('removeMember', selectedSquare, email);
 
 	const body = JSON.stringify({
 		email
@@ -288,7 +288,7 @@ const removeMember = async (props) => {
 		body 
 	};
 		
-	return refetch(`/api/squares/${selectedDSquare.id}/members/remove`, fetchOptions)
+	return refetch(`/api/squares/${selectedSquare.id}/members/remove`, fetchOptions)
 	.then(response => response.json())
 	.then(invited => {
 		debug('removeMember', invited);

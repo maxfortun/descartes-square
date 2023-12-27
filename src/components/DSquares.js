@@ -40,23 +40,25 @@ import DSquare from './DSquare';
 export default function (props) {
 
 	const {
-		dSquares,
-		setDSquares,
-		invites,
-		setInvites,
-		session,
-		setSession
+		selectedSquare, setSelectedSquare,
+		selectedDecision, setSelectedDecision,
+		selectedConsiderations, setSelectedConsiderations,
+		selectedMembers, setSelectedMembers,
+		selectedInvites, setSelectedInvites,
+		squares, setSquares,
+		invites, setInvites,
+		error, setError,
+		session, setSession
 	} = useContext(AppContext);
 
 	const [ ready, setReady ] = useState(false);
-	const [ selectedDSquare, setSelectedDSquare ] = useState({});
 
 	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
 
 	useEffect(() => {
 		debug('mounted');
 		fetchInvites({
-			setInvites
+			setSelectedInvites
 		})
 		.then(() => {
 			setReady(true);
@@ -69,28 +71,28 @@ export default function (props) {
 		}
 
 		fetchDSquares({
-			setDSquares
+			setSquares
 		});
 	}, [ready]);
 
 	useEffect(() => {
-		if(!dSquares) {
+		if(!squares) {
 			return;
 		}
-		dSquares.forEach((dSquare, i) => dSquare.position = i);
-	}, [dSquares]);
+		squares.forEach((dSquare, i) => dSquare.position = i);
+	}, [squares]);
 
-	if(!dSquares) {
+	if(!squares) {
 		return <Loader />;
 	}
 
 	const childProps = Object.assign({}, props, 
-            			{
-            				dSquares,
-            				setDSquares,
-            				selectedDSquare,
-            				setSelectedDSquare
-       					}
+						{
+							squares,
+							setSquares,
+							selectedSquare,
+							setSelectedSquare
+	   					}
 	);
 
 	return	<Box sx={{ mt: '4px' }}>
@@ -98,7 +100,7 @@ export default function (props) {
 					<DSTabs {...childProps} />
 				</Box>
 				<Box>
-					{ null != selectedDSquare.id 
+					{ null != selectedSquare?.id 
 						? <DSquare {...childProps} />
 						: <Loader />
 					}

@@ -31,79 +31,77 @@ import DSTab from './DSTab';
 
 export default function (props) {
 	const {
-		selectedDSquare,
-		setSelectedDSquare
-	} = props;
-
-	const {
-		setConsiderations,
-		setDSquares,
-		error,
-		setError,
-		session,
-		setSession
+		selectedSquare, setSelectedSquare,
+		selectedDecision, setSelectedDecision,
+		selectedConsiderations, setSelectedConsiderations,
+		selectedMembers, setSelectedMembers,
+		selectedInvites, setSelectedInvites,
+		squares, setSquares,
+		invites, setInvites,
+		error, setError,
+		session, setSession
 	} = useContext(AppContext);
 
 	const debug = Debug('descartes-squares:DSTabs:'+session.account.email);
 
-	if(!props.dSquares) {
+	if(!squares) {
 		return;
 	}
 
 	useEffect(() => {
-		if(props.dSquares.length) {
+		if(squares.length) {
 			return;
 		}
 		createDSquare({
-			setDSquares,
+			setSquares,
 			setConsiderations,
-			setSelectedDSquare,
+			setSelectedSquare,
 			setError
 		});
-	}, [props.dSquares]);
+	}, [squares]);
 
 	useEffect(() => {
-		if(selectedDSquare.id !== undefined) {
+		if(selectedSquare?.id !== undefined) {
 			return;
 		}
 
 		if(localStorage.dSquareId) {
-			const selectedSquare = props.dSquares.some(square => square.id == localStorage.dSquareId)[0];
-			debug('useEffect', 'selectedDSquare.id localStorage.dSquareId', 'selectedSquare', props.dSquares, localStorage.dSquareId, selectedSquare);
+			const selectedSquare = squares.some(square => square.id == localStorage.dSquareId)[0];
+			debug('useEffect', 'selectedSquare.id localStorage.dSquareId', 'selectedSquare', squares, localStorage.dSquareId, selectedSquare);
 			if(selectedSquare) {
-				setSelectedDSquare(selectedSquare);
+				setSelectedSquare(selectedSquare);
 				return;
 			}
 		}
 
-		if(props.dSquares.length > 0) {
-			const selectedSquare = props.dSquares[0];
-			debug('useEffect', 'selectedDSquare.id 0', 'selectedSquare', props.dSquares, selectedSquare);
-			setSelectedDSquare(selectedSquare);
+		if(squares.length > 0) {
+			const selectedSquare = squares[0];
+			debug('useEffect', 'selectedSquare.id 0', 'selectedSquare', squares, selectedSquare);
+			setSelectedSquare(selectedSquare);
 			return;
 		}
 
-	}, [selectedDSquare.id]);
+	}, [selectedSquare?.id]);
 
 
-	if(!selectedDSquare.id) {
+	if(!selectedSquare?.id) {
 		return;
 	}
 
 	const handleAdd = async (event) => {
 		createDSquare({
-			setDSquares,
+			setSquares,
 			setConsiderations,
-			setSelectedDSquare,
+			setSelectedSquare,
 			setError
 		});
 	};
 
 	const handleChange = (event, i) => {
-		const selectedSquare = props.dSquares[i];
+		const selectedSquare = squares[i];
 		debug('handleChange', i, selectedSquare);
 		setConsiderations(null);
-		setSelectedDSquare(selectedSquare);
+		setSelectedSquare(selectedSquare);
 	};
 
 	const handleShowInvites = (event) => {
@@ -112,16 +110,16 @@ export default function (props) {
 	const handleShowOwn = (event) => {
 	};
 
-	debug("Rendering", props.dSquares);
-	const tabs = props.dSquares.map((dSquare, i) => {
-		if(dSquare.id && dSquare.id == selectedDSquare.id) {
+	debug("Rendering", squares);
+	const tabs = squares.map((dSquare, i) => {
+		if(dSquare.id && dSquare.id == selectedSquare.id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
 		return <Tab key={i} label={dSquare.decision || 'Empty' } />
 	}); 
 	
-	const value = props.dSquares.map(dSquare => dSquare.id).indexOf(selectedDSquare.id);
-	debug("selectedDSquare", value, selectedDSquare);
+	const value = squares.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
+	debug("selectedSquare", value, selectedSquare);
 
 	const buttons = [];
 	buttons.push(
@@ -136,17 +134,19 @@ export default function (props) {
 		</IconButton>
 	);
 
-	buttons.push(
-		<IconButton
-			key={buttons.length}
-			size="small"
-			onClick={handleShowInvites}
-		>
-			<Tooltip placement="top-start" title="Show invites">
-				<PlaylistAddOutlinedIcon />
-			</Tooltip>
-		</IconButton>
-	);
+	if(selectedInvites?.length) {
+		buttons.push(
+			<IconButton
+				key={buttons.length}
+				size="small"
+				onClick={handleShowInvites}
+			>
+				<Tooltip placement="top-start" title="Show selectedInvites">
+					<PlaylistAddOutlinedIcon />
+				</Tooltip>
+			</IconButton>
+		);
+	}
 	
 	return <Box
 		display='flex'

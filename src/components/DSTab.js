@@ -41,47 +41,40 @@ import {
 
 export default function (props) {
 	const {
-		selectedDSquare
-	} = props;
-
-	const {
-		members,
-		setMembers,
-		invites,
-		setInvites,
-		considerations,
-		setConsiderations,
-		dSquares,
-		setDSquares,
-		decision,
-		setDecision,
-		session,
-		setSession
+		selectedSquare, setSelectedSquare,
+		selectedDecision, setSelectedDecision,
+		selectedConsiderations, setSelectedConsiderations,
+		selectedMembers, setSelectedMembers,
+		selectedInvites, setSelectedInvites,
+		squares, setSquares,
+		invites, setInvites,
+		error, setError,
+		session, setSession
 	} = useContext(AppContext);
 
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 	const [ openShare, setOpenShare ] = useState(false);
-	const [ membersError, setMembersError ] = useState(false);
-	const [ membersHelperText, setMembersHelperText ] = useState(false);
+	const [ selectedMembersError, setSelectedMembersError ] = useState(false);
+	const [ selectedMembersHelperText, setSelectedMembersHelperText ] = useState(false);
 
 	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
 
 	useEffect(() => {
-		setDecision(selectedDSquare.decision);
-	}, [selectedDSquare.decision]);
+		setSelectedDecision(selectedSquare.decision);
+	}, [selectedSquare.decision]);
 
 
 	const handleDecisionChange = (event) => {
 		// debug('handleDecisionChange', event.target.value);
-		setDecision(event.target.value);
-		selectedDSquare.decision = event.target.value;
+		setSelectedDecision(event.target.value);
+		selectedSquare.decision = event.target.value;
 		setDecisionChanged(true);
 	};
 
 	const handleDecisionBlur = (event) => {
 		// debug('handleDecisionBlur');
 		updateDecision({
-			selectedDSquare,
+			selectedSquare,
 			decisionChanged,
 			setDecisionChanged
 		});
@@ -92,30 +85,30 @@ export default function (props) {
 		if (event.key != 'Enter') {
 			return;
 		}
-		if(!considerations) {
+		if(!selectedConsiderations) {
 			return;
 		}
-		if(considerations.length) {
+		if(selectedConsiderations.length) {
 			return;
 		}
 		await updateDecision({
-			selectedDSquare,
+			selectedSquare,
 			decisionChanged,
 			setDecisionChanged
 		});
 		addAIConsiderations({
-			selectedDSquare,
-			considerations,
-			setConsiderations,
+			selectedSquare,
+			selectedConsiderations,
+			setSelectedConsiderations,
 		});
 	};
 
 	const handleAIAssist = (event) => {
 		debug('handleAIAssist');
 		addAIConsiderations({
-			selectedDSquare,
-			considerations,
-			setConsiderations,
+			selectedSquare,
+			selectedConsiderations,
+			setSelectedConsiderations,
 		});
 	};
 
@@ -135,22 +128,22 @@ export default function (props) {
 	};
 
 	const handleDeleteSquare = async (event) => {
-		debug('deleteDSquare >', selectedDSquare.id);
-		return refetch(`/api/squares/${selectedDSquare.id}`, { method: 'DELETE', credentials: 'include' })
+		debug('deleteDSquare >', selectedSquare.id);
+		return refetch(`/api/squares/${selectedSquare.id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
 			let nextDSquare = {};
 			const positions = {};
-			props.dSquares.forEach((dSquare, i) => positions[dSquare.id] = i);
-			const position = positions[selectedDSquare.id];
+			props.squares.forEach((dSquare, i) => positions[dSquare.id] = i);
+			const position = positions[selectedSquare.id];
 			if(null != position) {
-				nextDSquare = props.dSquares[position + 1] || props.dSquares[position - 1];
+				nextDSquare = props.squares[position + 1] || props.squares[position - 1];
 			}
 			if(nextDSquare) {
-				props.setSelectedDSquare(nextDSquare);
+				props.setSelectedSquare(nextDSquare);
 			}
-			setDSquares(prev => prev.filter( _square => _square.id != selectedDSquare.id ));
+			setSquares(prev => prev.filter( _square => _square.id != selectedSquare.id ));
 			return square;
 		});
 	};
@@ -168,24 +161,24 @@ export default function (props) {
 
 	const handleMembersTextKeyDown = async (event) => {
 		if(!validEmail(event.target.value)) {
-			setMembersHelperText('Format: username@hostname.tld');
+			setSelectedMembersHelperText('Format: username@hostname.tld');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
-				setMembersError(true);
+				setSelectedMembersError(true);
 			}
 			return;
 		}
 		
-		if(members?.map(member => member.id).includes(event.target.value)) {
-			setMembersHelperText('Member already has access');
+		if(selectedMembers?.map(member => member.id).includes(event.target.value)) {
+			setSelectedMembersHelperText('Member already has access');
 			if(event.key === 'Enter') {
 				event.stopPropagation();
-				setMembersError(true);
+				setSelectedMembersError(true);
 			}
 			return;
 		}
 
-		setMembersError(false);
+		setSelectedMembersError(false);
 	};
 
 	const handleMembersChange = async (event, options, reason, detail) => {
@@ -193,26 +186,26 @@ export default function (props) {
 
 		if(reason == 'createOption') {
 			if(!validEmail(detail.option)) {
-				setMembersError(true);
+				setSelectedMembersError(true);
 				return;
 			}
 
-			setMembersError(false);
-			setMembersHelperText(null);
+			setSelectedMembersError(false);
+			setSelectedMembersHelperText(null);
 			await inviteMember({
-				selectedDSquare,
+				selectedSquare,
 				email: detail.option,
-				setInvites
+				setSelectedInvites
 			});
 			return;
 		}
 
 		if(reason == 'removeOption') {
 			await removeMember({
-				selectedDSquare,
+				selectedSquare,
 				email: detail.option,
-				setInvites,
-				setMembers
+				setSelectedInvites,
+				setSelectedMembers
 			});
 			return;
 		}
@@ -220,16 +213,16 @@ export default function (props) {
 
 	const sharedWith = [];
 
-	members?.filter(member => member.email != session.account.email)
+	selectedMembers?.filter(member => member.email != session.account.email)
 	.forEach(member => {
-		sharedWith.push(Object.assign({membership: 'member'}, member));
+		sharedWith.push(Object.assign({selectedMembership: 'member'}, member));
 	});
 
-	invites?.forEach(member => {
-		sharedWith.push(Object.assign({membership: 'invited'}, member));
+	selectedInvites?.forEach(member => {
+		sharedWith.push(Object.assign({selectedMembership: 'invited'}, member));
 	});
-    
-	const aiAssist = considerations && considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
+	
+	const aiAssist = selectedConsiderations && selectedConsiderations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
 		<HelpOutlineIcon onClick={handleAIAssist} />
 	</Tooltip>;
 
@@ -242,7 +235,7 @@ export default function (props) {
 	};
 
 	const renderTag = (option, getTagProps, i) => {
-		if( option.membership == 'invited' ) {
+		if( option.selectedMembership == 'invited' ) {
 			return renderTagInvited(option, getTagProps, i);
 		}
 
@@ -279,8 +272,8 @@ export default function (props) {
 								label='With ...' 
 								{...params} 
 								onKeyDown={handleMembersTextKeyDown}
-								error={membersError} 
-								helperText={membersHelperText}
+								error={selectedMembersError} 
+								helperText={selectedMembersHelperText}
 								placeholder='Enter an email address and press enter.'
 							/>
 						}
@@ -291,14 +284,14 @@ export default function (props) {
 					/>
 				</DialogContent>
 			</Dialog>
-			<Tooltip placement="top-start" title={decision}>
+			<Tooltip placement="top-start" title={selectedDecision}>
 				<TextField
-					disabled={ considerations==null || considerations.length > 0 }
+					disabled={ selectedConsiderations==null || selectedConsiderations.length > 0 }
 					label='Should I ...'
 					size='small'
 					fullWidth={true}
 					inputProps={{ style: { textAlign: 'center' } }}
-					value={decision}
+					value={selectedDecision}
 					placeholder={getRandomPlaceHolder()}
 					onChange={handleDecisionChange}
 					onBlur={handleDecisionBlur}
