@@ -1,11 +1,13 @@
-#!/opt/local/bin/bash -e
+#!/bin/bash -e
 app=$1
 
 if [ -z "$app" ]; then
 	echo "Usage: $0 <app> [options]"
-	echo " e.g.: $0 auth"
+	echo " e.g.: $0 dsquares"
 	exit 1
 fi
+
+. $DPSRV_HOME/rc/bin/dpsrv.sh
 
 SWD=$( cd $(dirname $0) ; pwd )
 MONGO_INITDB_ROOT_USERNAME_FILE=$DPSRV_HOME/rc/secrets/mongo/conf/admin-username
@@ -21,7 +23,7 @@ fi
 
 admin_uri="mongodb://$MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_PASSWORD@localhost:27017/admin?tls=true&tlsInsecure=true&tlsCertificateKeyFile=/etc/mongo/cert.pem"
 
-. $SWD/../secrets/.env.local
+. $SWD/../../secrets/.env.local
 app_var=${app^^}_MONGODB
 app_uri=${!app_var}
 app_uri=${app_uri%%\?*}
@@ -51,8 +53,8 @@ db.createUser(
 
 _EOT_
 
-cat $script
-docker exec -i dpsrv-mongo mongosh "$admin_uri" --quiet < "$script"
+container=$(dpsrv-list | grep ' dpsrv-mongo-' | awk '{ print $3 }')
+docker exec -i $container mongosh "$admin_uri" --quiet < "$script"
 
 rm "$script"
 

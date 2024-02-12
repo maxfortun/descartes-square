@@ -1,16 +1,21 @@
 services:
   descartes-squares:
-    container_name: descartes-squares
-    image: node:21-alpine3.18
+    container_name: descartes-squares-${tag:-latest}
+    image: descartes-squares-${tag:-latest}
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+        GIT_CREDENTIALS: $GIT_CREDENTIALS
     working_dir: /usr/src/app
     environment:
+      PORT: 3003
       DEBUG1: "*,-morgan,-agentkeepalive,-send,-body-parser:*,-nodemon*,-express:*,-mongooose-jsproxy,-ezsso:express-client:*"
       DEBUG: "*"
     restart: always
     ports:
-      - '50803:3000'
+      - '3003/tcp'
     volumes:
-      - ${PWD}/:/usr/src/app/
       - ${PWD}/secrets/.env.local:/usr/src/app/.env.local
       - ${DPSRV_HOME}/rc/secrets/mongo/conf/:/etc/mongo/:ro
       - ${DPSRV_HOME}/rc/secrets/cloud-gcp/:/usr/src/app/.config/gcloud/:ro
