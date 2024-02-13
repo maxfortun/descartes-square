@@ -1,9 +1,10 @@
-#!/opt/local/bin/bash -e
+#!/bin/bash -e
 
 SWD=$( cd $(dirname $0) ; pwd )
 
+. $DPSRV_HOME/rc/bin/dpsrv.sh
 . $EZSSO_HOME/rc/secrets/accounts-app/.env.local
-. $SWD/../secrets/.env.local
+. $SWD/../../secrets/.env.local
 
 app_db=${ACCOUNTS_MONGODB##*/}
 
@@ -146,6 +147,7 @@ db.authZ.insertMany([
 
 _EOT_
 
-docker exec -i dpsrv-mongo mongosh "$ACCOUNTS_MONGODB" --quiet < $script
+container=$(dpsrv-list | grep ' dpsrv-mongo-' | awk '{ print $3 }')
+docker exec -i $container mongosh "$ACCOUNTS_MONGODB" --quiet < $script
 
 rm $script
