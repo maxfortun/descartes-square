@@ -18,6 +18,8 @@ router.get('/appinfo', async (req, res) => {
 	res.json(await dsquares.appInfo(req));
 });
 
+router.get('/logout', async (req, res, next) => await req.app.settings.oidc.logout(req, res, next));
+
 router.get('/squares', async (req, res) => {
 	res.json(await dsquares.listSquares(req));
 });
