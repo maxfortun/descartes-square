@@ -54,7 +54,7 @@ export default function (props) {
 		}
 		createDSquare({
 			setSquares,
-			setConsiderations,
+			setSelectedConsiderations,
 			setSelectedSquare,
 			setError
 		});
@@ -91,7 +91,7 @@ export default function (props) {
 	const handleAdd = async (event) => {
 		createDSquare({
 			setSquares,
-			setConsiderations,
+			setSelectedConsiderations,
 			setSelectedSquare,
 			setError
 		});
