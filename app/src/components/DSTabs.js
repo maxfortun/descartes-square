@@ -100,7 +100,7 @@ export default function (props) {
 	const handleChange = (event, i) => {
 		const selectedSquare = squares[i];
 		debug('handleChange', i, selectedSquare);
-		setConsiderations(null);
+		setSelectedConsiderations(null);
 		setSelectedSquare(selectedSquare);
 	};
 
