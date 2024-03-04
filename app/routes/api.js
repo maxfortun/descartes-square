@@ -7,7 +7,7 @@ const dsquares = require('../lib/dsquares');
 const ai = require('../lib/ai');
 
 router.get('/session', function(req, res, next) {
-	res.json({ account: req.account });
+	res.json({ account: req.account, oidc: { access_token: req.oidc.access_token } });
 });
 
 router.get('/redirect', function(req, res, next) {

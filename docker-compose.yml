@@ -1,7 +1,7 @@
 services:
-  descartes-squares:
-    container_name: descartes-squares-${tag:-latest}
-    image: descartes-squares-${tag:-latest}
+  dsquares:
+    container_name: dsquares-${tag:-latest}
+    image: dsquares-${tag:-latest}
     build:
       context: .
       args:

@@ -6,7 +6,7 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { AppContext } from './AppContext';
 
-const debug = Debug('descartes-squares:AppBarMenuAuth');
+const debug = Debug('dsquares:AppBarMenuAuth');
 
 export default function () {
 	const {

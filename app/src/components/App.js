@@ -6,11 +6,11 @@ import { Icon } from '@mui/material';
 import { AppContext } from './AppContext';
 import AppBar from './AppBar';
 import Welcome from './Welcome';
-import DSquares from './DSquares';
+import Console from './Console';
 import Loader from './Loader';
 import LoggedOut from './LoggedOut';
 
-const debug = Debug('descartes-squares:App');
+const debug = Debug('dsquares:App');
 
 const appContext = {};
 
@@ -25,6 +25,9 @@ export default function () {
 	const [ error, setError ] = useState(null);
 	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
 
+	const [ shareDbConnection, setShareDbConnection ] = useState(null);
+	const [ squaresProxy, setSquaresProxy ] = useState(null);
+
 	Object.assign(appContext, {
 		selectedSquare, setSelectedSquare,
 		selectedDecision, setSelectedDecision,
@@ -34,7 +37,9 @@ export default function () {
 		squares, setSquares,
 		invites, setInvites,
 		error, setError,
-		session, setSession
+		session, setSession,
+		shareDbConnection, setShareDbConnection,
+		squaresProxy, setSquaresProxy
 	});
 
 	useEffect(() => {
@@ -56,7 +61,7 @@ export default function () {
 		}
 
 		if(session.account) {
-			return <DSquares />;
+			return <Console />;
 		}
 
 		return <div>Error</div>;

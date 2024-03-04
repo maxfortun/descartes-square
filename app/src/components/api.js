@@ -2,7 +2,7 @@ import Debug from 'debug';
 
 import { refetch } from './utils';
 
-const debug = Debug('descartes-squares:api');
+const debug = Debug('dsquares:api');
 
 const fetchDSquares = async (props) => {
 	const {

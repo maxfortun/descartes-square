@@ -22,7 +22,7 @@ import {
 	Typography
 } from '@mui/material';
 
-const debug = Debug('descartes-squares:Welcome');
+const debug = Debug('dsquares:Welcome');
 
 import { AppContext } from './AppContext';
 

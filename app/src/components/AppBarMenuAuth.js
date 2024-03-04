@@ -8,7 +8,7 @@ import { AppContext } from './AppContext';
 
 import { logout } from './api';
 
-const debug = Debug('descartes-squares:AppBarMenuAuth');
+const debug = Debug('dsquares:AppBarMenuAuth');
 
 export default function () {
 	const {

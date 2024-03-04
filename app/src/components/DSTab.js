@@ -57,7 +57,7 @@ export default function (props) {
 	const [ selectedMembersError, setSelectedMembersError ] = useState(false);
 	const [ selectedMembersHelperText, setSelectedMembersHelperText ] = useState(false);
 
-	const debug = Debug('descartes-squares:DSTab:'+session.account.email);
+	const debug = Debug('dsquares:DSTab:'+session.account.email);
 
 	useEffect(() => {
 		setSelectedDecision(selectedSquare.decision);

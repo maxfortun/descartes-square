@@ -3,10 +3,10 @@
 SWD=$( cd $(dirname $0) ; pwd )
 
 . $DPSRV_HOME/rc/bin/dpsrv.sh
-. $EZSSO_HOME/rc/secrets/accounts-app/.env.local
+. $EZSSO_HOME/rc/secrets/ezsso-admin/.env.local
 . $SWD/../../secrets/.env.local
 
-app_db=${ACCOUNTS_MONGODB##*/}
+app_db=${EZSSO_ADMIN_MONGODB##*/}
 
 script=/tmp/$(basename $0).$$
 cat > $script <<_EOT_
@@ -17,6 +17,9 @@ db.authN.deleteMany( { id: '$EZSSO_OIDC_AUTH_ID' } );
 
 db.authN.insertOne({
 	id: '$EZSSO_OIDC_AUTH_ID',
+	accounts: [
+		'max@maxf.net'
+	],
 	password: '$EZSSO_OIDC_AUTH_PASSWORD',
 	status: 'available',
 	cookie_name: 'ezsso_sid',
@@ -25,9 +28,9 @@ db.authN.insertOne({
 	idps: [
 		{
 			id: 'google',
-			issuer: '$(jq -r .issuer $EZSSO_HOME/rc/secrets/accounts-app/google-oidc-client.json)',
-			client_id: '$(jq -r .client_id $EZSSO_HOME/rc/secrets/accounts-app/google-oidc-client.json)',
-			client_secret: '$(jq -r .client_secret $EZSSO_HOME/rc/secrets/accounts-app/google-oidc-client.json)',
+			issuer: '$(jq -r .issuer $EZSSO_HOME/rc/secrets/ezsso-admin/google-oidc-client.json)',
+			client_id: '$(jq -r .client_id $EZSSO_HOME/rc/secrets/ezsso-admin/google-oidc-client.json)',
+			client_secret: '$(jq -r .client_secret $EZSSO_HOME/rc/secrets/ezsso-admin/google-oidc-client.json)',
 		}
 	]
 });
@@ -148,6 +151,6 @@ db.authZ.insertMany([
 _EOT_
 
 container=$(dpsrv-list | grep ' dpsrv-mongo-' | awk '{ print $3 }')
-docker exec -i $container mongosh "$ACCOUNTS_MONGODB" --quiet < $script
+docker exec -i $container mongosh "$EZSSO_ADMIN_MONGODB" --quiet < $script
 
 rm $script

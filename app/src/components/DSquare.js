@@ -61,7 +61,7 @@ export default function (props) {
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
-	const debug = Debug('descartes-squares:DSquare:'+session.account.email);
+	const debug = Debug('dsquares:DSquare:'+session.account.email);
 
 	if(!selectedSquare?.id) {
 		return <Loader />;

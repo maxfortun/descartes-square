@@ -53,10 +53,11 @@ export default function (props) {
 
 	const [ ready, setReady ] = useState(false);
 
-	const debug = Debug('descartes-squares:DSquares:'+session.account.email);
+	const debug = Debug('dsquares:DSquares:'+session.account.email);
 
 	useEffect(() => {
 		debug('mounted');
+
 		fetchInvites({
 			setInvites
 		})

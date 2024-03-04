@@ -42,7 +42,7 @@ export default function (props) {
 		session, setSession
 	} = useContext(AppContext);
 
-	const debug = Debug('descartes-squares:DSTabs:'+session.account.email);
+	const debug = Debug('dsquares:DSTabs:'+session.account.email);
 
 	if(!squares) {
 		return;
