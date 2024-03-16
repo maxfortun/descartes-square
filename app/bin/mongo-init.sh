@@ -58,3 +58,5 @@ docker exec -i $container mongosh "$admin_uri" --quiet < "$script"
 
 rm "$script"
 
+[ ! -x $SWD/mongo-init-$app.sh ] || $SWD/mongo-init-$app.sh
+
