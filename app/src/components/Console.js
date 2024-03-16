@@ -49,7 +49,7 @@ export default function () {
 				return protocols;
 			};
 
-			const socket = new WebSocket('wss://sharedb.me/ws?collection=dsquares', authProtocols);
+			const socket = new WebSocket(`wss://sharedb.me/ws?collection=${session.sharedb.collection_id}`, authProtocols);
 
 			socket.addEventListener('error', e => {
 				debug('WebSocket failed. Checking health.', e);

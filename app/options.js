@@ -50,6 +50,6 @@ module.exports = {
     ezsso_oidc_redirect_uri: process.env.EZSSO_OIDC_REDIRECT_URI,
     ezsso_oidc_logout_uri: process.env.EZSSO_OIDC_LOGOUT_URI,
 	ezsso_oidc_cookie_name: process.env.EZSSO_OIDC_COOKIE_NAME,
-	sharedb_collection_id: process.env.SHAREDB_COLLECTION_ID
+	sharedb_ws_url: process.env.SHAREDB_WS_URL
 };
 

@@ -12,8 +12,8 @@ router.get('/session', function(req, res, next) {
 		oidc: {
 			access_token: req.oidc.access_token
 		},
-		sharedb: {
-			collection_id: req.app.settings.options.sharedb_collection_id
+		options: {
+			sharedb_ws_url: req.app.settings.options.sharedb_ws_url
 		}
 	});
 });
