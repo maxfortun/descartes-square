@@ -7,7 +7,15 @@ const dsquares = require('../lib/dsquares');
 const ai = require('../lib/ai');
 
 router.get('/session', function(req, res, next) {
-	res.json({ account: req.account, oidc: { access_token: req.oidc.access_token } });
+	res.json({
+		account: req.account,
+		oidc: {
+			access_token: req.oidc.access_token
+		},
+		sharedb: {
+			collection_id: req.app.settings.options.sharedb_collection_id
+		}
+	});
 });
 
 router.get('/redirect', function(req, res, next) {
