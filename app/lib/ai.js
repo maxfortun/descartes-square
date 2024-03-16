@@ -11,7 +11,7 @@ const tokens = {};
 
 async function openai(req) {
 	const square = await dsquares.findSquare(req);
-	const prompt = `Respond to each of the following questions in JSON. What will happen if I do ${square.decision}? What will happen if I do not ${square.decision}? What will not happen if I do ${square.decision}? What will not happen if I do not ${square.decision}?`;
+	const prompt = `Respond to each of the following questions in JSON. What will happen if I do ${square.decision}? What will happen if I do not ${square.decision}? What will not happen if I do ${square.decision}? What will not happen if I do not ${square.decision}? Do not include negations of previously given answers.`;
 
 	const aiRequest = {
 		model: "gpt-3.5-turbo",
