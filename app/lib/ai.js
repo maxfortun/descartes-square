@@ -12,9 +12,9 @@ const tokens = {};
 const _prompt = (square) => {
 	return `
 		Respond in JSON.
-		Each question with its respective answer in its own array element.
-		List 5 answers per question.
-		Do not include negations of previously given answers.
+		Each question with its respective answers in its own array element.
+		Exclude responses that are negated versions of previously given answers.
+		List 5 answers per question where each answer is about a different aspect of the question.
 		Phrase answers from first person perspective.
 		Add a sentiment to every answer.
 	
@@ -24,7 +24,6 @@ const _prompt = (square) => {
 		What will not happen if I do not ${square.decision}?
 	`;
 };
-
 
 async function openai(req) {
 	const square = await dsquares.findSquare(req);
