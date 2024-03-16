@@ -48,6 +48,7 @@ async function vertex(req) {
 		Respond in JSON.
 		Each question with its respective answer in its own array element.
 		List 5 answers per question.
+		Do not include negations of previously given answers.
 		Phrase answers from first person perspective.
 		Add a sentiment to every answer.
 
@@ -55,6 +56,7 @@ async function vertex(req) {
 		What will happen if I do not ${square.decision}?
 		What will not happen if I do ${square.decision}?
 		What will not happen if I do not ${square.decision}?
+
 	`;
 
 	debug(req.id, 'googleai >', prompt);
