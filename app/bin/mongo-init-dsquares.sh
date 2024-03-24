@@ -145,6 +145,17 @@ db.authZ.insertMany([
 				expr: 'app.squares | length(@) >= $.app.limits.squares'
 			}
 		]
+	},
+	{	   
+		authN: '$EZSSO_OIDC_AUTH_ID',
+		id: UUID().toString('hex').match(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/).slice(1,6).join('-'),
+		description: 'Allow all to access the websocket',
+		rules: [
+			{
+				engine: 'jmespathts',
+				expr: 'req.url.pathname == \`/ws\`'
+			}
+		]
 	}
 ]);
 
