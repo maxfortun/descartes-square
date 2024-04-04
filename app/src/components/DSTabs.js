@@ -26,78 +26,44 @@ import {
 } from './api';
 
 import { AppContext } from './AppContext';
-import { refetch } from './utils';
+import { state as _s } from './utils';
 import DSTab from './DSTab';
 
 export default function (props) {
 	const {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
-	const debug = Debug('dsquares:DSTabs:'+session.account.email);
+	const { selectedSquare, squares } = state;
 
-	if(!squares) {
-		return;
-	}
+	const debug = Debug('dsquares:DSTabs:'+state.account.email);
 
 	useEffect(() => {
-		if(squares.length) {
+		if(!squares?.length) {
+			debug('useEffect', 'selectedSquare.id', 'no squares');
 			return;
 		}
-		createDSquare({
-			setSquares,
-			setSelectedConsiderations,
-			setSelectedSquare,
-			setError
-		});
-	}, [squares]);
 
-	useEffect(() => {
-		if(selectedSquare?.id !== undefined) {
+		if(selectedSquare.id) {
+			debug('useEffect', 'selectedSquare.id', 'already selected', selectedSquare.id);
 			return;
 		}
 
 		if(localStorage.dSquareId) {
-			const selectedSquare = squares.some(square => square.id == localStorage.dSquareId)[0];
-			debug('useEffect', 'selectedSquare.id localStorage.dSquareId', 'selectedSquare', squares, localStorage.dSquareId, selectedSquare);
-			if(selectedSquare) {
-				setSelectedSquare(selectedSquare);
-				return;
-			}
-		}
-
-		if(squares.length > 0) {
-			const selectedSquare = squares[0];
-			debug('useEffect', 'selectedSquare.id 0', 'selectedSquare', squares, selectedSquare);
-			setSelectedSquare(selectedSquare);
+			selectedSquare.id = squares.some(square => square.id == localStorage.dSquareId)?.[0]?.id;
+			debug('useEffect', 'selectedSquare.id', 'from localStore.dSquareId', selectedSquare.id);
 			return;
 		}
 
+		selectedSquare.id = squares[squares.length - 1].id;
+		debug('useEffect', 'selectedSquare.id', 'last one', squares.length - 1, selectedSquare.id);
 	}, [selectedSquare?.id]);
 
 
-	if(!selectedSquare?.id) {
-		return;
-	}
-
-	const handleAdd = async (event) => {
-		createDSquare({
-			setSquares,
-			setSelectedConsiderations,
-			setSelectedSquare,
-			setError
-		});
+	const handleAddSquare = (event) => {
 	};
 
-	const handleChange = (event, i) => {
+	const handleChangeSquare = (event, i) => {
 		const selectedSquare = squares[i];
 		debug('handleChange', i, selectedSquare);
 		setSelectedConsiderations(null);
@@ -111,14 +77,14 @@ export default function (props) {
 	};
 
 	debug("Rendering", squares);
-	const tabs = squares.map((dSquare, i) => {
+	const tabs = squares?.map((dSquare, i) => {
 		if(dSquare.id && dSquare.id == selectedSquare.id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
 		return <Tab key={i} label={dSquare.decision || 'Empty' } />
-	}); 
+	}) || []; 
 	
-	const value = squares.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
+	const value = squares?.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
 	debug("selectedSquare", value, selectedSquare);
 
 	const buttons = [];
@@ -126,7 +92,7 @@ export default function (props) {
 		<IconButton
 			key={buttons.length}
 			size="small"
-			onClick={handleAdd}
+			onClick={handleAddSquare}
 		>
 			<Tooltip placement="top-start" title="Add a square">
 				<AddIcon />
@@ -134,6 +100,7 @@ export default function (props) {
 		</IconButton>
 	);
 
+/*
 	if(selectedInvites?.length) {
 		buttons.push(
 			<IconButton
@@ -147,7 +114,8 @@ export default function (props) {
 			</IconButton>
 		);
 	}
-	
+*/
+
 	return <Box
 		display='flex'
 		justifyContent='center'
@@ -155,11 +123,10 @@ export default function (props) {
 	>
 		<Box
 			justifyContent='center'
-			sx={{ width:'100%' }}
 		>
 			<Tabs
 				value={value}
-				onChange={handleChange}
+				onChange={handleChangeSquare}
 				variant="scrollable"
   				scrollButtons={false}
 			>

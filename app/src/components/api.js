@@ -57,10 +57,7 @@ const fetchDSquare = async (props) => {
 
 const createDSquare = async (props) => {
 	const {
-		setSquares,
-		setSelectedConsiderations,
-		setSelectedSquare,
-		setError
+		state, setState
 	} = props;
 
 	debug('createDSquare >');

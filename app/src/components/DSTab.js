@@ -41,15 +41,7 @@ import {
 
 export default function (props) {
 	const {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
@@ -57,7 +49,7 @@ export default function (props) {
 	const [ selectedMembersError, setSelectedMembersError ] = useState(false);
 	const [ selectedMembersHelperText, setSelectedMembersHelperText ] = useState(false);
 
-	const debug = Debug('dsquares:DSTab:'+session.account.email);
+	const debug = Debug('dsquares:DSTab:'+state.account.email);
 
 	useEffect(() => {
 		setSelectedDecision(selectedSquare.decision);
@@ -213,7 +205,7 @@ export default function (props) {
 
 	const sharedWith = [];
 
-	selectedMembers?.filter(member => member.email != session.account.email)
+	selectedMembers?.filter(member => member.email != state.account.email)
 	.forEach(member => {
 		sharedWith.push(Object.assign({selectedMembership: 'member'}, member));
 	});
@@ -245,7 +237,7 @@ export default function (props) {
 	return <Box sx={{ mt: '8px', flexGrow: 1 }} >
 			<Dialog fullWidth open={openShare} onClose={handleCloseShare}>
 				<DialogTitle sx={{ m: 0, p: 2 }}>
-						Sharing as {session.account.name || session.account.email}
+						Sharing as {state.account.name || state.account.email}
 				</DialogTitle>
 				<IconButton
 					aria-label="close"

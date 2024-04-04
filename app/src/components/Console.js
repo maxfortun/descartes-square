@@ -8,6 +8,7 @@ import ShareDb from 'sharedb/lib/client';
 import ShareDbJSProxy from 'sharedb-jsproxy';
 import ShareDbPromises from 'sharedb-promises';
 
+import { state as _s } from './utils';
 import { AppContext } from './AppContext';
 import AppBar from './AppBar';
 import Welcome from './Welcome';
@@ -26,30 +27,20 @@ ShareDb.logger.setMethods({
 export default function () {
 
 	const {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession,
-		shareDbConnection, setShareDbConnection,
-		squaresProxy, setSquaresProxy 
+		state, setState
 	} = useContext(AppContext);
 
 	useEffect(() => {
 		async function initShareDb() {
 			const authProtocols = () => {
 				const protocols = [];
-				if(session.oidc.access_token) {
-					protocols.push(btoa('Authorization: Bearer '+session.oidc.access_token));
+				if(state.oidc.access_token) {
+					protocols.push(btoa('Authorization: Bearer '+state.oidc.access_token));
 				}
 				return protocols;
 			};
 
-			const socket = new WebSocket(session.options.sharedb_ws_url, authProtocols);
+			const socket = new WebSocket(state.options.sharedb_ws_url, authProtocols);
 
 			socket.addEventListener('error', e => {
 				debug('WebSocket failed. Checking health.', e);
@@ -61,22 +52,25 @@ export default function () {
 
 			const _shareDbConnection = new ShareDb.Connection(socket);
 			_shareDbConnection.debug = true;
-			setShareDbConnection(_shareDbConnection);
+			setState(_s( {shareDbConnection: _shareDbConnection} ));
 
-			const squaresDoc = _shareDbConnection.get('dsquares', session.account.id);
+			const accountDoc = _shareDbConnection.get('dsquares', state.account.id);
 			const initData = {
-				idps: [],
-				collections: []
+				squares: []
 			};
 
-			const squaresDocPromises = ShareDbPromises.doc(squaresDoc);
-			await squaresDocPromises.fetchOrCreate(initData);
-			await squaresDocPromises.subscribe();
-			debug('squares', squaresDoc);
-			setSquaresProxy(new ShareDbJSProxy(squaresDoc));
+			const accountDocPromises = ShareDbPromises.doc(accountDoc);
+			await accountDocPromises.fetchOrCreate(initData);
+			await accountDocPromises.subscribe();
+			debug('account', accountDoc);
+			setState(_s({ accountProxy: new ShareDbJSProxy(accountDoc) }));
 		}
 		initShareDb();
 	}, []);
+
+	if(!state.accountProxy) {
+		return <Loader />;
+	}
 
 	return <DSquares />;
 }

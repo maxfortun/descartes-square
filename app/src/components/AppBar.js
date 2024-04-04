@@ -10,24 +10,24 @@ import AppBarMenuAuth from './AppBarMenuAuth';
 
 const debug = Debug('dsquares:AppBar');
 
-import { refetch } from './utils';
+import { refetch, state as _s } from './utils';
 
 export default function () {
 	const { 
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	const fetchSession = async () => {
-		debug('fetchSession>');
+		debug('fetchSession >');
 		refetch('/api/session', { credentials: 'include' })
 		.then(response => response.json())
 		.then(data => {
-			debug('fetchSession<', data);
-			setSession(Object.assign({}, session, data, {loaded: true}));
+			debug('fetchSession <', data);
+			setState(_s(data));
 		})
 		.catch(e => {
-			setSession(Object.assign({}, session, {loaded: true, logged_out: true}));
-			debug('fetchSession!', e);
+			setState(_s({should_login: false}));
+			debug('fetchSession !', e);
 		});
 	};
 
@@ -36,11 +36,11 @@ export default function () {
 	}, []);
 
 	useEffect(() => {
-		if(!session.login) {
+		if(!state.should_login) {
 			return;
 		}
 		fetchSession();
-	}, [session.login]);
+	}, [state.should_login]);
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -49,7 +49,7 @@ export default function () {
 					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 						Descartes' Squares - square away the uncertainty.
 					</Typography>
-					{ session?.account?.email
+					{ state?.account?.email
 						? <AppBarMenuAuth/>
 						: <AppBarMenuNoAuth/>
 					}

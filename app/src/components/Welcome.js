@@ -24,18 +24,19 @@ import {
 
 const debug = Debug('dsquares:Welcome');
 
+import { state as _s } from './utils';
 import { AppContext } from './AppContext';
 
 export default function () {
 	const {
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	useEffect(() => {
 		debug('mounted');
 	}, []);
 
-	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
+	const handleLoginClick = () => setState(_s({should_login: true}));
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 	return (

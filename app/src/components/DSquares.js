@@ -26,7 +26,8 @@ import {
 	ArrowForwardOutlined as ArrowForwardOutlinedIcon
 } from '@mui/icons-material';
 
-import { refetch } from './utils';
+import { state as _s } from './utils';
+
 import { 
 	fetchDSquares,
 	fetchInvites
@@ -40,70 +41,51 @@ import DSquare from './DSquare';
 export default function (props) {
 
 	const {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
-	const [ ready, setReady ] = useState(false);
+	const debug = Debug('dsquares:DSquares:'+state.account.email);
 
-	const debug = Debug('dsquares:DSquares:'+session.account.email);
-
-	useEffect(() => {
-		debug('mounted');
-
-		fetchInvites({
-			setInvites
-		})
-		.then(() => {
-			setReady(true);
-		});
-	}, []);
-
-	useEffect(() => {
-		if(!ready) {
-			return;
-		}
-
-		fetchDSquares({
-			setSquares
-		});
-	}, [ready]);
-
-	useEffect(() => {
+	const setStateSquaresFromShareDb = async () => {
+		const squares = (await state.accountProxy).squares;
 		if(!squares) {
 			return;
 		}
-		squares.forEach((dSquare, i) => dSquare.position = i);
-	}, [squares]);
+		const change = {
+			squares: squares.map(square => ({ _id: square._id, decision: square.decision }))
+		};
+		setState(_s(change));
+	};
 
-	if(!squares) {
-		return <Loader />;
-	}
+	const handleAccountChange = async event => {
+		if(event.path?.[0] != 'squares') {
+			debug('handleAccountChange', 'ignoring nested event', event);
+			return;
+		}
+	
+		setStateSquaresFromShareDb();
+	};
 
-	const childProps = Object.assign({}, props, 
-						{
-							squares,
-							setSquares,
-							selectedSquare,
-							setSelectedSquare
-	   					}
-	);
+	useEffect(() => {
+		debug('mounted');
+		(async () => {
+			state.accountProxy.__proxy__.on('change', handleAccountChange);
+			setStateSquaresFromShareDb();
+		})();
+	}, []);
 
 	return	<Box sx={{ mt: '4px' }}>
 				<Box>
-					<DSTabs {...childProps} />
+					<DSTabs />
 				</Box>
-				<Box>
-					{ null != selectedSquare?.id 
-						? <DSquare {...childProps} />
-						: <Loader />
+				<Box
+					display='flex'
+					justifyContent='center' 
+					sx={{ mt: '16px' }}
+				>
+					{ null != state.selectedSquare?.id 
+						? <DSquare />
+						: "No squares yet. Create one?"
 					}
 				</Box>
 			</Box>;

@@ -8,9 +8,11 @@ import { AppContext } from './AppContext';
 
 const debug = Debug('dsquares:AppBarMenuAuth');
 
+import { state as _s } from './utils';
+
 export default function () {
 	const {
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	const [ anchorEl, setAnchorEl ] = useState(null);
@@ -23,7 +25,7 @@ export default function () {
 		setAnchorEl(null);
 	};
 
-	const handleLoginClick = () => setSession(Object.assign({}, session, {login: true}));
+	const handleLoginClick = () => setState(_s( {should_login: true} ));
 
 	useEffect(() => {
 		debug('mounted');

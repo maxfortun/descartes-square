@@ -1,8 +1,14 @@
- 
+import Debug from 'debug';
+const debug = Debug('dsquares:utils');
+
 const refetch = async (url, options) => {
 	return fetch(url, options)
 	.catch(e => {
 		return refetchIframe(url, options);
+	})
+	.catch(e => {
+		const url = encodeURIComponent(window.location.href);
+		window.location.href = '/api/redirect?url='+url;
 	});
 };
 
@@ -27,6 +33,15 @@ const refetchIframe = async (url, options) => {
 	});
 }; 
 
+const state = (newState) => {
+	return (prevState) => {
+		const changedState = { ...prevState, ...newState };
+		debug('state', changedState);
+		return changedState;
+	};
+};
+
 module.exports = {
-	refetch
+	refetch,
+	state
 };

@@ -15,56 +15,31 @@ const debug = Debug('dsquares:App');
 const appContext = {};
 
 export default function () {
-	const [ selectedSquare, setSelectedSquare ] = useState(null);
-	const [ selectedDecision, setSelectedDecision ] = useState('');
-	const [ selectedConsiderations, setSelectedConsiderations ] = useState(null);
-	const [ selectedMembers, setSelectedMembers ] = useState(null);
-	const [ selectedInvites, setSelectedInvites ] = useState(null);
-	const [ squares, setSquares ] = useState(null);
-	const [ invites, setInvites ] = useState(null);
-	const [ error, setError ] = useState(null);
-	const [ session, setSession ] = useState({ login: localStorage.login == 'true'});
-
-	const [ shareDbConnection, setShareDbConnection ] = useState(null);
-	const [ squaresProxy, setSquaresProxy ] = useState(null);
+	const [ state, setState ] = useState({
+		should_login: localStorage.should_login == 'true',
+		is_logged_in: false,
+		selectedSquare: {}
+	});
 
 	Object.assign(appContext, {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession,
-		shareDbConnection, setShareDbConnection,
-		squaresProxy, setSquaresProxy
+		state, setState
 	});
 
 	useEffect(() => {
-		debug('useEffect session.login', session.login);
-		localStorage.login = session.login;
-	}, [session.login]);
+		localStorage.should_login = (state.should_login?'true':'false');
+		debug('useEffect localStorage.should_login', localStorage.should_login);
+	}, [state?.should_login]);
 
 	function getAppComponent() {
-		if(!session.login) {
+		if(!state?.should_login) {
 			return <Welcome />;
 		}
 
-		if(!session.loaded) {
+		if(!state?.account) {
 			return <Loader />;
 		}
 
-		if(session.logged_out) {
-			return <LoggedOut />;
-		}
-
-		if(session.account) {
-			return <Console />;
-		}
-
-		return <div>Error</div>;
+		return <Console />;
 	}
 
 	return (

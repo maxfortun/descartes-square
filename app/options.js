@@ -45,11 +45,9 @@ module.exports = {
 	dsquares,
 	accounts,
 	ezsso_oidc_auth_id: process.env.EZSSO_OIDC_AUTH_ID,
-    ezsso_oidc_idp_id: process.env.EZSSO_OIDC_IDP_ID,
+	ezsso_oidc_idp_id: process.env.EZSSO_OIDC_IDP_ID,
     ezsso_oidc_authorize_uri: process.env.EZSSO_OIDC_AUTHORIZE_URI,
-    ezsso_oidc_redirect_uri: process.env.EZSSO_OIDC_REDIRECT_URI,
     ezsso_oidc_logout_uri: process.env.EZSSO_OIDC_LOGOUT_URI,
-	ezsso_oidc_cookie_name: process.env.EZSSO_OIDC_COOKIE_NAME,
 	sharedb_ws_url: process.env.SHAREDB_WS_URL
 };
 

@@ -45,15 +45,7 @@ import Loader from './Loader';
 export default function (props) {
 
 	const {
-		selectedSquare, setSelectedSquare,
-		selectedDecision, setSelectedDecision,
-		selectedConsiderations, setSelectedConsiderations,
-		selectedMembers, setSelectedMembers,
-		selectedInvites, setSelectedInvites,
-		squares, setSquares,
-		invites, setInvites,
-		error, setError,
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	const causes = [ 'do', 'do not' ];
@@ -61,7 +53,7 @@ export default function (props) {
 
 	const border = '1px solid rgba(224, 224, 224, 1)';
 
-	const debug = Debug('dsquares:DSquare:'+session.account.email);
+	const debug = Debug('dsquares:DSquare:'+state.account.email);
 
 	if(!selectedSquare?.id) {
 		return <Loader />;

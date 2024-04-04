@@ -10,9 +10,11 @@ import { logout } from './api';
 
 const debug = Debug('dsquares:AppBarMenuAuth');
 
+import { state as _s } from './utils';
+
 export default function () {
 	const {
-		session, setSession
+		state, setState
 	} = useContext(AppContext);
 
 	const [ anchorEl, setAnchorEl ] = useState(null);
@@ -27,7 +29,7 @@ export default function () {
 
 	const handleLogoutClick = async (event) => {
 		await logout();
-		setSession(Object.assign({}, session, {login: false, account: {}}));
+		setState(_s( {should_login: false, account: null}));
 	};
 
 	useEffect(() => {
@@ -43,7 +45,7 @@ export default function () {
 					color="inherit"
 					aria-label="Menu"
 				>
-					<Avatar sx={{ mr: '2px' }} alt={session.account.name} src={session.account.picture} imgProps={{ referrerPolicy: 'no-referrer' }} />
+					<Avatar sx={{ mr: '2px' }} alt={state.account.name} src={state.account.picture} imgProps={{ referrerPolicy: 'no-referrer' }} />
 					<MenuIcon />
 				</IconButton>
 			</Tooltip>
