@@ -34,12 +34,12 @@ export default function (props) {
 		state, setState
 	} = useContext(AppContext);
 
-	const { selectedSquare, squares } = state;
+	const { selectedSquare, accountProxy } = state;
 
 	const debug = Debug('dsquares:DSTabs:'+state.account.email);
 
 	useEffect(() => {
-		if(!squares?.length) {
+		if(!accountProxy.squares?.length) {
 			debug('useEffect', 'selectedSquare.id', 'no squares');
 			return;
 		}
@@ -50,21 +50,22 @@ export default function (props) {
 		}
 
 		if(localStorage.dSquareId) {
-			selectedSquare.id = squares.some(square => square.id == localStorage.dSquareId)?.[0]?.id;
+			selectedSquare.id = accountProxy.squares.some(square => square.id == localStorage.dSquareId)?.[0]?.id;
 			debug('useEffect', 'selectedSquare.id', 'from localStore.dSquareId', selectedSquare.id);
 			return;
 		}
 
-		selectedSquare.id = squares[squares.length - 1].id;
-		debug('useEffect', 'selectedSquare.id', 'last one', squares.length - 1, selectedSquare.id);
+		selectedSquare.id = accountProxy.squares[squares.length - 1].id;
+		debug('useEffect', 'selectedSquare.id', 'last one', accountProxy.squares.length - 1, selectedSquare.id);
 	}, [selectedSquare?.id]);
 
 
 	const handleAddSquare = (event) => {
+		accountProxy.squares.push({ _id: crypto.randomUUID() });
 	};
 
 	const handleChangeSquare = (event, i) => {
-		const selectedSquare = squares[i];
+		const selectedSquare = accountProxy.squares[i];
 		debug('handleChange', i, selectedSquare);
 		setSelectedConsiderations(null);
 		setSelectedSquare(selectedSquare);
@@ -76,15 +77,15 @@ export default function (props) {
 	const handleShowOwn = (event) => {
 	};
 
-	debug("Rendering", squares);
-	const tabs = squares?.map((dSquare, i) => {
+	debug("Rendering", accountProxy.squares);
+	const tabs = accountProxy.squares?.map((dSquare, i) => {
 		if(dSquare.id && dSquare.id == selectedSquare.id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
 		return <Tab key={i} label={dSquare.decision || 'Empty' } />
 	}) || []; 
 	
-	const value = squares?.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
+	const value = accountProxy.squares?.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
 	debug("selectedSquare", value, selectedSquare);
 
 	const buttons = [];
