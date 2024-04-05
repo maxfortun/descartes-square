@@ -44,6 +44,8 @@ export default function (props) {
 		state, setState
 	} = useContext(AppContext);
 
+	const { selectedSquare, accountProxy } = state;
+
 	const [ decisionChanged, setDecisionChanged ] = useState(false);
 	const [ openShare, setOpenShare ] = useState(false);
 	const [ selectedMembersError, setSelectedMembersError ] = useState(false);
@@ -77,10 +79,12 @@ export default function (props) {
 		if (event.key != 'Enter') {
 			return;
 		}
-		if(!selectedConsiderations) {
+		return;
+
+		if(!selectedSquare.considerations) {
 			return;
 		}
-		if(selectedConsiderations.length) {
+		if(selectedSquare.considerations.length) {
 			return;
 		}
 		await updateDecision({
@@ -90,16 +94,18 @@ export default function (props) {
 		});
 		addAIConsiderations({
 			selectedSquare,
-			selectedConsiderations,
+			selectedSquare.considerations,
 			setSelectedConsiderations,
 		});
 	};
 
 	const handleAIAssist = (event) => {
 		debug('handleAIAssist');
+		return;
+
 		addAIConsiderations({
 			selectedSquare,
-			selectedConsiderations,
+			selectedSquare.considerations,
 			setSelectedConsiderations,
 		});
 	};
@@ -120,22 +126,22 @@ export default function (props) {
 	};
 
 	const handleDeleteSquare = async (event) => {
-		debug('deleteDSquare >', selectedSquare.id);
-		return refetch(`/api/squares/${selectedSquare.id}`, { method: 'DELETE', credentials: 'include' })
+		debug('deleteDSquare >', selectedSquare._id);
+		return refetch(`/api/squares/${selectedSquare._id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
 			debug('deleteDSquare <', square);
 			let nextDSquare = {};
 			const positions = {};
-			props.squares.forEach((dSquare, i) => positions[dSquare.id] = i);
-			const position = positions[selectedSquare.id];
+			props.squares.forEach((dSquare, i) => positions[dSquare._id] = i);
+			const position = positions[selectedSquare._id];
 			if(null != position) {
 				nextDSquare = props.squares[position + 1] || props.squares[position - 1];
 			}
 			if(nextDSquare) {
 				props.setSelectedSquare(nextDSquare);
 			}
-			setSquares(prev => prev.filter( _square => _square.id != selectedSquare.id ));
+			setSquares(prev => prev.filter( _square => _square._id != selectedSquare._id ));
 			return square;
 		});
 	};
@@ -161,6 +167,7 @@ export default function (props) {
 			return;
 		}
 		
+/*
 		if(selectedMembers?.map(member => member.id).includes(event.target.value)) {
 			setSelectedMembersHelperText('Member already has access');
 			if(event.key === 'Enter') {
@@ -169,6 +176,7 @@ export default function (props) {
 			}
 			return;
 		}
+*/
 
 		setSelectedMembersError(false);
 	};
@@ -205,6 +213,7 @@ export default function (props) {
 
 	const sharedWith = [];
 
+/*
 	selectedMembers?.filter(member => member.email != state.account.email)
 	.forEach(member => {
 		sharedWith.push(Object.assign({selectedMembership: 'member'}, member));
@@ -214,9 +223,11 @@ export default function (props) {
 		sharedWith.push(Object.assign({selectedMembership: 'invited'}, member));
 	});
 	
-	const aiAssist = selectedConsiderations && selectedConsiderations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
+
+	const aiAssist = selectedSquare.considerations && selectedSquare.considerations.length == 0 && <Tooltip placement="top-start" title="AI Assist">
 		<HelpOutlineIcon onClick={handleAIAssist} />
 	</Tooltip>;
+*/
 
 	const renderTagMember = (option, getTagProps, i) => {
 		return <Chip {...getTagProps({ index: i })} sx={{ backgroundColor: 'lightgreen' }} title={option.email} label={option.name || option.email} />;
@@ -276,9 +287,9 @@ export default function (props) {
 					/>
 				</DialogContent>
 			</Dialog>
-			<Tooltip placement="top-start" title={selectedDecision}>
+			<Tooltip placement="top-start" title={selectedSquare.decision}>
 				<TextField
-					disabled={ selectedConsiderations==null || selectedConsiderations.length > 0 }
+					disabled={ selectedSquare.considerations==null || selectedSquare.considerations.length > 0 }
 					label='Should I ...'
 					size='small'
 					fullWidth={true}
@@ -291,7 +302,6 @@ export default function (props) {
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
-								{aiAssist}
 								<Tooltip placement="top-start" title="Share this sqaure">
 									<IosShareIcon onClick={handleShareSquare} />
 								</Tooltip>

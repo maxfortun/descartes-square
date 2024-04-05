@@ -40,24 +40,26 @@ export default function (props) {
 
 	useEffect(() => {
 		if(!accountProxy.squares?.length) {
-			debug('useEffect', 'selectedSquare.id', 'no squares');
+			debug('useEffect', 'selectedSquare._id', 'no squares');
 			return;
 		}
 
-		if(selectedSquare.id) {
-			debug('useEffect', 'selectedSquare.id', 'already selected', selectedSquare.id);
+		if(selectedSquare._id) {
+			debug('useEffect', 'selectedSquare._id', 'already selected', selectedSquare._id);
 			return;
 		}
 
 		if(localStorage.dSquareId) {
-			selectedSquare.id = accountProxy.squares.some(square => square.id == localStorage.dSquareId)?.[0]?.id;
-			debug('useEffect', 'selectedSquare.id', 'from localStore.dSquareId', selectedSquare.id);
-			return;
+			selectedSquare._id = accountProxy.squares.some(square => square._id == localStorage.dSquareId)?.[0]?._id;
+			if(selectedSquare._id) {
+				debug('useEffect', 'selectedSquare._id', 'from localStore.dSquareId', selectedSquare._id);
+				return;
+			}
 		}
 
-		selectedSquare.id = accountProxy.squares[squares.length - 1].id;
-		debug('useEffect', 'selectedSquare.id', 'last one', accountProxy.squares.length - 1, selectedSquare.id);
-	}, [selectedSquare?.id]);
+		selectedSquare._id = accountProxy.squares[accountProxy.squares.length - 1]._id;
+		debug('useEffect', 'selectedSquare._id', 'last one', accountProxy.squares.length - 1, selectedSquare._id);
+	}, [selectedSquare?._id]);
 
 
 	const handleAddSquare = (event) => {
@@ -79,13 +81,13 @@ export default function (props) {
 
 	debug("Rendering", accountProxy.squares);
 	const tabs = accountProxy.squares?.map((dSquare, i) => {
-		if(dSquare.id && dSquare.id == selectedSquare.id) {
+		if(dSquare._id && dSquare._id == selectedSquare._id) {
 			return <DSTab key={i} {...props} dSquare={dSquare} />
 		}
 		return <Tab key={i} label={dSquare.decision || 'Empty' } />
 	}) || []; 
 	
-	const value = accountProxy.squares?.map(dSquare => dSquare.id).indexOf(selectedSquare.id);
+	const value = accountProxy.squares?.map(dSquare => dSquare._id).indexOf(selectedSquare._id);
 	debug("selectedSquare", value, selectedSquare);
 
 	const buttons = [];

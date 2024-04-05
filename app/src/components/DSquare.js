@@ -66,7 +66,7 @@ export default function (props) {
 			setSelectedMembers,
 			setSelectedInvites
 		});
-	}, [selectedSquare.id]);
+	}, [selectedSquare._id]);
 
 	if(!selectedConsiderations) {
 		return <Loader />;
