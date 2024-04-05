@@ -53,14 +53,16 @@ export default function (props) {
 
 	const debug = Debug('dsquares:DSTab:'+state.account.email);
 
+/*
 	useEffect(() => {
 		setSelectedDecision(selectedSquare.decision);
 	}, [selectedSquare.decision]);
+*/
 
 
 	const handleDecisionChange = (event) => {
 		// debug('handleDecisionChange', event.target.value);
-		setSelectedDecision(event.target.value);
+		// setSelectedDecision(event.target.value);
 		selectedSquare.decision = event.target.value;
 		setDecisionChanged(true);
 	};
@@ -93,9 +95,7 @@ export default function (props) {
 			setDecisionChanged
 		});
 		addAIConsiderations({
-			selectedSquare,
-			selectedSquare.considerations,
-			setSelectedConsiderations,
+			selectedSquare
 		});
 	};
 
@@ -104,9 +104,7 @@ export default function (props) {
 		return;
 
 		addAIConsiderations({
-			selectedSquare,
-			selectedSquare.considerations,
-			setSelectedConsiderations,
+			selectedSquare
 		});
 	};
 
@@ -294,7 +292,7 @@ export default function (props) {
 					size='small'
 					fullWidth={true}
 					inputProps={{ style: { textAlign: 'center' } }}
-					value={selectedDecision}
+					value={selectedSquare.decision}
 					placeholder={getRandomPlaceHolder()}
 					onChange={handleDecisionChange}
 					onBlur={handleDecisionBlur}
