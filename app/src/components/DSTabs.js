@@ -87,7 +87,10 @@ export default function (props) {
 		return <Tab key={i} label={dSquare.decision || 'Empty' } />
 	}) || []; 
 	
-	const value = accountProxy.squares?.map(dSquare => dSquare._id).indexOf(selectedSquare._id);
+	let value = accountProxy.squares?.map(dSquare => dSquare._id).indexOf(selectedSquare._id);
+	if(value < 0) {
+		value = 0;
+	}
 	debug("selectedSquare", value, selectedSquare);
 
 	const buttons = [];
