@@ -137,7 +137,7 @@ export default function (props) {
 		</Box>;
 	};
 
-	return	<Box sx={{ mt: '16px', mb: '4px' }} >
+	return	<Box sx={{ width: '100%', mt: '16px', mb: '4px' }} >
 				<TableContainer component={Paper} >
 					<Table sx={{ height: '75vh' }}>
 						<TableBody>
