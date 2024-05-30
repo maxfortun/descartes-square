@@ -118,7 +118,7 @@ export default function (props) {
 					});
 */
 
-		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+selectedDecision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
+		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+dSquare?.decision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 
 		return <Box style={{ height: '100%', width: '100%' }}>
 			<Box style={{ display: 'flex' }}>
