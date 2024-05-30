@@ -33,12 +33,6 @@ import {
 	KeyboardReturn as KeyboardReturnIcon
 } from '@mui/icons-material';
 
-import { 
-	fetchDSquare,
-	createConsideration,
-	deleteConsideration
-} from './api';
-
 import { AppContext } from './AppContext';
 import Loader from './Loader';
 
@@ -48,6 +42,10 @@ export default function (props) {
 		state, setState
 	} = useContext(AppContext);
 
+	const { selectedSquare, accountProxy } = state;
+
+	const [ dSquare, setDSquare ] = useState(null);
+
 	const causes = [ 'do', 'do not' ];
 	const effects = [ 'will', 'will not' ];
 
@@ -55,20 +53,26 @@ export default function (props) {
 
 	const debug = Debug('dsquares:DSquare:'+state.account.email);
 
-	if(!selectedSquare?.id) {
+	if(!selectedSquare?._id) {
 		return <Loader />;
 	}
 
 	useEffect(() => {
-		fetchDSquare({
-			selectedSquare,
-			setSelectedConsiderations,
-			setSelectedMembers,
-			setSelectedInvites
-		});
+		(async () => {
+			debug('selectedSquare', selectedSquare, accountProxy.squares);
+
+			if(!selectedSquare._id) {
+				setDSquare(null);
+				return;
+			}
+
+			const square = accountProxy.squares.find((square) => square._id == selectedSquare._id);
+			debug('selectedSquare square', square);
+			setDSquare(square);
+		})();
 	}, [selectedSquare._id]);
 
-	if(!selectedConsiderations) {
+	if(!dSquare) {
 		return <Loader />;
 	}
 
@@ -100,6 +104,10 @@ export default function (props) {
 	};
 
 	const renderConsiderations = (cause, effect) => {
+		debug('renderConsiderations', cause, effect, accountProxy.squares);
+
+		const considerationElements = [];
+/*
 		const considerationElements = selectedConsiderations
 					.filter(consideration => consideration.cause == cause && consideration.effect == effect)
 					.map((consideration, i) => {
@@ -108,6 +116,7 @@ export default function (props) {
 						</Box>;
 						return label;
 					});
+*/
 
 		const label = ('What '+effect + ' happen if I ' + cause.toLowerCase()+' '+selectedDecision?.toLowerCase()).replaceAll(/[ .!?]+$/g, '')+'?';
 

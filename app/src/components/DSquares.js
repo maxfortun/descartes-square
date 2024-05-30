@@ -83,7 +83,8 @@ export default function (props) {
 					justifyContent='center' 
 					sx={{ mt: '16px' }}
 				>
-					{ null != state.selectedSquare?.id 
+					{
+						null != state.selectedSquare?._id 
 						? <DSquare />
 						: "No squares yet. Create one?"
 					}

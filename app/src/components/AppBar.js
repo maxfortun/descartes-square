@@ -26,7 +26,7 @@ export default function () {
 			setState(_s(data));
 		})
 		.catch(e => {
-			setState(_s({should_login: false}));
+			// setState(_s({should_login: false}));
 			debug('fetchSession !', e);
 		});
 	};
