@@ -287,7 +287,7 @@ export default function (props) {
 			</Dialog>
 			<Tooltip placement="top-start" title={selectedSquare.decision}>
 				<TextField
-					disabled={ selectedSquare.considerations==null || selectedSquare.considerations.length > 0 }
+					disabled={ false }
 					label='Should I ...'
 					size='small'
 					fullWidth={true}
