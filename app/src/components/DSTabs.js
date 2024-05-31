@@ -68,9 +68,8 @@ export default function (props) {
 
 	const handleChangeSquare = (event, i) => {
 		const selectedSquare = accountProxy.squares[i];
-		debug('handleChange', i, selectedSquare);
-		// setSelectedConsiderations(null);
-		// setSelectedSquare(selectedSquare);
+		debug('handleChangeSquare', i, selectedSquare);
+		setState(_s( {selectedSquare} ));
 	};
 
 	const handleShowInvites = (event) => {
