@@ -54,7 +54,7 @@ export default function (props) {
 	const debug = Debug('dsquares:DSTab:'+state.account.email);
 
 	const handleDecisionChange = (event) => {
-		// debug('handleDecisionChange', event.target.value);
+		//debug('handleDecisionChange', event.target.value);
 		selectedSquare.decision = event.target.value;
 	};
 
