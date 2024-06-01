@@ -53,27 +53,9 @@ export default function (props) {
 
 	const debug = Debug('dsquares:DSTab:'+state.account.email);
 
-/*
-	useEffect(() => {
-		setSelectedDecision(selectedSquare.decision);
-	}, [selectedSquare.decision]);
-*/
-
-
 	const handleDecisionChange = (event) => {
 		// debug('handleDecisionChange', event.target.value);
-		// setSelectedDecision(event.target.value);
 		selectedSquare.decision = event.target.value;
-		setDecisionChanged(true);
-	};
-
-	const handleDecisionBlur = (event) => {
-		// debug('handleDecisionBlur');
-		updateDecision({
-			selectedSquare,
-			decisionChanged,
-			setDecisionChanged
-		});
 	};
 
 	const handleDecisionKeyDown = async (event) => {
@@ -83,6 +65,7 @@ export default function (props) {
 		}
 		return;
 
+/*
 		if(!selectedSquare.considerations) {
 			return;
 		}
@@ -97,20 +80,22 @@ export default function (props) {
 		addAIConsiderations({
 			selectedSquare
 		});
+*/
 	};
 
 	const handleAIAssist = (event) => {
 		debug('handleAIAssist');
 		return;
-
+/*
 		addAIConsiderations({
 			selectedSquare
 		});
+*/
 	};
 
 	const handleShareSquare = (event) => {
 		debug('handleShareSquare');
-		setOpenShare(true);
+		//setOpenShare(true);
 	};
 
 	const placeholders = [
@@ -125,6 +110,7 @@ export default function (props) {
 
 	const handleDeleteSquare = async (event) => {
 		debug('deleteDSquare >', selectedSquare._id);
+/*
 		return refetch(`/api/squares/${selectedSquare._id}`, { method: 'DELETE', credentials: 'include' })
 		.then(response => response.json())
 		.then(square => {
@@ -142,6 +128,7 @@ export default function (props) {
 			setSquares(prev => prev.filter( _square => _square._id != selectedSquare._id ));
 			return square;
 		});
+*/
 	};
 
 	const handleCloseShare = async (event) => {
@@ -156,6 +143,7 @@ export default function (props) {
 	};
 
 	const handleMembersTextKeyDown = async (event) => {
+/*
 		if(!validEmail(event.target.value)) {
 			setSelectedMembersHelperText('Format: username@hostname.tld');
 			if(event.key === 'Enter') {
@@ -164,7 +152,7 @@ export default function (props) {
 			}
 			return;
 		}
-		
+*/	
 /*
 		if(selectedMembers?.map(member => member.id).includes(event.target.value)) {
 			setSelectedMembersHelperText('Member already has access');
@@ -174,14 +162,14 @@ export default function (props) {
 			}
 			return;
 		}
+		setSelectedMembersError(false);
 */
 
-		setSelectedMembersError(false);
 	};
 
 	const handleMembersChange = async (event, options, reason, detail) => {
 		debug('handleMembersChange', reason, detail.option);
-
+/*
 		if(reason == 'createOption') {
 			if(!validEmail(detail.option)) {
 				setSelectedMembersError(true);
@@ -207,6 +195,7 @@ export default function (props) {
 			});
 			return;
 		}
+*/
 	};
 
 	const sharedWith = [];
