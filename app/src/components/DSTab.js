@@ -58,6 +58,10 @@ export default function (props) {
 		selectedSquare.decision = event.target.value;
 	};
 
+	const handleDecisionBlur = (event) => {
+		// debug('handleDecisionBlur');
+	};
+
 	const handleDecisionKeyDown = async (event) => {
 		// debug('handleDecisionKeyDown');
 		if (event.key != 'Enter') {
